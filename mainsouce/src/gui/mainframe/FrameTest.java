@@ -23,9 +23,9 @@ public class FrameTest extends JFrame {
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
-		cardPage.add(loginPanel);
-		cardPage.add(simpleDocPanel);
-		cardPage.add(myPage);
+		cardPage.add("loginPanel", loginPanel);
+		cardPage.add("my page", myPage);
+		cardPage.add("simpleDocPanel", simpleDocPanel);
 		add(cardPage, BorderLayout.CENTER);
 		
 		setVisible(true);
