@@ -24,8 +24,7 @@ public class FrameTop extends JPanel{
 		JPanel previousButtonPanel = new JPanel(new GridLayout(0,1));
 		previousButtonPanel.setBackground(new Color(217, 217, 217));
 		
-		// 버튼들
-		// 버튼들
+		// 버튼들 (메인페이지 아직 연결 안함)
 		JButton mainPageBtn = new JButton("메인페이지");
 //		mainPageBtn.addActionListener((e) -> {
 //			MainFrameState.card.show("my page");
