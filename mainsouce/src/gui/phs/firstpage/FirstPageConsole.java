@@ -6,8 +6,8 @@ import java.awt.CardLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import gui.phs.simpleDocPanel.CardLayoutPanel;
-import gui.phs.simpleDocPanel.FrameTop;
+import gui.mainframe.CardLayoutPanel;
+import gui.mainframe.FrameTop;
 
 public class FirstPageConsole extends JFrame {
 

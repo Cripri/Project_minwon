@@ -1,13 +1,17 @@
 package gui.phs.firstpage;
 
-import gui.phs.simpleDocPanel.SimpleDocPanel;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.*;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import gui.mainframe.SimpleDocPanel;
 
 public class FirstPage extends SimpleDocPanel {
 
