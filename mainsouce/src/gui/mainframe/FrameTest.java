@@ -15,17 +15,17 @@ public class FrameTest extends JFrame {
 		setLocationRelativeTo(null); // 화면 중앙
 		setLayout(new BorderLayout());
 
-//		LoginPanel loginPanel = new LoginPanel();
-//		SimpleDocPanel simpleDocPanel = new SimpleDocPanel();
-//		MyPage myPage = new MyPage();
+		LoginPanel loginPanel = new LoginPanel();
+		SimpleDocPanel simpleDocPanel = new SimpleDocPanel();
+		MyPage myPage = new MyPage();
 		
 		FrameTop ft = new FrameTop();
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
-//		cardPage.add(loginPanel);
-//		cardPage.add(simpleDocPanel);
-//		cardPage.add(myPage);
+		cardPage.add(loginPanel);
+		cardPage.add(simpleDocPanel);
+		cardPage.add(myPage);
 		add(cardPage, BorderLayout.CENTER);
 		
 		setVisible(true);

@@ -25,10 +25,26 @@ public class FrameTop extends JPanel{
 		previousButtonPanel.setBackground(new Color(217, 217, 217));
 		
 		// 버튼들
+		// 버튼들
 		JButton mainPageBtn = new JButton("메인페이지");
+//		mainPageBtn.addActionListener((e) -> {
+//			MainFrameState.card.show("my page");
+//		});
+		
 		JButton myPageBtn = new JButton("마이페이지");
+		myPageBtn.addActionListener((e) -> {
+			MainFrameState.card.show("my page");
+		});
+		
 		JButton loginBtn = new JButton("로그인");
+		loginBtn.addActionListener((e) -> {
+			MainFrameState.card.show("loginPanel");
+		});
+		
 		JButton previousBtn = new JButton("뒤로가기");
+		previousBtn.addActionListener((e) -> {
+			MainFrameState.card.prev();
+		});
 
 		// 버튼 투명하게 설정
 		for (JButton btn : new JButton[]{mainPageBtn, myPageBtn, loginBtn}) {
