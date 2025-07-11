@@ -1,4 +1,4 @@
-package gui.mainframe;
+package gui.mainframe.components;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
@@ -10,7 +10,7 @@ import java.awt.RenderingHints;
 import javax.swing.JButton;
 
 // 모서리 둥근 버튼
-class RoundedButton extends JButton {
+public class RoundedButton extends JButton {
     private static final long serialVersionUID = 1L;
 
     public RoundedButton(String text) {
@@ -23,7 +23,7 @@ class RoundedButton extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        Color bgColor = new Color(54, 178, 255);
+        Color bgColor = new Color(17, 120, 255);
         Color fgColor = Color.WHITE;
 
         Graphics2D g2 = (Graphics2D) g;

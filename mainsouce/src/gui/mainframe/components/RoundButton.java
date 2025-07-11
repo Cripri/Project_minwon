@@ -1,4 +1,4 @@
-package gui.mainframe;
+package gui.mainframe.components;
 
 import java.awt.FontMetrics;
 import java.awt.Graphics;
@@ -8,7 +8,7 @@ import java.awt.RenderingHints;
 import javax.swing.JButton;
 
 // 원형 버튼
-class RoundButton extends JButton {
+public class RoundButton extends JButton {
     private static final long serialVersionUID = 1L;
 
     public RoundButton(String text) {

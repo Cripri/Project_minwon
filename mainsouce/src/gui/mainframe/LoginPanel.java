@@ -13,6 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import gui.mainframe.components.RoundButton;
+import gui.mainframe.components.RoundedButton;
+
 class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
