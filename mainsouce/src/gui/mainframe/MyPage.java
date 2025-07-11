@@ -11,13 +11,14 @@ import java.awt.Insets;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+
+import gui.mainframe.components.RoundedButton;
 
 public class MyPage extends JPanel {
 
@@ -152,9 +153,8 @@ public class MyPage extends JPanel {
                 gbc.weightx = columnWeights[col];
 
                 if (col == 2) {
-                    JButton btn = new JButton("출력");
+                	RoundedButton btn = new RoundedButton("출력");
                     btn.setPreferredSize(new Dimension(120, 30));
-                    btn.setBackground(new Color(54, 178, 255));
                     btn.setForeground(Color.WHITE);
                     btn.setFocusPainted(false);
                     btn.setFont(font);

@@ -1,5 +1,6 @@
 package gui.mainframe.components;
 
+import java.awt.Cursor;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -18,6 +19,7 @@ public class RoundButton extends JButton {
         setBorderPainted(false);
         setFocusPainted(false);
         setOpaque(false);
+        setCursor(new Cursor(Cursor.HAND_CURSOR)); // 손가락 커서 추가
     }
 
     @Override
