@@ -24,6 +24,8 @@ public class SinmungoListPanel extends JPanel {
         new Petition("45", "가로등 고장 신고", "시설관리공단", "2025-07-01")
     );
 
+
+
     private int currentPage = 0;
     private final int itemsPerPage = 5;
 

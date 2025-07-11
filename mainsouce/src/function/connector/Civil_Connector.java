@@ -8,8 +8,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Civil_Connector extends Thread {
     static String path = "oracle.jdbc.driver.OracleDriver";
-    static String url = "jdbc:oracle:thin:@localhost:1521:XE";
-    static String user = "civil";
+    static String url = "jdbc:oracle:thin:@//192.168.0.26:1521/XE";
+    static String user = "centeradmin";
     static String password = "1234";
 
     static {

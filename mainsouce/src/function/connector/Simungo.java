@@ -19,7 +19,7 @@ public class Simungo {
 	String employees_answer;
 	String security_set;
 	String security_password;
-	String status;
+		String status;
 	
 	
 	public Simungo(Integer sinmungo_code, Integer member_code, String member_phonenum, String member_email,
