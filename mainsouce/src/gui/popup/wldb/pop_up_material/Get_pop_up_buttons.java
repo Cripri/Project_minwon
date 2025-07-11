@@ -174,49 +174,105 @@ public class Get_pop_up_buttons{
 			
 			JButton btn1 = new JButton("공용 알림");
 			btn1.addActionListener(f ->{
-				JFrame pop = geb.get_pop_up_base_small("공용 알림", col);
-				pop.setLayout(new GridLayout(3, 1));
-				
-				pop.add(new JPanel());
-				pop.add(geb.get_public_pop_up_you_did(2, 0, "로그인", "실패"));
-				pop.add(geb.get_ok_button_panel(pop));
+				JFrame pop = get_public_alarm_frame(2, 0, "로그인", "실패");
 			});
-			JButton btn2 = new JButton("로그인/아웃 알림");
+			JButton btn2 = new JButton("공용 알림 3개버전");
 			btn2.addActionListener(f ->{
-				JFrame pop = geb.get_pop_up_base_small("로그인 알림", col);
-				pop.setLayout(new GridLayout(3, 1));
-				
-				pop.add(new JPanel());
-				pop.add(geb.get_pop_up_login_out("어쩌구", true));
-				pop.add(geb.get_ok_button_panel(pop));				
+				JFrame pop = get_public_alarm_triple_frame
+						(2, 0, 0, "유저", "계정", "삭제");
 			});
-			JButton btn3 = new JButton("틀림 알림");
+			JButton btn3 = new JButton("로그인/아웃 알림");
 			btn3.addActionListener(f ->{
-				JFrame pop = geb.get_pop_up_base_small("틀림 알림", col);
-				pop.setLayout(new GridLayout(3, 1));
-				
-				pop.add(new JPanel());
-				pop.add(geb.get_pop_up_wrong("아이디"));
-				pop.add(geb.get_ok_button_panel(pop));				
+				JFrame pop = get_log_in_out_frame("보라돌이", true);		
 			});
-			JButton btn4 = new JButton("권한부족 알림");
+			JButton btn4 = new JButton("틀림 알림");
 			btn4.addActionListener(f ->{
-				JFrame pop = geb.get_pop_up_base_small("권한부족 알림", col);
-				pop.setLayout(new GridLayout(3, 1));
-				
-				pop.add(new JPanel());
-				pop.add(geb.get_pop_up_you_can_not());
-				pop.add(geb.get_ok_button_panel(pop));				
+				JFrame pop = get_wrong_frame("아이디");			
+			});
+			JButton btn5 = new JButton("권한부족 알림");
+			btn5.addActionListener(f ->{
+				JFrame pop = get_you_can_not_frame();				
 			});
 			
 			pop_up.add(btn1);
 			pop_up.add(btn2);
 			pop_up.add(btn3);
 			pop_up.add(btn4);
+			pop_up.add(btn5);
 			
 		});
 		return alarm_button;
 	}
 	
+	
+	public static JFrame get_public_alarm_frame(
+			int index1, int index2,
+			String str1 , String str2
+	) {
+		JFrame pop = geb.get_pop_up_base_small("알림", col);
+		pop.setLayout(new GridLayout(3, 1));
+		
+		pop.add(new JPanel());
+		pop.add(geb.get_public_pop_up_you_did(index1, index2, str1, str2));
+		pop.add(geb.get_ok_button_panel(pop));
+		
+		return pop;
+	}
+	
+	public static JFrame get_public_alarm_triple_frame(
+			int index1, int index2, int index3,
+			String str1 , String str2, String str3
+	) {
+		JFrame pop = geb.get_pop_up_base_small("알림", col);
+		pop.setLayout(new GridLayout(3, 1));
+		
+		pop.add(new JPanel());
+		pop.add(geb.get_public_pop_up_you_did_triple(
+				index1, index2, index3, str1, str2, str3));
+		pop.add(geb.get_ok_button_panel(pop));
+		
+		return pop;
+	}
+	
+	
+	public static JFrame get_log_in_out_frame(
+			String str, boolean in_out
+	) {
+		JFrame pop = geb.get_pop_up_base_small("로그인 알림", col);
+		
+		pop.setLayout(new GridLayout(3, 1));
+		
+		pop.add(new JPanel());
+		pop.add(geb.get_pop_up_login_out(str, in_out));
+		pop.add(geb.get_ok_button_panel(pop));
+		
+		return pop;	
+	}
+	
+	
+	public static JFrame get_wrong_frame(String wrong_part) {
+		JFrame pop = geb.get_pop_up_base_small("틀림 알림", col);
+		
+		pop.setLayout(new GridLayout(3, 1));
+		
+		pop.add(new JPanel());
+		pop.add(geb.get_pop_up_wrong(wrong_part));
+		pop.add(geb.get_ok_button_panel(pop));
+		
+		return pop;	
+	}
+	
+	
+	public static JFrame get_you_can_not_frame() {
+		JFrame pop = geb.get_pop_up_base_small("권한부족 알림", col);
+		
+		pop.setLayout(new GridLayout(3, 1));
+		
+		pop.add(new JPanel());
+		pop.add(geb.get_pop_up_you_can_not());
+		pop.add(geb.get_ok_button_panel(pop));
+		
+		return pop;		
+	}
 
 }

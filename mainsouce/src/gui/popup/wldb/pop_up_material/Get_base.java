@@ -256,7 +256,7 @@ public class Get_base {
 				state.setDeleted(true);
 				state.getPop_up().dispose();
 			} else {
-				JFrame not = get_now_not_input_panel();
+				JFrame not = get_now_not_input_panel("비밀번호");
 				state.getNexts().get(0).grabFocus();
 			}
 			
@@ -325,7 +325,7 @@ public class Get_base {
 				state.getPop_up().dispose();
 				sys(state.getMemo());
 			} else {
-				JFrame no = get_now_not_input_panel();
+				JFrame no = get_now_not_input_panel("민원 본문");
 				memo.grabFocus();
 			}
 						
@@ -355,18 +355,18 @@ public class Get_base {
 			
 			HashMap<String, String> texts = state.getInput_texts();
 			boolean ok = true;
+			String this_neme = "";
 			
 			for(JComponent jc : state.getNexts()) {
 				
 				if(jc instanceof JTextField) {					
 					String str = ((JTextField) jc).getText();
-					System.out.println(str + " 확인됨");
-					
-					System.out.println(texts.size());
 					
 					if(str == null || str == "" || texts.containsKey(str)) {
+						//jc.getName().equals(str)
 						ok = false;
-						System.out.println(str + " 안에서 확인됨");
+						this_neme = jc.getName();
+						System.out.println(this_neme + "툴이름");
 						break;
 					}
 					// 얻어낸 텍스트(현재 입력된값)가
@@ -386,7 +386,7 @@ public class Get_base {
 			if(ok) {
 				state.getPop_up().dispose();
 			} else {
-				JFrame no = get_now_not_input_panel();
+				JFrame no = get_now_not_input_panel(this_neme);
 			}
 			
 		});
@@ -454,6 +454,8 @@ public class Get_base {
 	private static JTextField get_jt(String text, Botton_input_state state) {
 		JTextField jt = new JTextField(text);
 		
+		jt.setName(text);
+		
 		jt.addFocusListener(new FocusAdapter() {			
 			@Override
 			public void focusGained(FocusEvent e) {
@@ -490,12 +492,12 @@ public class Get_base {
 		}
 	}
 	
-	private static JFrame get_now_not_input_panel() {
+	private static JFrame get_now_not_input_panel(String lack) {
 		JFrame no = new JFrame("경고");
 		
 		no.setLayout(new BorderLayout());
 		
-		JLabel ww = get_word("모든 문항을 입력해주세요");
+		JLabel ww = get_word(lack + "을(를) 입력해주세요");
 		JPanel pp = get_ok_button_panel(no);
 		
 		ww.setHorizontalAlignment(JLabel.CENTER);
@@ -598,8 +600,29 @@ public class Get_base {
 		
 		// 사용예: 민원등록을 취소하셨습니다	
 		// 사용예 : 로그인에 실패하셨습니다
-		// 사용예 : 0000계정의 삭제처리가 완료되었습니다
+		
 		// 이거말고 경우의 수가 또 뭐가 있지?
+	}
+	
+	protected static JLabel get_public_pop_up_you_did_triple(
+			int index1, int index2, int index3,
+			String str1 , String str2, String str3
+	) {
+		String[] contents1 = {
+				"을(를) ", "이(가) ", "의 "};
+		String[] contents2 = {
+				"이(가) ", "을(를) ", "으로 ", "으로인해 "};
+		String[] contents3 = {
+				"되었습니다.", "하셨습니다.", "하시겠습니까?"};
+		String content = 
+				str1 + contents1[index1] 
+				+ str2 + contents2[index2]
+				+ str3 + contents3[index3];
+		
+		
+		return get_word_center(content);
+		// 사용예 : 0000계정의 삭제처리가 완료되었습니다
+		// 아 맞다, ㅇㅇ의 ㅇㅇ이 ㅇㅇㅇ으로 수정되었습니다
 	}
 	
 	protected static JLabel get_pop_up_login_out(String str1, boolean in_out) {

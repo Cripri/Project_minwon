@@ -13,6 +13,7 @@ import javax.swing.border.LineBorder;
 	public class Botton_input_state {
 		// 임시 저장소
 		// 팝업 창마다 하나씩 두면 되겠지?
+		// 이름 버튼말고 팝업으로 바꿀까
 		
 		private JFrame pop_up;
 		
