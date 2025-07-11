@@ -22,6 +22,16 @@ public class QueryRequest<T> {
         this.resultClass = resultClass;
     }
 
+    public QueryRequest(String query, String operationName, String tableName,
+                        Object singleParam, QueryType queryType, Class<T> resultClass) {
+        this.query = query;
+        this.operationName = operationName;
+        this.tableName = tableName;
+        this.params = List.of(singleParam);  // 바로 리스트 생성
+        this.queryType = queryType;
+        this.resultClass = resultClass;
+    }
+
     // 게터 & 세터
     public String getQuery() { return query; }
     public void setQuery(String query) { this.query = query; }

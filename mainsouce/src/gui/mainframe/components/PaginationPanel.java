@@ -23,8 +23,8 @@ public class PaginationPanel extends JPanel {
         setOpaque(false);
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        ImageIcon prevIcon = new ImageIcon("./IconImage/이전페이지.png");
-        ImageIcon nextIcon = new ImageIcon("./IconImage/다음페이지.png");
+        ImageIcon prevIcon = new ImageIcon("resources/IconImage/이전페이지.png");
+        ImageIcon nextIcon = new ImageIcon(".resources/IconImage/다음페이지.png");
         Image prevScaled = prevIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         Image nextScaled = nextIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
 

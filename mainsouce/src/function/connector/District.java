@@ -63,6 +63,5 @@ public class District {
 	public void setSgg_name(String sgg_name) {
 		this.sgg_name = sgg_name;
 	}
-	
-	
+
 }

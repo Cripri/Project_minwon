@@ -14,6 +14,8 @@ public class Simple_doc {
 	String member_name_hanja;
 	Integer count;
 
+	String allInclude; // 전부 포함
+
 	//과거 주소 변동 사항
 	String include_address_history;
 	Integer address_history_years;
@@ -42,7 +44,7 @@ public class Simple_doc {
 	public Simple_doc() {
 	}
 
-	public Simple_doc(Integer simple_doc_code, String complaint_category_code, Integer district_code, String status, Date create_date, Date complete_date, Integer member_code, String member_name_en, String member_name_hanja, Integer count, String include_address_history, Integer address_history_years, String include_household_reason, String include_household_date, String include_occurrence_date, String include_head_name, String include_head_relationship, String include_personal_change_details, String include_id_number, String include_rrn_last7, String include_rrn_last7_self, String include_rrn_last7_member, String include_military_service, String military_service_basic_only, String military_service_full, String include_previous_address, String include_previous_address_self, String include_previous_address_member) {
+	public Simple_doc(Integer simple_doc_code, String complaint_category_code, Integer district_code, String status, Date create_date, Date complete_date, Integer member_code, String member_name_en, String member_name_hanja, Integer count, String allInclude, String include_address_history, Integer address_history_years, String include_household_reason, String include_household_date, String include_occurrence_date, String include_head_name, String include_head_relationship, String include_personal_change_details, String include_id_number, String include_rrn_last7, String include_rrn_last7_self, String include_rrn_last7_member, String include_military_service, String military_service_basic_only, String military_service_full, String include_previous_address, String include_previous_address_self, String include_previous_address_member) {
 		this.simple_doc_code = simple_doc_code;
 		this.complaint_category_code = complaint_category_code;
 		this.district_code = district_code;
@@ -53,6 +55,7 @@ public class Simple_doc {
 		this.member_name_en = member_name_en;
 		this.member_name_hanja = member_name_hanja;
 		this.count = count;
+		this.allInclude = allInclude;
 		this.include_address_history = include_address_history;
 		this.address_history_years = address_history_years;
 		this.include_household_reason = include_household_reason;
@@ -151,6 +154,14 @@ public class Simple_doc {
 
 	public void setCount(Integer count) {
 		this.count = count;
+	}
+
+	public String getAllInclude() {
+		return allInclude;
+	}
+
+	public void setAllInclude(String allInclude) {
+		this.allInclude = allInclude;
 	}
 
 	public String getInclude_address_history() {
