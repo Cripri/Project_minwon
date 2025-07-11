@@ -1,4 +1,4 @@
-package gui.mainframe;
+package gui.mainframe.components;
 
 import java.awt.Color;
 import java.awt.FontMetrics;
