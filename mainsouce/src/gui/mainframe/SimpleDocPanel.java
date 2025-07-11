@@ -1,7 +1,16 @@
 package gui.mainframe;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+
+import gui.mainframe.components.RoundedButton;
 
 // 효승님이 한거 버튼 크기 수정본
 public class SimpleDocPanel extends JPanel {
@@ -18,8 +27,11 @@ public class SimpleDocPanel extends JPanel {
         centerPanel.setBackground(new Color(217, 217, 217));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100)); // 전체 여백
 
-        JButton leftButton = createCenterButton("주민등록증 신청\n및 재발급");
-        JButton rightButton = createCenterButton("주민등록 등본/\n초본 발급");
+        RoundedButton leftButton = new RoundedButton("주민등록증 신청\n및 재발급");
+        RoundedButton rightButton = new RoundedButton("주민등록 등본/\n초본 발급");
+        
+        leftButton.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+        rightButton.setFont(new Font("맑은 고딕", Font.BOLD, 20));
 
         Dimension buttonSize = new Dimension(300, 300);
         leftButton.setPreferredSize(buttonSize);
@@ -36,14 +48,5 @@ public class SimpleDocPanel extends JPanel {
         centerPanel.add(Box.createHorizontalGlue());
 
         add(centerPanel, BorderLayout.CENTER);
-    }
-
-    private JButton createCenterButton(String text) {
-        JButton button = new JButton("<html><center>" + text.replace("\n", "<br>") + "</center></html>");
-        button.setBackground(new Color(30, 160, 255));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-        button.setFocusPainted(false);
-        return button;
     }
 }
