@@ -34,12 +34,12 @@ public class FrameTop extends JPanel{
 		
 		JButton myPageBtn = new JButton("마이페이지");
 		myPageBtn.addActionListener((e) -> {
-			MainFrameState.card.show("my page");
+			MainFrameState.card.show("myPage");
 		});
 		
 		JButton loginBtn = new JButton("로그인");
 		loginBtn.addActionListener((e) -> {
-			MainFrameState.card.show("loginPanel");
+			MainFrameState.card.show("login");
 		});
 		
 		JButton previousBtn = new JButton("뒤로가기");

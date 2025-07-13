@@ -73,6 +73,9 @@ class LoginPanel extends JPanel {
 
         // 직사각형 버튼
         RoundedButton signUpBtn = new RoundedButton("회원가입");
+        signUpBtn.addActionListener((e) -> {
+        	MainFrameState.card.show("signUp");
+        });
         RoundedButton loginBtn = new RoundedButton("로그인");
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 20, 0));
