@@ -20,6 +20,7 @@ public class FrameTest extends JFrame {
 		MyPage myPage = new MyPage();
 		SinmungoListPanel sinmungoList = new SinmungoListPanel();
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
+		SignUpPanel signUp = new SignUpPanel();
 		
 		FrameTop ft = new FrameTop();
 		add(ft, BorderLayout.NORTH);
@@ -30,6 +31,7 @@ public class FrameTest extends JFrame {
 		cardPage.add("simpleDoc", simpleDoc);
 		cardPage.add("sinmungoList", sinmungoList);
 		cardPage.add("employeeMain", employeeMain);
+		cardPage.add("signUp", signUp);
 		add(cardPage, BorderLayout.CENTER);
 		
 		setVisible(true);
