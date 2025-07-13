@@ -65,7 +65,20 @@ public class SinmungoListPanel extends JPanel {
         bottomPanel.setOpaque(false);
         bottomPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
         bottomPanel.add(paginationPanel, BorderLayout.CENTER);
+        
+        // 새 글 작성 버튼
+		RoundedButton writeBtn = new RoundedButton("새 민원 작성");
+		writeBtn.setPreferredSize(new Dimension(160, 40));
+		writeBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		writeBtn.setBorderPainted(false);
+		writeBtn.setFocusPainted(false);
+		
+		// 민원 작성 페이지로 이동 설정해야 함 
+//		writeBtn.addActionListener((e) ->{
+//			MainFrameState.card.show("민원작성페이지");
+//		});
 
         add(bottomPanel, BorderLayout.SOUTH);
+        bottomPanel.add(writeBtn, BorderLayout.EAST);
     }
 }
