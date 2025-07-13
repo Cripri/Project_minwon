@@ -25,6 +25,7 @@ public class Simple_doc {
 	String include_household_date;  // 세대 구성 일자 포함
 	String include_occurrence_date; // 발생일 / 신고일 포함
 	String include_head_name; // 세대주 성명 포함
+	String roommate;
 	String include_head_relationship; // 세대주와의 관계 포함
 	String include_personal_change_details; // 인적사항 변경 내용 포함
 	String include_id_number ; // 국내/외국인 등록번호 포함
@@ -74,6 +75,14 @@ public class Simple_doc {
 		this.include_previous_address = include_previous_address;
 		this.include_previous_address_self = include_previous_address_self;
 		this.include_previous_address_member = include_previous_address_member;
+	}
+
+	public String getRoommate() {
+		return roommate;
+	}
+
+	public void setRoommate(String roommate) {
+		this.roommate = roommate;
 	}
 
 	public Integer getSimple_doc_code() {
