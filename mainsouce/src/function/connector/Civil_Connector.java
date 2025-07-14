@@ -34,7 +34,7 @@ public class Civil_Connector extends Thread {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             while (true) {
                 QueryRequest<?> request = queryQueue.take();
-                if (request.getQueryType() == QueryType.SELECT) {
+                if (request.getQuery().toLowerCase().startsWith("select")) {
                     executeQuery(request, conn);
                 } else {
                     executeUpdateQuery(request, conn);

@@ -12,9 +12,9 @@ public class Simple_doc {
 	Integer	member_code;
 	String member_name_en;
 	String member_name_hanja;
-	Integer count;
+	Integer doc_count;
 
-	String allInclude; // 전부 포함
+	String all_Included; // 전부 포함
 
 	//과거 주소 변동 사항
 	String address_history;
@@ -45,7 +45,7 @@ public class Simple_doc {
 	public Simple_doc() {
 	}
 
-	public Simple_doc(Integer simple_doc_code, String complaint_category_code, Integer district_code, String status, Date create_date, Date complete_date, Integer member_code, String member_name_en, String member_name_hanja, Integer count, String allInclude, String address_history, Integer address_history_years, String household_reason, String household_date, String occurrence_date, String head_name, String head_relationship, String personal_change_details, String id_number, String rrn_last7, String rrn_last7_self, String rrn_last7_member, String military_service, String military_service_basic_only, String military_service_full, String previous_address, String previous_address_self, String previous_address_member) {
+	public Simple_doc(Integer simple_doc_code, String complaint_category_code, Integer district_code, String status, Date create_date, Date complete_date, Integer member_code, String member_name_en, String member_name_hanja, Integer count, String all_Included, String address_history, Integer address_history_years, String household_reason, String household_date, String occurrence_date, String head_name, String head_relationship, String personal_change_details, String id_number, String rrn_last7, String rrn_last7_self, String rrn_last7_member, String military_service, String military_service_basic_only, String military_service_full, String previous_address, String previous_address_self, String previous_address_member) {
 		this.simple_doc_code = simple_doc_code;
 		this.complaint_category_code = complaint_category_code;
 		this.district_code = district_code;
@@ -55,8 +55,8 @@ public class Simple_doc {
 		this.member_code = member_code;
 		this.member_name_en = member_name_en;
 		this.member_name_hanja = member_name_hanja;
-		this.count = count;
-		this.allInclude = allInclude;
+		this.doc_count = count;
+		this.all_Included = all_Included;
 		this.address_history = address_history;
 		this.address_history_years = address_history_years;
 		this.household_reason = household_reason;
@@ -89,8 +89,8 @@ public class Simple_doc {
 				", member_code=" + member_code +
 				", member_name_en='" + member_name_en + '\'' +
 				", member_name_hanja='" + member_name_hanja + '\'' +
-				", count=" + count +
-				", allInclude='" + allInclude + '\'' +
+				", doc_count=" + doc_count +
+				", all_Included='" + all_Included + '\'' +
 				", address_history='" + address_history + '\'' +
 				", address_history_years=" + address_history_years +
 				", household_reason='" + household_reason + '\'' +
@@ -193,20 +193,20 @@ public class Simple_doc {
 		this.member_name_hanja = member_name_hanja;
 	}
 
-	public Integer getCount() {
-		return count;
+	public Integer getDoc_count() {
+		return doc_count;
 	}
 
-	public void setCount(Integer count) {
-		this.count = count;
+	public void setDoc_count(Integer doc_count) {
+		this.doc_count = doc_count;
 	}
 
-	public String getAllInclude() {
-		return allInclude;
+	public String getAll_Included() {
+		return all_Included;
 	}
 
-	public void setAllInclude(String allInclude) {
-		this.allInclude = allInclude;
+	public void setAll_Included(String all_Included) {
+		this.all_Included = all_Included;
 	}
 
 	public String getaddress_history() {
