@@ -31,8 +31,13 @@ public class PDFWriter {
             );
 
             connector.putQuery(target);
-            Thread.sleep(100);
+            Thread.sleep(1000);
             Simple_doc data = target.getSingleResult();
+
+            if (data == null) {
+                System.err.println("❗ 데이터가 존재하지 않습니다. simple_doc_pk: " + simple_doc_pk);
+                throw new NullPointerException("Simple_doc 데이터가 null입니다.");
+            }
 
             QueryRequest<Members> userdata = new QueryRequest<>(
                     "select * from Members where MEMBER_CODE like ?",
@@ -43,7 +48,7 @@ public class PDFWriter {
                     Members.class
             );
             connector.putQuery(userdata);
-            Thread.sleep(100);
+            Thread.sleep(1000);
             Members mem = userdata.getSingleResult();
 
             QueryRequest<District> dist = new QueryRequest<>(
@@ -55,7 +60,7 @@ public class PDFWriter {
                     District.class
             );
             connector.putQuery(dist);
-            Thread.sleep(100);
+            Thread.sleep(1000);
             District dis = dist.getSingleResult();
 
 

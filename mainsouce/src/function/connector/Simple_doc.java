@@ -77,6 +77,42 @@ public class Simple_doc {
 		this.previous_address_member = previous_address_member;
 	}
 
+	@Override
+	public String toString() {
+		return "Simple_doc{" +
+				"simple_doc_code=" + simple_doc_code +
+				", complaint_category_code='" + complaint_category_code + '\'' +
+				", district_code=" + district_code +
+				", status='" + status + '\'' +
+				", create_date=" + create_date +
+				", complete_date=" + complete_date +
+				", member_code=" + member_code +
+				", member_name_en='" + member_name_en + '\'' +
+				", member_name_hanja='" + member_name_hanja + '\'' +
+				", count=" + count +
+				", allInclude='" + allInclude + '\'' +
+				", address_history='" + address_history + '\'' +
+				", address_history_years=" + address_history_years +
+				", household_reason='" + household_reason + '\'' +
+				", household_date='" + household_date + '\'' +
+				", occurrence_date='" + occurrence_date + '\'' +
+				", head_name='" + head_name + '\'' +
+				", roommate='" + roommate + '\'' +
+				", head_relationship='" + head_relationship + '\'' +
+				", personal_change_details='" + personal_change_details + '\'' +
+				", id_number='" + id_number + '\'' +
+				", rrn_last7='" + rrn_last7 + '\'' +
+				", rrn_last7_self='" + rrn_last7_self + '\'' +
+				", rrn_last7_member='" + rrn_last7_member + '\'' +
+				", military_service='" + military_service + '\'' +
+				", military_service_basic_only='" + military_service_basic_only + '\'' +
+				", military_service_full='" + military_service_full + '\'' +
+				", previous_address='" + previous_address + '\'' +
+				", previous_address_self='" + previous_address_self + '\'' +
+				", previous_address_member='" + previous_address_member + '\'' +
+				'}';
+	}
+
 	public String getRoommate() {
 		return roommate;
 	}

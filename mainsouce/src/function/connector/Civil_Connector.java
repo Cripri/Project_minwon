@@ -53,6 +53,13 @@ public class Civil_Connector extends Thread {
             ResultSet rs = ps.executeQuery();
             List<T> list = mapResultSetToList(rs, request.getResultClass());
             request.setResultList(list);
+
+            if (list != null && !list.isEmpty()) {
+                request.setSingleResult(list.get(0));
+            } else {
+                request.setSingleResult(null);
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
