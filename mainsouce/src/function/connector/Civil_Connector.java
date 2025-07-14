@@ -34,7 +34,7 @@ public class Civil_Connector extends Thread {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             while (true) {
                 QueryRequest<?> request = queryQueue.take();
-                System.out.println("쿼리 받음: " + request.getQuery());
+                //System.out.println("쿼리 받음: " + request.getQuery());
                 if (request.getQuery().toLowerCase().startsWith("select")) {
                     executeQuery(request, conn);
                 } else {
@@ -51,8 +51,8 @@ public class Civil_Connector extends Thread {
         try (PreparedStatement ps = conn.prepareStatement(request.getQuery())) {
             List<Object> params = request.getParams();
             if (params != null) {
-                for (int i = 0; i < params.size(); i++) {
-                    ps.setObject(i + 1, params.get(i));
+                for (int i = 1; i < params.size(); i++) {
+                    ps.setObject(i, params.get(i));
                 }
             }
             ResultSet rs = ps.executeQuery();
