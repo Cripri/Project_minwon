@@ -52,6 +52,8 @@ public class QueryRequest<T> {
     public T getSingleResult() { return singleResult; }
     public void setSingleResult(T singleResult) { this.singleResult = singleResult; }
 
+
+
     private void put(Civil_Connector con){
         try {
             con.putQuery(this);

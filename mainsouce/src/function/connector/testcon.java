@@ -6,25 +6,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import static gui.mainframe.MainFrameState.civil;
+
 
 public class testcon {
     public static void main(String[] args){
         Civil_Connector con = new Civil_Connector();
         con.start();
 
-        QueryRequest<Simple_doc> doc = new QueryRequest<>(
-                "select * from simple_doc where simple_doc_code like ?",
-                2,
-                Simple_doc.class,
-                con
-        );
+        // select all members
+        List<Members> memList = con.selectAll(Members.class);
+        memList.forEach(System.out::println);
 
+        // update 예시
+        if (!memList.isEmpty()) {
+            Members m = memList.get(memList.size() - 1);
+            m.setMember_name("강지후");
+            con.update(m);
+        }
 
-        Simple_doc data = doc.getSingleResult();
+//        try {
+//            Thread.sleep(200); // update 스레드 처리 대기
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
 
-        System.out.println(data);
-
-        new PDFWriter(3,"123456-1234567",con);
+        // 다시 조회해서 출력
+        memList = con.selectAll(Members.class);
+        memList.forEach(System.out::println);
 
     }
 }

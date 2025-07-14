@@ -1,5 +1,7 @@
 package gui.mainframe;
 
+import function.connector.QueryRequest;
+import function.connector.Sinmungo;
 import gui.mainframe.components.*;
 import gui.mainframe.model.Petition;
 
@@ -7,6 +9,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
+
+import static gui.mainframe.MainFrameState.civil;
 
 public class SinmungoListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -24,7 +28,13 @@ public class SinmungoListPanel extends JPanel {
         new Petition("45", "가로등 고장 신고", "시설관리공단", "2025-07-01")
     );
 
-
+    QueryRequest<Sinmungo> sinmungo = new QueryRequest<>(
+            "select * from Sinmungo",
+            null,
+            Sinmungo.class,
+            civil
+    );
+    List<Sinmungo> sin = sinmungo.getResultList();
 
     private int currentPage = 0;
     private final int itemsPerPage = 5;

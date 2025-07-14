@@ -8,6 +8,8 @@ import java.sql.Connection;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import static gui.mainframe.MainFrameState.civil;
+
 public class FrameTest extends JFrame {
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +47,5 @@ public class FrameTest extends JFrame {
 	public static void main(String[] args) {
 
 		SwingUtilities.invokeLater(FrameTest::new);
-		Civil_Connector con = new Civil_Connector();
-		con.start();
 	}
 }
