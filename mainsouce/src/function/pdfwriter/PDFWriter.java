@@ -124,40 +124,40 @@ public class PDFWriter {
                     if(data.getAllInclude().equals("Y")){
                         writeText(document,page,check,font,172 ,692); //등본 전부
                     }else{
-                        if(data.getInclude_address_history().equals("Y")) {
+                        if(data.getaddress_history().equals("Y")) {
                             writeText(document, page, check, font, 305, 665); //주소 변동사항 전체 포함
                         }else {
                             writeText(document, page, check, font, 390, 665); //주소 변동사항 최근_년포함
                             writeText(document,page,data.getAddress_history_years().toString(),font,493 ,665); //_년 포함
                         }
 
-                        writeText(document, page, checkedOrEmpty(data.getInclude_household_reason(), check), font, 504, 644); //세대 구성 사유
+                        writeText(document, page, checkedOrEmpty(data.gethousehold_reason(), check), font, 504, 644); //세대 구성 사유
 
-                        writeText(document,page,checkedOrEmpty(data.getInclude_household_date(),check),font,504 ,623); //세대 구성 일자
+                        writeText(document,page,checkedOrEmpty(data.gethousehold_date(),check),font,504 ,623); //세대 구성 일자
 
-                        writeText(document,page,checkedOrEmpty(data.getInclude_occurrence_date(),check),font,504 ,601); //발생일 / 신고일
+                        writeText(document,page,checkedOrEmpty(data.getoccurrence_date(),check),font,504 ,601); //발생일 / 신고일
 
-                        if(data.getInclude_previous_address().equals("Y")) {
+                        if(data.getprevious_address().equals("Y")) {
                             writeText(document, page, check, font, 397, 580); //변동 사유
-                            if(data.getInclude_previous_address_self().equals("Y")) {
+                            if(data.getprevious_address_self().equals("Y")) {
                                 writeText(document, page, check2, font, 445, 580); //세대
                             }
-                            if(data.getInclude_previous_address_member().equals("Y")) {
+                            if(data.getprevious_address_member().equals("Y")) {
                                 writeText(document, page, check2, font, 493, 580); //세대원
                             }
                         }
 
-                        if(data.getInclude_id_number().equals("Y")) {
+                        if(data.getid_number().equals("Y")) {
                             writeText(document, page, check, font, 504, 557); //교부 대상자 외 세대주 세대원 외국인등
                         }
 
-                        if(data.getInclude_rrn_last7().equals("Y")) {
+                        if(data.getrrn_last7().equals("Y")) {
                             writeText(document, page, check, font, 395, 536); //주민등록번호 뒷자리 포함
-                            writeText(document,page,checkedOrEmpty(data.getInclude_rrn_last7_self(),check2),font,443 ,536); //세대
-                            writeText(document,page,checkedOrEmpty(data.getInclude_rrn_last7_member(),check2),font,490 ,536); //세대원
+                            writeText(document,page,checkedOrEmpty(data.getrrn_last7_self(),check2),font,443 ,536); //세대
+                            writeText(document,page,checkedOrEmpty(data.getrrn_last7_member(),check2),font,490 ,536); //세대원
                         }
 
-                        writeText(document,page,checkedOrEmpty(data.getInclude_head_relationship(),check),font,504 ,514); // 세대원의 세대주와의 관계
+                        writeText(document,page,checkedOrEmpty(data.gethead_relationship(),check),font,504 ,514); // 세대원의 세대주와의 관계
 
                         writeText(document,page,checkedOrEmpty(data.getRoommate(),check),font,504 ,493); // 동거인
                     }
@@ -167,22 +167,22 @@ public class PDFWriter {
                     if(data.getAllInclude().equals("Y")){
                         writeText(document,page,check,font,394 ,692); //초본 전부
                     }else{
-                        writeText(document,page,checkedOrEmpty(data.getInclude_personal_change_details(),check),font,504 ,471); // 개인 인적사항 변경 내용
+                        writeText(document,page,checkedOrEmpty(data.getpersonal_change_details(),check),font,504 ,471); // 개인 인적사항 변경 내용
 
-                        if(data.getInclude_address_history().equals("Y")) {
+                        if(data.getaddress_history().equals("Y")) {
                             writeText(document, page, check, font, 315, 445); //과거의 주소 변동 사항 전체
                         }else{
                             writeText(document,page,check,font,395 ,445); //직접입력
                             writeText(document,page,data.getAddress_history_years().toString(),font,496 ,445); //_년 포함
                         }
 
-                        writeText(document,page,checkedOrEmpty(data.getInclude_head_relationship(),check),font,504 ,424); // 과거의 주소 변동 사항 중 세대주의 성명과 세대주와의 관계
+                        writeText(document,page,checkedOrEmpty(data.gethead_relationship(),check),font,504 ,424); // 과거의 주소 변동 사항 중 세대주의 성명과 세대주와의 관계
 
-                        writeText(document,page,checkedOrEmpty(data.getInclude_rrn_last7(),check),font,504 ,405); // 주민등록번호 뒷자리
+                        writeText(document,page,checkedOrEmpty(data.getrrn_last7(),check),font,504 ,405); // 주민등록번호 뒷자리
 
-                        writeText(document,page,checkedOrEmpty(data.getInclude_head_relationship(),check),font,504 ,386); // 세대주의 성명과 세대주와의 관계
+                        writeText(document,page,checkedOrEmpty(data.gethead_relationship(),check),font,504 ,386); // 세대주의 성명과 세대주와의 관계
 
-                        writeText(document,page,checkedOrEmpty(data.getInclude_occurrence_date(),check),font,504 ,368); // 발생일 / 신고일
+                        writeText(document,page,checkedOrEmpty(data.getoccurrence_date(),check),font,504 ,368); // 발생일 / 신고일
 
                         writeText(document,page,check,font,504 ,350); // 변동 사유
 
