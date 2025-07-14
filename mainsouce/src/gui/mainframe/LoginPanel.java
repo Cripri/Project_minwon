@@ -6,18 +6,22 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.util.ArrayList;
+import java.util.List;
 
-import javax.swing.ButtonGroup;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+import function.connector.Civil_Connector;
+import function.connector.Members;
+import function.connector.QueryRequest;
+import function.connector.QueryType;
+import function.encryption.Encryptor;
 import gui.mainframe.components.RoundButton;
 import gui.mainframe.components.RoundedButton;
 
 class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+
 
 	public LoginPanel() {
         setLayout(new GridBagLayout());
@@ -64,7 +68,7 @@ class LoginPanel extends JPanel {
         gbc.ipady = 0;
         add(pwLabel, gbc);
 
-        JTextField pwField = new JTextField();
+        JPasswordField pwField = new JPasswordField();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.ipadx = 200;
