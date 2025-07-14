@@ -1,8 +1,10 @@
 package function.connector;
 
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class QueryRequest<T> {
+    private CountDownLatch latch = new CountDownLatch(1);
     private String query;
     private String operationName;
     private String tableName;
@@ -30,6 +32,14 @@ public class QueryRequest<T> {
         this.params = List.of(singleParam);  // 바로 리스트 생성
         this.queryType = queryType;
         this.resultClass = resultClass;
+    }
+
+    public CountDownLatch getLatch() {
+        return latch;
+    }
+
+    public void done() {
+        latch.countDown();
     }
 
     // 게터 & 세터

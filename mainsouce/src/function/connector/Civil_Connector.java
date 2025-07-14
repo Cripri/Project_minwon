@@ -1,5 +1,7 @@
 package function.connector;
 
+import gui.mainframe.MainFrameState;
+
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.*;
@@ -28,6 +30,7 @@ public class Civil_Connector extends Thread {
 
     @Override
     public void run() {
+        MainFrameState.civil = this;
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             while (true) {
                 QueryRequest<?> request = queryQueue.take();
@@ -62,6 +65,8 @@ public class Civil_Connector extends Thread {
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            request.done();  // 꼭 호출!
         }
     }
 

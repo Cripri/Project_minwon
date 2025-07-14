@@ -1,13 +1,13 @@
 package function.connector;
 
 import function.pdfwriter.PDFWriter;
+import gui.mainframe.MainFrameState;
 
 import java.util.List;
 
 public class testcon {
     public static void main(String[] args) {
-        Civil_Connector query = new Civil_Connector();
-        query.start();
+        MainFrameState.civil.start();
 
         QueryRequest<Members> mem = new QueryRequest<>(
                 "SELECT * FROM members WHERE MEMBER_ID like ?",
@@ -18,18 +18,18 @@ public class testcon {
                 Members.class
         );
 
-        QueryRequest<Simple_doc> target = new QueryRequest<>(
-                "select * from simple_doc",
-                "findallSimple_doc",
-                "Simple_doc",
-                null,
-                QueryType.SELECT,
-                Simple_doc.class
-        );
+//        QueryRequest<Simple_doc> target = new QueryRequest<>(
+//                "select * from simple_doc",
+//                "findallSimple_doc",
+//                "Simple_doc",
+//                null,
+//                QueryType.SELECT,
+//                Simple_doc.class
+//        );
 
         try {
-            query.putQuery(target);
-            query.putQuery(mem);
+            //query.putQuery(target);
+            MainFrameState.civil.putQuery(mem);
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -37,14 +37,14 @@ public class testcon {
 
         Members mem1 = mem.getSingleResult();
         List<Members> member = mem.getResultList();
-        List<Simple_doc> data = target.getResultList();
-        for(Simple_doc s : data){
-            System.out.println(s);
-        }
-        for(Members m : member){
-            System.out.println(m);
-        }
-        System.out.println(mem1);
+        //List<Simple_doc> data = target.getResultList();
+//        for(Simple_doc s : data){
+//            System.out.println(s);
+//        }
+//        for(Members m : member){
+//            System.out.println(m);
+//        }
+        System.out.println(mem1.getMember_id());
 
 
 

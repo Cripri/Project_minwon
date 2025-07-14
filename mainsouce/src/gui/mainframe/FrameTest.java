@@ -1,6 +1,9 @@
 package gui.mainframe;
 
+import function.connector.Civil_Connector;
+
 import java.awt.BorderLayout;
+import java.sql.Connection;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -40,6 +43,9 @@ public class FrameTest extends JFrame {
 	}
 
 	public static void main(String[] args) {
+
 		SwingUtilities.invokeLater(FrameTest::new);
+		Civil_Connector con = new Civil_Connector();
+		con.start();
 	}
 }
