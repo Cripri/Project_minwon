@@ -213,7 +213,6 @@ public class PDFWriter {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     private void resident_registration_card(Simple_doc data, String rrn, Members user, District dis){
