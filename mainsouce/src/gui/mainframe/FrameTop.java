@@ -1,11 +1,12 @@
 package gui.mainframe;
 
+import function.drawingsign.DrawingSign;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 // 버튼들은 나중에 픽토그램 이미지로 변경 예정
 public class FrameTop extends JPanel{
@@ -26,9 +27,10 @@ public class FrameTop extends JPanel{
 		
 		// 버튼들 (메인페이지 아직 연결 안함)
 		JButton mainPageBtn = new JButton("메인페이지");
-//		mainPageBtn.addActionListener((e) -> {
-//			MainFrameState.card.show("my page");
-//		});
+		mainPageBtn.addActionListener((e) -> {
+			//MainFrameState.card.show("my page");
+			SwingUtilities.invokeLater(() -> new DrawingSign().setVisible(true));
+		});
 		
 		JButton myPageBtn = new JButton("마이페이지");
 		myPageBtn.addActionListener((e) -> {

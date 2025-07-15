@@ -14,7 +14,7 @@ public class SearchBarPanel extends JPanel {
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        ImageIcon search = new ImageIcon("./IconImage/돋보기.png");
+        ImageIcon search = new ImageIcon("resources/IconImage/돋보기.png");
         Image searchImg = search.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         JLabel searchIcon = new JLabel(new ImageIcon(searchImg));
         searchIcon.setPreferredSize(new Dimension(40, 40));

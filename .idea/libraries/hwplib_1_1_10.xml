@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="hwplib-1.1.10">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/hwplib-1.1.10.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
