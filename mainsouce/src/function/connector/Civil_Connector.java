@@ -236,7 +236,7 @@ public class Civil_Connector extends Thread {
         }
     }
 
-    public <T> T find(Class<T> clazz,Integer pk){
+    public <T> T find(Class<T> clazz,Object pk){
         try{
             Field[] fields = clazz.getDeclaredFields();
 

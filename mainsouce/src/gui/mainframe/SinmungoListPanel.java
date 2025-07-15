@@ -5,12 +5,16 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+
+import function.connector.Department;
 import function.connector.QueryRequest;
 import function.connector.Sinmungo;
 import gui.mainframe.model.Petition;
 
 import javax.swing.border.EmptyBorder;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -29,23 +33,23 @@ public class SinmungoListPanel extends JPanel {
     private TableCardPanel tableCardPanel;
     private PaginationPanel paginationPanel;
 
-    private final List<Petition> petitions = List.of(
-        new Petition("51", "노원구 어쩌구 아스팔트 파임", "도로 교통공사", "2025-07-03"),
-        new Petition("50", "노원구 어쩌구 아스팔트 파임", "도로 교통공사", "2025-07-03"),
-        new Petition("49", "노원구 어쩌구 아스팔트 파임", "도로 교통공사", "2025-07-03"),
-        new Petition("48", "노원구 어쩌구 아스팔트 파임 🔒", "도로 교통공사", "2025-07-03"),
-        new Petition("47", "등본 발급 관련 문의", "행정복지센터", "2025-07-02"),
-        new Petition("46", "횡단보도 신호 개선 요청", "교통안전센터", "2025-07-01"),
-        new Petition("45", "가로등 고장 신고", "시설관리공단", "2025-07-01")
-    );
+    List<Sinmungo> sin = civil.selectAll(Sinmungo.class);
+    List<Petition> petitions = new ArrayList<>();
+    List<Department> dp = civil.selectAll(Department.class);
 
-    QueryRequest<Sinmungo> sinmungo = new QueryRequest<>(
-            "select * from Sinmungo",
-            null,
-            Sinmungo.class,
-            civil
-    );
-    List<Sinmungo> sin = sinmungo.getResultList();
+    private void inputlist(List<Sinmungo> sin) {
+        for (int i = sin.size()-1; i >= 0; i--) {
+            if(sin.get(i).getStatus().equals("C")) {
+                String dename = "";
+                for (Department d : dp) {
+                    if (Objects.equals(d.getDepartment_code(), sin.get(i).getEmployee_code())) {
+                        dename = d.getDepartment_name();
+                    }
+                }
+                petitions.add(new Petition(String.valueOf(sin.get(i).getSinmungo_code()), sin.get(i).getSinmungo_title(), dename, sin.get(i).getAnswer_date()));
+            }
+        }
+    }
 
     private int currentPage = 0;
     private final int itemsPerPage = 5;
@@ -54,6 +58,7 @@ public class SinmungoListPanel extends JPanel {
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(20, 20, 20, 20));
         setBackground(new Color(217, 217, 217));
+        inputlist(sin);
 
         // 제목
         JLabel title = new JLabel("민원 게시판");
@@ -96,7 +101,6 @@ public class SinmungoListPanel extends JPanel {
         writeBtn.addActionListener((e) -> {
         	MainFrameState.card.show("");
         });
-        
         
 		bottomPanel.add(writeBtn, BorderLayout.EAST);
 		bottomPanel.add(paginationPanel, BorderLayout.CENTER);

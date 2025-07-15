@@ -47,7 +47,7 @@ public class MyPage extends JPanel {
         setVisible(true);
     }
 
-    private JPanel titlePanel(String title, String subtitle) {
+    public static JPanel titlePanel(String title, String subtitle) {
         JPanel panel = new JPanel(new GridLayout(title != null ? 2 : 1, 1));
         panel.setBackground(new Color(217, 217, 217));
 
