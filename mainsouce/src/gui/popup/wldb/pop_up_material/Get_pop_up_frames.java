@@ -192,14 +192,14 @@ public class Get_pop_up_frames{
 			btn1.addActionListener(f ->{
 				JFrame pop = get_public_alarm_double_frame(2, 0, "로그인", "실패");
 			});
-			JButton btn2 = new JButton("공용 알림 3개버전");
+			JButton btn2 = new JButton("공용 알림");
 			btn2.addActionListener(f ->{
 				JFrame pop = get_public_alarm_frame
 						("유저의 계정이 정지되었습니다");
 			});
 			JButton btn3 = new JButton("로그인/아웃 알림");
 			btn3.addActionListener(f ->{
-				JFrame pop = get_log_in_out_frame("보라돌이", true);		
+				JFrame pop = get_log_in_out_frame("보라돌이");		
 			});
 			JButton btn4 = new JButton("틀림 알림");
 			btn4.addActionListener(f ->{
@@ -249,15 +249,13 @@ public class Get_pop_up_frames{
 	}
 	
 	
-	public static JFrame get_log_in_out_frame(
-			String str, boolean in_out
-	) {
+	public static JFrame get_log_in_out_frame(String str) {
 		JFrame pop = geb.get_pop_up_base_small("로그인 알림", col);
 		
 		pop.setLayout(new GridLayout(3, 1));
 		
 		pop.add(new JPanel());
-		pop.add(geb.get_pop_up_login_out(str, in_out));
+		pop.add(geb.get_pop_up_login_out(str));
 		pop.add(geb.get_ok_button_panel(pop));
 		
 		return pop;	
