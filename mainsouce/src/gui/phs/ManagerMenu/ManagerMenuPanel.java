@@ -1,7 +1,6 @@
 package gui.phs.ManagerMenu;
 
 import gui.mainframe.FrameTop;
-import gui.phs.common.BasicFrame;
 import gui.phs.common.ImageUtil;
 
 import javax.swing.*;
@@ -9,30 +8,29 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
-import java.util.function.Consumer;
 
-public class ManagerMenuPanel extends JFrame {
+public class ManagerMenuPanel extends JPanel {
 
     private DefaultTableModel model;
     private JTable table;
     private Object[][] originalData;
 
     public ManagerMenuPanel() {
-        BasicFrame.setupBasicFrame(this, "계정 관리");
+        setLayout(new BorderLayout());
+        setBackground(new Color(245, 245, 245));
 
-        FrameTop topPanel = new FrameTop();
-        add(topPanel, BorderLayout.NORTH);
+//        FrameTop topPanel = new FrameTop();
+//        add(topPanel, BorderLayout.NORTH);
 
         JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBackground(new Color(245, 245, 245));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        centerPanel.setBackground(new Color(245, 245, 245));
         add(centerPanel, BorderLayout.CENTER);
 
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         actionPanel.setOpaque(false);
 
         JButton filterBtn = new JButton("검색필터");
-        filterBtn.setPreferredSize(new Dimension(90, 30));
         styleButton(filterBtn);
         actionPanel.add(filterBtn);
 
@@ -56,14 +54,12 @@ public class ManagerMenuPanel extends JFrame {
         model = new DefaultTableModel(originalData, columns) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // 편집, 삭제 버튼 컬럼만 편집 가능하게 설정 (마지막 두 컬럼)
-                return column >= columns.length - 2;
+                return column >= columns.length - 2; // 편집, 삭제 컬럼만 편집 가능
             }
         };
 
         table = new JTable(model);
         table.setRowHeight(40);
-        table.setFillsViewportHeight(true);
         table.setShowGrid(false);
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setSelectionBackground(new Color(200, 220, 255));
@@ -83,43 +79,27 @@ public class ManagerMenuPanel extends JFrame {
             }
         });
 
-        // 테이블 헤더 스타일
         JTableHeader header = table.getTableHeader();
         header.setBackground(new Color(70, 130, 180));
         header.setForeground(Color.WHITE);
         header.setFont(header.getFont().deriveFont(Font.BOLD, 14f));
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
-        // 아이콘 렌더러와 에디터 설정
         setupIconRenderers();
-
-        // 컬럼 너비 설정
-        table.getColumnModel().getColumn(0).setPreferredWidth(70);  // 등록번호
-        table.getColumnModel().getColumn(1).setPreferredWidth(120); // 아이디
-        table.getColumnModel().getColumn(2).setPreferredWidth(100); // 이름
-        table.getColumnModel().getColumn(3).setPreferredWidth(80);  // 직급
-        table.getColumnModel().getColumn(4).setPreferredWidth(100); // 담당부서
-        table.getColumnModel().getColumn(5).setPreferredWidth(100); // 민원 부서 변경
-        table.getColumnModel().getColumn(6).setPreferredWidth(50);  // 편집
-        table.getColumnModel().getColumn(7).setPreferredWidth(50);  // 삭제
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         centerPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // 버튼 이벤트 처리
         filterBtn.addActionListener(e -> {
             JOptionPane.showMessageDialog(this, "검색 필터 기능은 추후 구현 예정입니다.");
         });
 
         createBtn.addActionListener(e -> {
-            AccountCreateDialog createDialog = new AccountCreateDialog(this, userData -> {
-                model.addRow(userData);
-            });
-            createDialog.setVisible(true);
+            Window parentWindow = SwingUtilities.getWindowAncestor(this);
+            AccountCreateDialog dialog = new AccountCreateDialog(parentWindow, userData -> model.addRow(userData));
+            dialog.setVisible(true);
         });
-
-        setVisible(true);
     }
 
     private void setupIconRenderers() {
@@ -149,9 +129,5 @@ public class ManagerMenuPanel extends JFrame {
                 btn.setBackground(new Color(220, 220, 220));
             }
         });
-    }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(ManagerMenuPanel::new);
     }
 }
