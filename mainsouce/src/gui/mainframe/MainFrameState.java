@@ -5,4 +5,9 @@ import function.connector.Civil_Connector;
 public class MainFrameState {
 	public static CardLayoutPanel card;
 	public static Civil_Connector civil;
+
+	static{
+		civil = new Civil_Connector();
+		civil.start();
+	}
 }

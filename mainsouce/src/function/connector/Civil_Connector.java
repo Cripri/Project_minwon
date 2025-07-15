@@ -22,7 +22,7 @@ public class Civil_Connector extends Thread {
         }
     }
 
-    private final BlockingQueue<QueryRequest<?>> queryQueue = new LinkedBlockingQueue<>(10);
+    private final BlockingQueue<QueryRequest<?>> queryQueue = new LinkedBlockingQueue<>();
 
     public void putQuery(QueryRequest<?> request) throws InterruptedException {
         queryQueue.put(request);
@@ -34,6 +34,7 @@ public class Civil_Connector extends Thread {
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             while (true) {
                 QueryRequest<?> request = queryQueue.take();
+                //System.out.println("쿼리 받음: " + request.getQuery());
                 if (request.getQuery().toLowerCase().startsWith("select")) {
                     executeQuery(request, conn);
                 } else {
@@ -42,6 +43,7 @@ public class Civil_Connector extends Thread {
             }
         } catch (SQLException | InterruptedException e) {
             e.printStackTrace();
+            System.out.println("스레드 종료됨!");
         }
     }
 
@@ -49,8 +51,8 @@ public class Civil_Connector extends Thread {
         try (PreparedStatement ps = conn.prepareStatement(request.getQuery())) {
             List<Object> params = request.getParams();
             if (params != null) {
-                for (int i = 0; i < params.size(); i++) {
-                    ps.setObject(i + 1, params.get(i));
+                for (int i = 1; i < params.size(); i++) {
+                    ps.setObject(i, params.get(i));
                 }
             }
             ResultSet rs = ps.executeQuery();
@@ -62,11 +64,10 @@ public class Civil_Connector extends Thread {
             } else {
                 request.setSingleResult(null);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            request.done();  // 꼭 호출!
+            request.done();
         }
     }
 
@@ -75,13 +76,22 @@ public class Civil_Connector extends Thread {
             List<Object> params = request.getParams();
             if (params != null) {
                 for (int i = 0; i < params.size(); i++) {
-                    ps.setObject(i + 1, params.get(i));
+                    Object param = params.get(i);
+                    if (param instanceof java.util.Date) {
+                        ps.setDate(i + 1, new java.sql.Date(((java.util.Date) param).getTime()));
+                    } else if (param instanceof Boolean) {
+                        ps.setString(i + 1, (Boolean) param ? "T" : "F");
+                    } else {
+                        ps.setObject(i + 1, param);
+                    }
                 }
             }
             int affectedRows = ps.executeUpdate();
             System.out.println("영향 받은 행 수: " + affectedRows);
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            request.done();
         }
     }
 
@@ -100,20 +110,16 @@ public class Civil_Connector extends Thread {
             T instance = clazz.getDeclaredConstructor().newInstance();
 
             for (int i = 1; i <= columnCount; i++) {
-                String columnName = meta.getColumnName(i).toLowerCase();  // ← columnLabel → columnName 로 바꿔봄
+                String columnName = meta.getColumnLabel(i).toLowerCase();
                 Field field = fieldMap.get(columnName);
                 if (field != null) {
                     Object value = rs.getObject(i);
 
-                    // BigDecimal → Integer
                     if (value instanceof java.math.BigDecimal && field.getType() == Integer.class) {
                         field.set(instance, ((java.math.BigDecimal) value).intValue());
-                    }
-                    // Timestamp → Date
-                    else if (value instanceof Timestamp && field.getType() == java.util.Date.class) {
+                    } else if (value instanceof Timestamp && field.getType() == java.util.Date.class) {
                         field.set(instance, new java.util.Date(((Timestamp) value).getTime()));
-                    }
-                    else {
+                    } else {
                         field.set(instance, value);
                     }
                 }
@@ -121,5 +127,88 @@ public class Civil_Connector extends Thread {
             list.add(instance);
         }
         return list;
+    }
+
+    public <T> void insert(T obj) {
+        try {
+            Class<?> clazz = obj.getClass();
+            Field[] fields = clazz.getDeclaredFields();
+
+            String tableName = clazz.getSimpleName().toLowerCase();
+            List<String> columnNames = new ArrayList<>();
+            List<Object> values = new ArrayList<>();
+
+            for (Field f : fields) {
+                f.setAccessible(true);
+                Object value = f.get(obj);
+                if (value != null) {
+                    columnNames.add(f.getName().toLowerCase());
+                    values.add(value);
+                }
+            }
+
+            String cols = String.join(", ", columnNames);
+            String qMarks = String.join(", ", Collections.nCopies(values.size(), "?"));
+            String sql = "INSERT INTO " + tableName + " (" + cols + ") VALUES (" + qMarks + ")";
+
+            QueryRequest<Object> req = new QueryRequest<>(sql, values, Object.class, this);
+            req.getLatch().await();
+            System.out.println("Insert complete: " + sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public <T> void update(T obj) {
+        try {
+            Class<?> clazz = obj.getClass();
+            Field[] fields = clazz.getDeclaredFields();
+
+            String tableName = clazz.getSimpleName().toLowerCase();
+            List<String> setClauses = new ArrayList<>();
+            List<Object> values = new ArrayList<>();
+
+            String pkName = null;
+            Object pkValue = null;
+
+            for (Field f : fields) {
+                f.setAccessible(true);
+                Object value = f.get(obj);
+                if (f.getName().toLowerCase().endsWith("code")) {
+                    pkName = f.getName().toLowerCase();
+                    pkValue = value;
+                } else if (value != null) {
+                    setClauses.add(f.getName().toLowerCase() + " = ?");
+                    values.add(value);
+                }
+            }
+
+            if (pkName == null || pkValue == null) {
+                throw new IllegalArgumentException("PK 필드(xxx_code)가 필요합니다!");
+            }
+
+            String setPart = String.join(", ", setClauses);
+            String sql = "UPDATE " + tableName + " SET " + setPart + " WHERE " + pkName + " = ?";
+            values.add(pkValue);
+
+            QueryRequest<Object> req = new QueryRequest<>(sql, values, Object.class, this);
+            req.getLatch().await();
+            System.out.println("Update complete: " + sql);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public <T> List<T> selectAll(Class<T> clazz) {
+        try {
+            String tableName = clazz.getSimpleName().toLowerCase();
+            String sql = "SELECT * FROM " + tableName;
+            QueryRequest<T> req = new QueryRequest<>(sql, Collections.emptyList(), clazz, this);
+            req.getLatch().await();
+            return req.getResultList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
     }
 }
