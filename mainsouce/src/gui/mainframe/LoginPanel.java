@@ -6,16 +6,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.*;
 
-import function.connector.Civil_Connector;
-import function.connector.Members;
-import function.connector.QueryRequest;
-import function.connector.QueryType;
-import function.encryption.Encryptor;
 import gui.mainframe.components.RoundButton;
 import gui.mainframe.components.RoundedButton;
 
