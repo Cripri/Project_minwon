@@ -9,6 +9,9 @@ import java.awt.Insets;
 
 import javax.swing.*;
 
+import function.connector.Members;
+import function.connector.QueryRequest;
+import function.encryption.Encryptor;
 import gui.mainframe.components.RoundButton;
 import gui.mainframe.components.RoundedButton;
 
