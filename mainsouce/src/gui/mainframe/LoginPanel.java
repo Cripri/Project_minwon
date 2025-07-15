@@ -7,14 +7,21 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 
-import javax.swing.*;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
+import function.connector.Members;
+import function.connector.QueryRequest;
+import function.encryption.Encryptor;
 import gui.mainframe.components.RoundButton;
 import gui.mainframe.components.RoundedButton;
 
 class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
-
 
 	public LoginPanel() {
         setLayout(new GridBagLayout());
@@ -91,9 +98,12 @@ class LoginPanel extends JPanel {
         		String enPw = mem.getMember_password_encrypted();
         		
         		if (Encryptor.matches(pw, enPw)) {
-        			System.out.println("성공~");
+        			MainFrameState.login_id = mem.getMember_id();
+        			MainFrameState.frameTop.refreshButtons();
+        			idField.setText("");
+        			pwField.setText("");
         			// 카드 넘겨주기 mypage로
-        			// MainFrameState.card.show("myPage");
+        			MainFrameState.card.show("myPage");
         		} else {
         			// 팝업 -> 비밀번호 틀림
         			System.out.println("비밀번호 틀림");

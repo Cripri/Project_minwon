@@ -32,6 +32,7 @@ public class FrameTest extends JFrame {
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
+		
 		cardPage.add("login", login);
 		cardPage.add("myPage", myPage);
 		cardPage.add("simpleDoc", simpleDoc);
@@ -41,6 +42,10 @@ public class FrameTest extends JFrame {
 		cardPage.add("userInfoEdit", userInfoEdit);
 		add(cardPage, BorderLayout.CENTER);
 		
+		MainFrameState.currentCard = "login";
+		MainFrameState.history.clear();
+		MainFrameState.future.clear();
+		MainFrameState.history.push("login");
 		setVisible(true);
 	}
 
