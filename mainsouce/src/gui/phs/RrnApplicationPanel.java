@@ -1,9 +1,25 @@
 package gui.phs;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.SwingUtilities;
 
 import gui.mainframe.FrameTop;
+import gui.mainframe.components.addressComboBoxPanel;
 
 public class RrnApplicationPanel extends JPanel {
 
@@ -69,12 +85,8 @@ public class RrnApplicationPanel extends JPanel {
 
         JPanel comboPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         comboPanel.setOpaque(false);
-        JComboBox<String> cityCombo = new JComboBox<>(new String[]{"시도선택"});
-        JComboBox<String> districtCombo = new JComboBox<>(new String[]{"시군구선택"});
-        cityCombo.setFont(boldFont);
-        districtCombo.setFont(boldFont);
-        comboPanel.add(cityCombo);
-        comboPanel.add(districtCombo);
+        comboPanel.add(new addressComboBoxPanel().addressComboBoxPanel());
+        
         comboPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         centerPanel.add(comboPanel);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 2)));
