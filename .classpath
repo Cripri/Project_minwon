@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="mainsouce/src"/>
+	<classpathentry kind="lib" path="resources/lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="resources/lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="resources/lib/pdfbox-app-2.0.33.jar"/>
+	<classpathentry kind="lib" path="resources/lib/spring-security-crypto-6.2.2.jar"/>
+	<classpathentry kind="output" path="out/production/MainSouce"/>
+</classpath>

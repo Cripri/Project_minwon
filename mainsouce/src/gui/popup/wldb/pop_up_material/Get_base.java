@@ -283,7 +283,7 @@ public class Get_base {
 		JPanel memo_jp = get_panel(col);
 		memo_jp.setLayout(new BorderLayout());
 		
-		JTextArea memo = new JTextArea();
+		JTextArea memo = new JTextArea();		
 		memo.setBorder(new LineBorder(col.getInside_color(), 5));
 		state.Nexts_add(memo);
 		
@@ -577,7 +577,7 @@ public class Get_base {
 	}
 	
 	
-	protected static JLabel get_public_pop_up_you_did(
+	protected static JLabel get_public_pop_up_you_did_double(
 			int index1, int index2,
 			String str1 , String str2
 	) {
@@ -604,25 +604,9 @@ public class Get_base {
 		// 이거말고 경우의 수가 또 뭐가 있지?
 	}
 	
-	protected static JLabel get_public_pop_up_you_did_triple(
-			int index1, int index2, int index3,
-			String str1 , String str2, String str3
-	) {
-		String[] contents1 = {
-				"을(를) ", "이(가) ", "의 "};
-		String[] contents2 = {
-				"이(가) ", "을(를) ", "으로 ", "으로인해 "};
-		String[] contents3 = {
-				"되었습니다.", "하셨습니다.", "하시겠습니까?"};
-		String content = 
-				str1 + contents1[index1] 
-				+ str2 + contents2[index2]
-				+ str3 + contents3[index3];
+	protected static JLabel get_public_pop_up_you_did(String str) {
 		
-		
-		return get_word_center(content);
-		// 사용예 : 0000계정의 삭제처리가 완료되었습니다
-		// 아 맞다, ㅇㅇ의 ㅇㅇ이 ㅇㅇㅇ으로 수정되었습니다
+		return get_word_center(str);
 	}
 	
 	protected static JLabel get_pop_up_login_out(String str1, boolean in_out) {
