@@ -11,13 +11,13 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class ManagerMenu extends JFrame {
+public class ManagerMenuPanel extends JFrame {
 
     private DefaultTableModel model;
     private JTable table;
     private Object[][] originalData;
 
-    public ManagerMenu() {
+    public ManagerMenuPanel() {
         BasicFrame.setupBasicFrame(this, "계정 관리");
 
         FrameTop topPanel = new FrameTop();
@@ -152,6 +152,6 @@ public class ManagerMenu extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(ManagerMenu::new);
+        SwingUtilities.invokeLater(ManagerMenuPanel::new);
     }
 }
