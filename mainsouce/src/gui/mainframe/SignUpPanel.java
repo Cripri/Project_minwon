@@ -3,7 +3,9 @@ package gui.mainframe;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.RoundedButton;
+import gui.mainframe.components.addressComboBoxPanel;
 
 import java.awt.*;
 
@@ -40,11 +42,20 @@ public class SignUpPanel extends JPanel {
         addRow(formPanel, gbc, row++, "비밀번호", new JPasswordField(15), null, labelFont, inputFont);
         addRow(formPanel, gbc, row++, "비밀번호확인", new JPasswordField(15), null, labelFont, inputFont);
         addRow(formPanel, gbc, row++, "이름", new JTextField(15), null, labelFont, inputFont);
-        addRow(formPanel, gbc, row++, "생년월일", new JTextField("1999년12월12일", 15), null, labelFont, inputFont);
 
-        // 성별
         gbc.gridx = 0;
         gbc.gridy = row;
+        JLabel birthDateLabel = new JLabel("생년월일");
+        formPanel.add(birthDateLabel, gbc);
+        
+        gbc.gridx = 1;
+        gbc.gridy = row;
+        BirthDateSelector bds = new BirthDateSelector();
+        formPanel.add(bds.getBirthDatePanel(), gbc);
+        
+        // 성별
+        gbc.gridx = 0;
+        gbc.gridy = ++row;
         formPanel.add(new JLabel("성별"), gbc);
 
         gbc.gridx = 1;
@@ -53,6 +64,10 @@ public class SignUpPanel extends JPanel {
         ButtonGroup genderGroup = new ButtonGroup();
         JRadioButton male = new JRadioButton("남");
         JRadioButton female = new JRadioButton("여");
+        male.setBackground(new Color(217, 217, 217));
+        female.setBackground(new Color(217, 217, 217));
+        male.setSelected(true);
+        
         genderGroup.add(male);
         genderGroup.add(female);
         genderPanel.add(male);
@@ -63,17 +78,35 @@ public class SignUpPanel extends JPanel {
         addRow(formPanel, gbc, row++, "핸드폰번호", new JTextField("010-1234-5678", 15), new RoundedButton("본인인증"), labelFont, inputFont);
         addRow(formPanel, gbc, row++, "이메일", new JTextField("example@email.com", 15), null, labelFont, inputFont);
 
-        // 주소
-        JTextField zipField = new JTextField("12345", 6);
-        addRow(formPanel, gbc, row++, "주소", zipField, new RoundedButton("주소검색"), labelFont, inputFont);
+        gbc.gridx = 0;
+        gbc.gridy = row;
+
+        JLabel addressLabel = new JLabel("주소");
+        formPanel.add(addressLabel, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = row++;
-        gbc.gridwidth = 2;
-        formPanel.add(new JTextField("도로명 주소", 20), gbc);
-
+        addressComboBoxPanel address = new addressComboBoxPanel();
+        formPanel.add(address.addressComboBoxPanel(), gbc);
+//        JComboBox<String> sidoComboBox = new JComboBox<String>();
+//        sidoComboBox.setBackground(Color.WHITE);
+//    	sidoComboBox.addItem("서울특별시");
+//    	sidoComboBox.addItem("경기도");
+//    	formPanel.add(sidoComboBox, gbc);
+    	
+//    	gbc.gridx = 2;
+//    	gbc.gridy = row++;
+    	
+//    	JComboBox<String> sigunguComboBox = new JComboBox<String>();
+//    	sigunguComboBox.setBackground(Color.WHITE);
+//    	sigunguComboBox.addItem("노원구");
+//    	sigunguComboBox.addItem("안양시");
+//    	formPanel.add(sigunguComboBox, gbc);
+        
+    	gbc.gridx = 1;
         gbc.gridy = row++;
-        formPanel.add(new JTextField("상세 주소", 20), gbc);
+        gbc.gridwidth = 2;
+        formPanel.add(new JTextField(), gbc);
 
         // --- Submit Button ---
         JButton submitBtn = new RoundedButton("회원가입");
