@@ -8,6 +8,8 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -18,6 +20,11 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import function.connector.Complaint_category_info;
+import function.connector.Department;
+import function.connector.Employees;
+import function.connector.Simple_doc;
+import function.connector.Sinmungo;
 import gui.mainframe.components.RoundedButton;
 
 public class MyPage extends JPanel {
@@ -65,11 +72,28 @@ public class MyPage extends JPanel {
     }
 
     private JPanel requestTableSection() {
-        String[] headers = {"번호", "제목", "처리기관", "등록일"};
-        Object[][] rows = {
-            {"51", "노원구 어쩌구 아스팔트 파임", "도로 교통공사", "2025-07-03"},
-            {"50", "노원구 어쩌구 아스팔트 파임", "도로 교통공사", "2025-07-03"}
-        };
+        String[] headers = {"번호", "제목", "처리기관", "등록일", "답변일"};
+        List<Sinmungo> list = MainFrameState.civil.selectAll(Sinmungo.class);
+        Object[][] rows = new Object[list.size()][headers.length];
+        
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+        for (int i = 0; i < rows.length; i++) {
+        	Sinmungo l = list.get(i);
+			rows[i][0] = l.getSinmungo_code();
+			rows[i][1] = l.getSinmungo_title();
+			Employees e = MainFrameState.civil.find(Employees.class, l.getEmployee_code());
+			Department d = MainFrameState.civil.find(Department.class, e.getDepartment_code());
+			rows[i][2] = d.getDepartment_name();
+			String create_date = formatter.format(l.getCreate_date());
+			rows[i][3] = create_date;
+			if (l.getAnswer_date() == null) {
+				rows[i][4] = "답변 없음";
+			} else {
+				String answer_date = formatter.format(l.getAnswer_date());
+				rows[i][4] = answer_date;
+			}
+		}
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
@@ -85,7 +109,7 @@ public class MyPage extends JPanel {
         Font font = new Font("맑은 고딕", Font.PLAIN, 13);
         Font headerFont = new Font("맑은 고딕", Font.BOLD, 14);
 
-        double[] columnWeights = {0.1, 0.4, 0.2, 0.3};
+        double[] columnWeights = {0.1, 0.4, 0.2, 0.15, 0.15};
 
         // 헤더
         for (int col = 0; col < headers.length; col++) {
@@ -98,7 +122,7 @@ public class MyPage extends JPanel {
         }
 
         // 데이터 행
-        for (int row = 0; row < rows.length; row++) {
+        for (int row = 0; row < list.size(); row++) {
             for (int col = 0; col < headers.length; col++) {
                 gbc.gridx = col;
                 gbc.gridy = row + 1;
@@ -113,11 +137,26 @@ public class MyPage extends JPanel {
     }
 
     private JPanel issueTableSection() {
-        String[] headers = {"번호", "제목", "처리기관", "등록일"};
-        Object[][] rows = {
-            {"51", "등본", "출력", "2025-07-03"},
-            {"50", "초본", "출력", "2025-07-03"}
-        };
+        String[] headers = {"번호", "신청문서", "출력", "등록일", "처리일"};
+        List<Simple_doc> list = MainFrameState.civil.selectAll(Simple_doc.class);
+        Object[][] rows = new Object[list.size()][headers.length];
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        
+        for (int i = 0; i < rows.length; i++) {
+        	Simple_doc l = list.get(i);
+			rows[i][0] = l.getSimple_doc_code();
+			Complaint_category_info category = MainFrameState.civil.find(Complaint_category_info.class, l.getComplaint_category_code()); 
+			rows[i][1] = category.getComplaint_category_name();
+			rows[i][2] = "출력";
+			String create_date = formatter.format(l.getCreate_date());
+			rows[i][3] = create_date;
+			if (list.get(i).getComplete_date() == null) {
+				rows[i][4] = "처리중";
+			} else {
+				String answer_date = formatter.format(list.get(i).getComplete_date());
+				rows[i][4] = answer_date;
+			}
+		}
 
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
@@ -133,7 +172,7 @@ public class MyPage extends JPanel {
         Font font = new Font("맑은 고딕", Font.PLAIN, 13);
         Font headerFont = new Font("맑은 고딕", Font.BOLD, 14);
 
-        double[] columnWeights = {0.1, 0.4, 0.2, 0.3};
+        double[] columnWeights = {0.1, 0.4, 0.2, 0.15, 0.15};
 
         // 헤더
         for (int col = 0; col < headers.length; col++) {
