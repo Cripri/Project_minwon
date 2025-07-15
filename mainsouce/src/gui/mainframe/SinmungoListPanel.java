@@ -1,15 +1,26 @@
 package gui.mainframe;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import function.connector.QueryRequest;
 import function.connector.Sinmungo;
-import gui.mainframe.components.*;
 import gui.mainframe.model.Petition;
 
-import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
 import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import gui.mainframe.components.PaginationPanel;
+import gui.mainframe.components.RoundedButton;
+import gui.mainframe.components.SearchBarPanel;
+import gui.mainframe.components.TableCardPanel;
 import static gui.mainframe.MainFrameState.civil;
 
 public class SinmungoListPanel extends JPanel {
@@ -65,6 +76,10 @@ public class SinmungoListPanel extends JPanel {
         centerPanel.add(tableCardPanel);
 
         add(centerPanel, BorderLayout.CENTER);
+        
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setOpaque(false);
+        bottomPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
         // 페이지네이션
         int totalPages = (int) Math.ceil((double) petitions.size() / itemsPerPage);
@@ -73,24 +88,18 @@ public class SinmungoListPanel extends JPanel {
             tableCardPanel.showPage(newPage);
         });
 
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.setOpaque(false);
-        bottomPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
-        bottomPanel.add(paginationPanel, BorderLayout.CENTER);
+        RoundedButton writeBtn = new RoundedButton("새 민원 작성");
+        writeBtn.setPreferredSize(new Dimension(160, 40));
+        writeBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        writeBtn.setBorderPainted(false);
+        writeBtn.setFocusPainted(false);
+        writeBtn.addActionListener((e) -> {
+        	MainFrameState.card.show("");
+        });
         
-        // 새 글 작성 버튼
-		RoundedButton writeBtn = new RoundedButton("새 민원 작성");
-		writeBtn.setPreferredSize(new Dimension(160, 40));
-		writeBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		writeBtn.setBorderPainted(false);
-		writeBtn.setFocusPainted(false);
-		
-		// 민원 작성 페이지로 이동 설정해야 함 
-//		writeBtn.addActionListener((e) ->{
-//			MainFrameState.card.show("민원작성페이지");
-//		});
-
+        
+		bottomPanel.add(writeBtn, BorderLayout.EAST);
+		bottomPanel.add(paginationPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
-        bottomPanel.add(writeBtn, BorderLayout.EAST);
     }
 }

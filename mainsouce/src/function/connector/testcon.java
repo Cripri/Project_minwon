@@ -14,26 +14,25 @@ public class testcon {
         Civil_Connector con = new Civil_Connector();
         con.start();
 
-        // select all members
-        List<Members> memList = con.selectAll(Members.class);
-        memList.forEach(System.out::println);
+        Members newmember = new Members();
+        Members updatemem = new Members();
+        newmember.setMember_id("afasdf");
 
-        // update 예시
-        if (!memList.isEmpty()) {
-            Members m = memList.get(memList.size() - 1);
-            m.setMember_name("강지후");
-            con.update(m);
+
+        con.insert(newmember);
+        con.update(updatemem);
+        // select * from District;
+        List<District> aldis = con.selectAll(District.class);
+
+        Sinmungo s = con.find(Sinmungo.class,51);
+
+        for(District d : aldis){
+            System.out.println(d);
         }
 
-//        try {
-//            Thread.sleep(200); // update 스레드 처리 대기
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
 
-        // 다시 조회해서 출력
-        memList = con.selectAll(Members.class);
-        memList.forEach(System.out::println);
+        Simple_doc m = con.find(Simple_doc.class,2);
 
+        System.out.println(m);
     }
 }
