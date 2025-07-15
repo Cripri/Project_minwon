@@ -1,14 +1,12 @@
 package gui.mainframe;
 
-import function.connector.Civil_Connector;
-
 import java.awt.BorderLayout;
-import java.sql.Connection;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import static gui.mainframe.MainFrameState.civil;
+//import gui.phs.WriteContent;
+import gui.phs.firstpage.FirstPage;
 
 public class FrameTest extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -19,7 +17,8 @@ public class FrameTest extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null); // 화면 중앙
 		setLayout(new BorderLayout());
-
+		
+		FirstPage firstPage = new FirstPage();
 		LoginPanel login = new LoginPanel();
 		SimpleDocPanel simpleDoc = new SimpleDocPanel();
 		MyPage myPage = new MyPage();
@@ -27,11 +26,13 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
+//		WriteContent write = new WriteContent();
 		
 		FrameTop ft = new FrameTop();
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
+		cardPage.add("firstPage", firstPage);
 		cardPage.add("login", login);
 		cardPage.add("myPage", myPage);
 		cardPage.add("simpleDoc", simpleDoc);
@@ -39,6 +40,8 @@ public class FrameTest extends JFrame {
 		cardPage.add("employeeMain", employeeMain);
 		cardPage.add("signUp", signUp);
 		cardPage.add("userInfoEdit", userInfoEdit);
+//		cardPage.add("write", write);
+		
 		add(cardPage, BorderLayout.CENTER);
 		
 		setVisible(true);

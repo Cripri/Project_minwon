@@ -28,8 +28,8 @@ public class FrameTop extends JPanel{
 		// 버튼들 (메인페이지 아직 연결 안함)
 		JButton mainPageBtn = new JButton("메인페이지");
 		mainPageBtn.addActionListener((e) -> {
-			//MainFrameState.card.show("my page");
-			SwingUtilities.invokeLater(() -> new DrawingSign().setVisible(true));
+			MainFrameState.card.show("firstPage");
+//			SwingUtilities.invokeLater(() -> new DrawingSign().setVisible(true));
 		});
 		
 		JButton myPageBtn = new JButton("마이페이지");
