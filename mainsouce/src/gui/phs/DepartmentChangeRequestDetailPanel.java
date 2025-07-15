@@ -1,31 +1,26 @@
 package gui.phs;
 
 import gui.mainframe.FrameTop;
-import gui.phs.common.BasicFrame;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class DepartmentChangeRequestDetail extends JFrame {
+public class DepartmentChangeRequestDetailPanel extends JPanel {
 
-    public DepartmentChangeRequestDetail() {
-        BasicFrame.setupBasicFrame(this, "부서변경 요청내역");
+    public DepartmentChangeRequestDetailPanel() {
+        setLayout(new BorderLayout(10, 10));
+        setBackground(new Color(200, 200, 200));
 
-        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBackground(new Color(200, 200, 200));
-        setContentPane(mainPanel);
-
-        // 🔹 상단 패널: FrameTop 유지
+        // 🔹 상단 패널
         FrameTop topPanel = new FrameTop();
-        mainPanel.add(topPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
 
-        // 🔹 중앙 내용 전체 패널 (정보 + 민원내용)
+        // 🔹 중앙 패널
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(new Color(220, 220, 220));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        // 제목
         JLabel headerLabel = new JLabel("부서 변경 요청 내역", SwingConstants.CENTER);
         headerLabel.setFont(new Font("맑은고딕", Font.BOLD, 20));
         headerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -46,7 +41,6 @@ public class DepartmentChangeRequestDetail extends JFrame {
 
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // 제목 영역
         JTextArea titleArea = new JTextArea("제목");
         titleArea.setFont(new Font("맑은고딕", Font.BOLD, 16));
         titleArea.setEditable(false);
@@ -59,7 +53,6 @@ public class DepartmentChangeRequestDetail extends JFrame {
 
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // 민원내용 영역
         JTextArea contentArea = new JTextArea("민원내용");
         contentArea.setFont(new Font("맑은고딕", Font.PLAIN, 14));
         contentArea.setEditable(false);
@@ -70,7 +63,7 @@ public class DepartmentChangeRequestDetail extends JFrame {
         contentArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
         centerPanel.add(contentArea);
 
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
+        add(centerPanel, BorderLayout.CENTER);
 
         // 🔹 하단 패널
         JPanel bottomPanel = new JPanel();
@@ -78,7 +71,6 @@ public class DepartmentChangeRequestDetail extends JFrame {
         bottomPanel.setBackground(new Color(220, 220, 220));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 20, 30));
 
-        // 버튼들 가운데 정렬
         JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonRow.setBackground(new Color(220, 220, 220));
 
@@ -109,19 +101,24 @@ public class DepartmentChangeRequestDetail extends JFrame {
         buttonRow.add(listButton);
         bottomPanel.add(buttonRow);
 
-        // 안내 문구
         JPanel explanationPanel = new JPanel(new GridLayout(2, 1));
         explanationPanel.setBackground(new Color(220, 220, 220));
-        JLabel label1 = new JLabel("부서 선택 후 '부서 변경' 클릭 시 적용됩니다.", SwingConstants.CENTER);
-        JLabel label2 = new JLabel("팀장급부터만 변경 가능합니다.", SwingConstants.CENTER);
-        explanationPanel.add(label1);
-        explanationPanel.add(label2);
+        explanationPanel.add(new JLabel("부서 선택 후 '부서 변경' 클릭 시 적용됩니다.", SwingConstants.CENTER));
+        explanationPanel.add(new JLabel("팀장급부터만 변경 가능합니다.", SwingConstants.CENTER));
         bottomPanel.add(explanationPanel);
 
-        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
+        add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    // 테스트용 main
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new DepartmentChangeRequestDetail().setVisible(true));
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("부서변경 요청내역");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(800, 600);
+            frame.setLocationRelativeTo(null);
+            frame.setContentPane(new DepartmentChangeRequestDetailPanel());
+            frame.setVisible(true);
+        });
     }
 }
