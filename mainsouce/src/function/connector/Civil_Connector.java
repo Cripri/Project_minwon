@@ -51,8 +51,8 @@ public class Civil_Connector extends Thread {
         try (PreparedStatement ps = conn.prepareStatement(request.getQuery())) {
             List<Object> params = request.getParams();
             if (params != null) {
-                for (int i = 1; i < params.size(); i++) {
-                    ps.setObject(i, params.get(i));
+                for (int i = 0; i < params.size(); i++) {
+                    ps.setObject(i + 1, params.get(i));
                 }
             }
             ResultSet rs = ps.executeQuery();
@@ -87,7 +87,7 @@ public class Civil_Connector extends Thread {
                 }
             }
             int affectedRows = ps.executeUpdate();
-            System.out.println("영향 받은 행 수: " + affectedRows);
+            //System.out.println("영향 받은 행 수: " + affectedRows);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -211,4 +211,30 @@ public class Civil_Connector extends Thread {
             return Collections.emptyList();
         }
     }
+
+    public <T> T find(Class<T> clazz,Integer pk){
+        try{
+            Field[] fields = clazz.getDeclaredFields();
+
+            String pkName = null;
+            for (Field f : fields) {
+                f.setAccessible(true);
+                if (f.getName().toLowerCase().endsWith("code")) {
+                    pkName = f.getName().toLowerCase();
+                    break;
+                }
+            }
+
+            String tableName = clazz.getSimpleName().toLowerCase();
+            String sql = "select * from " + tableName + " where " + pkName + " = ?";
+
+            QueryRequest<T> req = new QueryRequest<>(sql,pk,clazz,this);
+            return req.getSingleResult();
+        }catch (Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
 }

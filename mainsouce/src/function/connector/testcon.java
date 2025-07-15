@@ -14,26 +14,8 @@ public class testcon {
         Civil_Connector con = new Civil_Connector();
         con.start();
 
-        // select all members
-        List<Members> memList = con.selectAll(Members.class);
-        memList.forEach(System.out::println);
+        Simple_doc m = con.find(Simple_doc.class,2);
 
-        // update 예시
-        if (!memList.isEmpty()) {
-            Members m = memList.get(memList.size() - 1);
-            m.setMember_name("강지후");
-            con.update(m);
-        }
-
-//        try {
-//            Thread.sleep(200); // update 스레드 처리 대기
-//        } catch (InterruptedException e) {
-//            throw new RuntimeException(e);
-//        }
-
-        // 다시 조회해서 출력
-        memList = con.selectAll(Members.class);
-        memList.forEach(System.out::println);
-
+        System.out.println(m);
     }
 }
