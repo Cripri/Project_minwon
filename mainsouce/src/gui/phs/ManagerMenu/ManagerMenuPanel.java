@@ -92,7 +92,7 @@ public class ManagerMenuPanel extends JPanel {
         centerPanel.add(scrollPane, BorderLayout.CENTER);
 
         filterBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "검색 필터 기능은 추후 구현 예정입니다.");
+            JOptionPane.showMessageDialog(this, "Comming soon...");
         });
 
         createBtn.addActionListener(e -> {
@@ -103,8 +103,8 @@ public class ManagerMenuPanel extends JPanel {
     }
 
     private void setupIconRenderers() {
-        ImageIcon editIcon = ImageUtil.getScaledIcon("편집이미지.png", 25, 25);
-        ImageIcon deleteIcon = ImageUtil.getScaledIcon("휴지통.png", 25, 25);
+        ImageIcon editIcon = ImageUtil.getScaledIcon("resources/IconImage/편집이미지.png", 25, 25);
+        ImageIcon deleteIcon = ImageUtil.getScaledIcon("resources/IconImage/휴지통.png", 25, 25);
 
         table.getColumnModel().getColumn(6).setCellRenderer(new ImageButtonRenderer(editIcon));
         table.getColumnModel().getColumn(7).setCellRenderer(new ImageButtonRenderer(deleteIcon));

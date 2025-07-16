@@ -1,12 +1,11 @@
 package gui.phs;
 
 import java.awt.*;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.Year;
 import javax.swing.*;
 
-import gui.mainframe.FrameTop;
 import gui.mainframe.components.addressComboBoxPanel;
 
 public class AfterLoginPanel extends JPanel {
@@ -15,11 +14,6 @@ public class AfterLoginPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(217, 217, 217));
 
-        // 상단 바
-        FrameTop topPanel = new FrameTop();
-        this.add(topPanel, BorderLayout.NORTH);
-
-        // 중앙 입력 폼 패널
         JPanel formPanel = new JPanel(new GridLayout(10, 1, 5, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(30, 250, 30, 250));
         formPanel.setBackground(new Color(217, 217, 217));
@@ -44,7 +38,7 @@ public class AfterLoginPanel extends JPanel {
 
         // 주소
         rows[2].add(new JLabel("주소"));
-        rows[2].add(new addressComboBoxPanel().addressComboBoxPanel()); // ✅ 수정된 부분
+        rows[2].add(new addressComboBoxPanel().addressComboBoxPanel());
 
         // 연락처
         rows[3].add(new JLabel("연락처"));
@@ -53,43 +47,8 @@ public class AfterLoginPanel extends JPanel {
 
         // 생년월일 + 성별
         rows[4].add(new JLabel("생년월일"));
-
-        int currentYear = Year.now().getValue();
-        int startYear = 1850;
-        int count = currentYear - startYear + 1;
-        String[] yearStrings = new String[count];
-        for (int i = 0; i < count; i++) {
-            yearStrings[i] = String.valueOf(currentYear - i);
-        }
-
-        JComboBox<String> yearsBox = new JComboBox<>(yearStrings);
-        JComboBox<Integer> monthsBox = new JComboBox<>();
-        JComboBox<Integer> daysBox = new JComboBox<>();
-
-        for (int i = 1; i <= 12; i++) monthsBox.addItem(i);
-        for (int i = 1; i <= 31; i++) daysBox.addItem(i);
-
-        ActionListener updateDays = e -> {
-            int year = Integer.parseInt((String) yearsBox.getSelectedItem());
-            int month = (Integer) monthsBox.getSelectedItem();
-            int maxDay = LocalDate.of(year, month, 1).lengthOfMonth();
-            Integer selectedDay = (Integer) daysBox.getSelectedItem();
-
-            daysBox.removeAllItems();
-            for (int i = 1; i <= maxDay; i++) daysBox.addItem(i);
-            if (selectedDay != null && selectedDay <= maxDay) daysBox.setSelectedItem(selectedDay);
-        };
-
-        yearsBox.addActionListener(updateDays);
-        monthsBox.addActionListener(updateDays);
-
-        yearsBox.setPreferredSize(new Dimension(80, 25));
-        monthsBox.setPreferredSize(new Dimension(60, 25));
-        daysBox.setPreferredSize(new Dimension(60, 25));
-
-        rows[4].add(yearsBox); rows[4].add(new JLabel("년"));
-        rows[4].add(monthsBox); rows[4].add(new JLabel("월"));
-        rows[4].add(daysBox); rows[4].add(new JLabel("일"));
+        JPanel birthdatePanel = createBirthdatePanel();
+        rows[4].add(birthdatePanel);
 
         rows[4].add(new JLabel("성별:"));
         JComboBox<String> genderBox = new JComboBox<>(new String[]{"남성", "여성"});
@@ -128,11 +87,56 @@ public class AfterLoginPanel extends JPanel {
         ButtonGroup securityGroup = new ButtonGroup();
         securityGroup.add(securityYes);
         rows[7].add(securityYes);
+        
 
         // 안내문
         JLabel warningLabel = new JLabel("* 선택할 경우 외부로 비밀번호 제외, 비회원은 신청정보와 일치할 때만 확인할 수 있습니다.");
         rows[8].add(warningLabel);
 
         this.add(formPanel, BorderLayout.CENTER);
+    }
+
+    public JPanel createBirthdatePanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        panel.setOpaque(false);
+
+        int currentYear = Year.now().getValue();
+        int startYear = 1850;
+        int count = currentYear - startYear + 1;
+        String[] yearStrings = new String[count];
+        for (int i = 0; i < count; i++) {
+            yearStrings[i] = String.valueOf(currentYear - i);
+        }
+
+        JComboBox<String> yearsBox = new JComboBox<>(yearStrings);
+        JComboBox<Integer> monthsBox = new JComboBox<>();
+        JComboBox<Integer> daysBox = new JComboBox<>();
+
+        for (int i = 1; i <= 12; i++) monthsBox.addItem(i);
+        for (int i = 1; i <= 31; i++) daysBox.addItem(i);
+
+        ActionListener updateDays = e -> {
+            int year = Integer.parseInt((String) yearsBox.getSelectedItem());
+            int month = (Integer) monthsBox.getSelectedItem();
+            int maxDay = LocalDate.of(year, month, 1).lengthOfMonth();
+            Integer selectedDay = (Integer) daysBox.getSelectedItem();
+
+            daysBox.removeAllItems();
+            for (int i = 1; i <= maxDay; i++) daysBox.addItem(i);
+            if (selectedDay != null && selectedDay <= maxDay) daysBox.setSelectedItem(selectedDay);
+        };
+
+        yearsBox.addActionListener(updateDays);
+        monthsBox.addActionListener(updateDays);
+
+        yearsBox.setPreferredSize(new Dimension(60, 23));
+        monthsBox.setPreferredSize(new Dimension(45, 23));
+        daysBox.setPreferredSize(new Dimension(45, 23));
+
+        panel.add(yearsBox); panel.add(new JLabel("년"));
+        panel.add(monthsBox); panel.add(new JLabel("월"));
+        panel.add(daysBox); panel.add(new JLabel("일"));
+
+        return panel;
     }
 }

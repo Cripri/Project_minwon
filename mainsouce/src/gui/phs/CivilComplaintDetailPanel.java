@@ -13,9 +13,8 @@ public class CivilComplaintDetailPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
 
-        // 상단 FrameTop
-        FrameTop topPanel = new FrameTop();
-        this.add(topPanel, BorderLayout.NORTH);
+//        FrameTop topPanel = new FrameTop();
+//        this.add(topPanel, BorderLayout.NORTH);
 
         // 가운데 본문 영역
         JPanel contentPanel = new JPanel();
