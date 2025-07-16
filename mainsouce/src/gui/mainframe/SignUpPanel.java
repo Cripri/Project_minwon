@@ -8,7 +8,10 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -21,14 +24,11 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-
-import gui.mainframe.components.BirthDateSelector;
-
 import function.connector.Members;
 import function.connector.QueryRequest;
 import function.encryption.Encryptor;
+import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
-
 import gui.mainframe.components.RoundedButton;
 import gui.mainframe.components.addressComboBoxPanel;
 
@@ -36,7 +36,7 @@ public class SignUpPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     
     boolean isDuplication = true;
-    String gender = null;
+    String gender = "m";
     boolean isCertification = false;
     
 	public SignUpPanel() {
@@ -63,50 +63,39 @@ public class SignUpPanel extends JPanel {
         Font inputFont = new Font("맑은 고딕", Font.PLAIN, 14);
 
         int row = 0;
-
-
-        // Helper to add labeled field
-        addRow(formPanel, gbc, row++, "ID", new JTextField(15), new RoundedButton("중복확인"), labelFont, inputFont);
-        addRow(formPanel, gbc, row++, "비밀번호", new JPasswordField(15), null, labelFont, inputFont);
-        addRow(formPanel, gbc, row++, "비밀번호확인", new JPasswordField(15), null, labelFont, inputFont);
-        addRow(formPanel, gbc, row++, "이름", new JTextField(15), null, labelFont, inputFont);
-
         
         JTextField idField = new JTextField(15);
 
         RoundedButton duplicationButton = new RoundedButton("중복확인");
         duplicationButton.addActionListener((e) -> {
-        	QueryRequest<Members> request = new QueryRequest<>(
-            		"SELECT member_id FROM members WHERE member_id like ?", 
-            	    idField.getText(),
-            	    Members.class,
-            	    MainFrameState.civil
-            	);
-            	
-            	Members mem = request.getSingleResult();
-            	if (mem == null) {
-            		// 팝업 사용가능한 아이디입니다.
-            		System.out.println("사용가능한 아이디");
-            		isDuplication = false;
-            	} else {
-            		// 팝업 이미 사용중인 아이디입니다.
-            		System.out.println("사용불가능한 아이디");
-            		isDuplication = true;
-            	}
+           QueryRequest<Members> request = new QueryRequest<>(
+                  "SELECT member_id FROM members WHERE member_id like ?", 
+                   idField.getText(),
+                   Members.class,
+                   MainFrameState.civil
+               );
+               
+               Members mem = request.getSingleResult();
+               if (mem == null) {
+                  // 팝업 사용가능한 아이디입니다.
+                  System.out.println("사용가능한 아이디");
+                  isDuplication = false;
+               } else {
+                  // 팝업 이미 사용중인 아이디입니다.
+                  System.out.println("사용불가능한 아이디");
+                  isDuplication = true;
+               }
         });
         
         JPasswordField pwField = new JPasswordField(15);
         JPasswordField pwCheckField = new JPasswordField(15);
         
         PlaceholderTextField nameField = new PlaceholderTextField("홍길동", 15);
-        PlaceholderTextField birthField = new PlaceholderTextField("1999년 12월 11일", 15);
 
-        addRow(formPanel, gbc, row++, "ID", idField, new RoundedButton("중복확인"), labelFont, inputFont);
+        addRow(formPanel, gbc, row++, "ID", idField, duplicationButton, labelFont, inputFont);
         addRow(formPanel, gbc, row++, "비밀번호", pwField, null, labelFont, inputFont);
         addRow(formPanel, gbc, row++, "비밀번호확인", pwCheckField, null, labelFont, inputFont);
         addRow(formPanel, gbc, row++, "이름", nameField, null, labelFont, inputFont);
-        addRow(formPanel, gbc, row++, "생년월일", birthField, null, labelFont, inputFont);
-
 
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -114,13 +103,13 @@ public class SignUpPanel extends JPanel {
         formPanel.add(birthDateLabel, gbc);
         
         gbc.gridx = 1;
-        gbc.gridy = row;
+        gbc.gridy = row++;
         BirthDateSelector bds = new BirthDateSelector();
         formPanel.add(bds.getBirthDatePanel(), gbc);
         
         // 성별
         gbc.gridx = 0;
-        gbc.gridy = ++row;
+        gbc.gridy = row;
         formPanel.add(new JLabel("성별"), gbc);
 
         gbc.gridx = 1;
@@ -134,7 +123,6 @@ public class SignUpPanel extends JPanel {
         female.setBackground(new Color(217, 217, 217));
         male.setSelected(true);
 
-        
         genderGroup.add(male);
         genderGroup.add(female);
         genderPanel.add(male);
@@ -146,8 +134,8 @@ public class SignUpPanel extends JPanel {
         RoundedButton certificationButton = new RoundedButton("본인인증");
         
         certificationButton.addActionListener((e) -> {
-        	// 본인인증 만들어지면 수정
-        	isCertification = true;
+           // 본인인증 만들어지면 수정
+           isCertification = true;
         });
         
         PlaceholderTextField emailField = new PlaceholderTextField("example@email.com", 15);
@@ -155,6 +143,7 @@ public class SignUpPanel extends JPanel {
         addRow(formPanel, gbc, row++, "핸드폰번호", phoneNumberField, certificationButton, labelFont, inputFont);
         addRow(formPanel, gbc, row++, "이메일", emailField, null, labelFont, inputFont);
 
+        // 주소
         gbc.gridx = 0;
         gbc.gridy = row;
 
@@ -165,29 +154,92 @@ public class SignUpPanel extends JPanel {
         gbc.gridy = row++;
         addressComboBoxPanel address = new addressComboBoxPanel();
         formPanel.add(address.addressComboBoxPanel(), gbc);
-//        JComboBox<String> sidoComboBox = new JComboBox<String>();
-//        sidoComboBox.setBackground(Color.WHITE);
-//    	sidoComboBox.addItem("서울특별시");
-//    	sidoComboBox.addItem("경기도");
-//    	formPanel.add(sidoComboBox, gbc);
-    	
-//    	gbc.gridx = 2;
-//    	gbc.gridy = row++;
-    	
-//    	JComboBox<String> sigunguComboBox = new JComboBox<String>();
-//    	sigunguComboBox.setBackground(Color.WHITE);
-//    	sigunguComboBox.addItem("노원구");
-//    	sigunguComboBox.addItem("안양시");
-//    	formPanel.add(sigunguComboBox, gbc);
         
-    	gbc.gridx = 1;
+        gbc.gridx = 0;
+        gbc.gridy = row;
+        JLabel addressDetailLabel = new JLabel("상세주소");
+        formPanel.add(addressDetailLabel, gbc);
+        
+        gbc.gridx = 1;
         gbc.gridy = row++;
         gbc.gridwidth = 2;
-        formPanel.add(new JTextField(), gbc);
+        JTextField addressDetailField = new JTextField();
+        formPanel.add(addressDetailField, gbc);
 
         // --- Submit Button ---
         JButton submitBtn = new RoundedButton("회원가입");
         submitBtn.addActionListener((e) -> {
+        	Date bDate = new Date();
+			if (male.isSelected()) {
+				gender = "m";
+			} else if (female.isSelected()) {
+				gender = "f";
+			}
+
+			if (bds.getYear() != null && bds.getMonth() != null && bds.getDay() != null) {
+				int year = bds.getYear();
+				int month = bds.getMonth();
+				int day = bds.getDay();
+
+				LocalDate bLocalDate = LocalDate.of(year, month, day);
+				bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			} else {
+				// TODO 팝업
+				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
+				System.out.println("생년, 월, 일을 모두 선택해주세요.");
+			}
+			
+			// 값이 선택된 경우만 처리
+			if (address.getSido() != null && address.getSigungu() != null) {
+			    int districtCode = address.findDistrictCode(address.getSido(), address.getSigungu());
+			    System.out.println("선택된 지역 코드: " + districtCode);
+
+			    if (districtCode != -1) {
+			        // 정상적인 지역 코드 처리
+			    } else {
+			        // 지역 코드가 없는 경우 처리
+			        System.out.println("해당 지역에 대한 코드가 없습니다.");
+			    }
+			} else {
+			    System.out.println("시도와 시군구를 모두 선택해주세요.");
+			}
+
+
+           
+           if (isDuplication) {
+              // 팝업
+              System.out.println("아이디 중복확인을 해주세요.");
+              return;
+           }
+           if (!isCertification) {
+              // 팝업
+              System.out.println("본인인증을 진행해주세요.");
+              return;
+           } 
+           if (pwField.getPassword().length == 0) {
+              System.out.println("비밀번호를 확인해주세요");
+              return;
+           }
+           if (!pwField.getPassword().equals(pwCheckField)) {
+              System.out.println("비밀번호가 일치하지않습니다.");
+              return;
+           }
+           
+           Members m = new Members();
+           m.setMember_id(idField.getText());
+           m.setMember_password(new String(pwField.getPassword()));
+           m.setMember_name(nameField.getText());
+           m.setMember_birthday(bDate);
+           m.setMember_gender(gender);
+           m.setDistrict_code(address.findDistrictCode(address.getSido(), address.getSigungu())); 
+           m.setMember_ad_detail(addressDetailField.getText());
+           m.setMember_phonenum(phoneNumberField.getText());
+           m.setMember_email(emailField.getText());
+           m.setMember_password_encrypted(Encryptor.encode(new String(pwField.getPassword())));
+
+           
+           // 완성되면 주석 풀기
+           // MainFrameState.civil.insert(m);
         	if (male.isSelected()) {
                 gender = "m";
             } else if (female.isSelected()) {
@@ -217,37 +269,8 @@ public class SignUpPanel extends JPanel {
         		System.out.println("비밀번호를 확인해주세요");
         		return;
         	}
-        	
-        	List<Object> list = new ArrayList<>();
-        	list.add(idField.getText());
-        	list.add(pwField.getPassword());
-        	list.add(nameField.getText());
-        	list.add(birthField.getText());
-        	list.add(gender);
-        	// 주소코드 
-        	// 상세주소
-        	list.add(phoneNumberField.getText());
-        	list.add(emailField.getText());
-        	list.add(Encryptor.encode(new String(pwField.getPassword())));
-        	
-        	QueryRequest<Members> request = new QueryRequest<>(
-            		"SELECT member_id FROM members WHERE member_id like ?", 
-            	    list,
-            	    Members.class,
-            	    MainFrameState.civil
-            	);
-            	
-            	Members mem = request.getSingleResult();
-            	if (mem == null) {
-            		// 팝업 사용가능한 아이디입니다.
-            		System.out.println("사용가능한 아이디");
-            		isDuplication = false;
-            	} else {
-            		// 팝업 이미 사용중인 아이디입니다.
-            		System.out.println("사용불가능한 아이디");
-            		isDuplication = true;
-            	}
         });
+        
         submitBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
         submitBtn.setBackground(new Color(0, 122, 255));
         submitBtn.setForeground(Color.WHITE);

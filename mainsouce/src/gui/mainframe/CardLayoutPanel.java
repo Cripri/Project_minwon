@@ -21,9 +21,9 @@ public class CardLayoutPanel extends JPanel {
 			if (MainFrameState.currentCard != null) {
 				MainFrameState.history.push(MainFrameState.currentCard);
 			}
-			
+
 			// 새로운 이동이 발생하면 future 초기화
-			MainFrameState.future.clear(); 
+			MainFrameState.future.clear();
 			MainFrameState.currentCard = value;
 			c.show(this, value);
 		}
@@ -31,16 +31,16 @@ public class CardLayoutPanel extends JPanel {
 
 	public void prev() {
 		if (!MainFrameState.history.isEmpty()) {
-	        String previous = MainFrameState.history.pop();
-	        
-	        if (MainFrameState.login_id != null && previous.equals("login")) {
-                previous = "myPage";
-	        }
-	        
-	        MainFrameState.future.push(MainFrameState.currentCard);
-	        MainFrameState.currentCard = previous;
-	        c.show(this, previous);
-	    }
+			String previous = MainFrameState.history.pop();
+
+			if (MainFrameState.login_id != null && previous.equals("login")) {
+				previous = "myPage";
+			}
+
+			MainFrameState.future.push(MainFrameState.currentCard);
+			MainFrameState.currentCard = previous;
+			c.show(this, previous);
+		}
 	}
 
 	public void next() {
