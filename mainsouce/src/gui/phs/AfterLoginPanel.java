@@ -1,4 +1,4 @@
-package gui.phs.afterlogin;
+package gui.phs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,26 +11,21 @@ import java.time.Year;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
 import gui.mainframe.FrameTop;
-import gui.phs.common.BasicFrame;
 
+public class AfterLoginPanel extends JPanel {
 
-
-public class AfterLogin extends JFrame {
-	private static final long serialVersionUID = 1L;
-
-	public AfterLogin() {
-        BasicFrame.setupBasicFrame(this, "After log-in UI");
+    public AfterLoginPanel() {
+        setLayout(new BorderLayout());
+        setBackground(new Color(217, 217, 217));
 
         FrameTop topPanel = new FrameTop();
-        add(topPanel, BorderLayout.NORTH);
+        this.add(topPanel, BorderLayout.NORTH);
 
         JPanel formPanel = new JPanel(new GridLayout(10, 1, 5, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(30, 250, 30, 250));
@@ -152,14 +147,6 @@ public class AfterLogin extends JFrame {
         JLabel warningLabel = new JLabel("* 선택할 경우 외부로 비밀번호 제외, 비회원은 신청정보와 일치할 때만 확인할 수 있습니다.");
         rows[8].add(warningLabel);
 
-        add(formPanel, BorderLayout.CENTER);
-        setVisible(true);
+        this.add(formPanel, BorderLayout.CENTER);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(AfterLogin::new);
-    }
-    
-
-
 }

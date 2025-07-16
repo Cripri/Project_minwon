@@ -1,16 +1,17 @@
 package gui.phs;
 
-
-import java.awt.*;
 import javax.swing.*;
+import java.awt.*;
+
 import gui.mainframe.FrameTop;
-import gui.phs.common.BasicFrame;
 
-public class RrnApplication extends JFrame {
+public class RrnApplicationPanel extends JPanel {
 
-    public RrnApplication() {
-        BasicFrame.setupBasicFrame(this, "민원 작성");
+    public RrnApplicationPanel() {
+        setLayout(new BorderLayout());
+        setBackground(new Color(217, 217, 217));
 
+        // 상단 패널
         FrameTop topPanel = new FrameTop();
         add(topPanel, BorderLayout.NORTH);
 
@@ -26,8 +27,8 @@ public class RrnApplication extends JFrame {
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
         centerPanel.add(title);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        
-        // 라디오 버튼 - 등본/초본
+
+        // 등본/초본 선택 라디오 버튼
         ButtonGroup docTypeGroup = new ButtonGroup();
         JRadioButton option1 = new JRadioButton("주민등록표 등본 발급");
         JRadioButton option2 = new JRadioButton("주민등록표 초본 발급");
@@ -42,8 +43,7 @@ public class RrnApplication extends JFrame {
         option2.setFont(boldFont);
         docTypeGroup.add(option1);
         docTypeGroup.add(option2);
-        
-        
+
         JPanel radioPanel = new JPanel();
         radioPanel.setLayout(new BoxLayout(radioPanel, BoxLayout.Y_AXIS));
         radioPanel.setOpaque(false);
@@ -117,10 +117,9 @@ public class RrnApplication extends JFrame {
         guide2.setAlignmentX(Component.LEFT_ALIGNMENT);
         centerPanel.add(guide2);
 
-        // 하단 여백
         centerPanel.add(Box.createVerticalGlue());
 
-        // 신청하기 버튼
+        // 버튼
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.X_AXIS));
         btnPanel.setOpaque(false);
@@ -137,11 +136,17 @@ public class RrnApplication extends JFrame {
 
         centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerPanel.add(btnPanel);
-
-        setVisible(true);
     }
 
+    // 테스트용 main
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(RrnApplication::new);
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("민원 작성");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(700, 600);
+            frame.setLocationRelativeTo(null);
+            frame.setContentPane(new RrnApplicationPanel());
+            frame.setVisible(true);
+        });
     }
 }

@@ -1,5 +1,6 @@
 package gui.mainframe.wldb_main_frame.material;
 
+import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Cursor;
@@ -7,6 +8,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -25,7 +27,8 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
-import function.connector.Simungo;
+import function.connector.Sinmungo;
+import gui.mainframe.components.IconButton;
 import gui.mainframe.model.Petition;
 import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
@@ -39,10 +42,14 @@ public class Get_main_base {
 	static Color_list_main cols = new Color_list_main(); 
 	static Get_pop_up_frames pop = new Get_pop_up_frames();
 	
-	private static Double[] petition_gap = {0.1, 0.2, 0.1, 0.1};
+	private static Double[] petition_gap = {0.1, 0.3, 0.2, 0.2};
 	static ArrayList<Double> petition_gaps = new ArrayList<>(Arrays.asList(petition_gap));
 
 	private static int page_input_limit = 10;
+	private static String card_name = "employees petition card ";
+	private static int new_page = 1;
+	private static CardLayout page = new CardLayout();
+	
 	
 	public static JPanel get_public_panel() {
 		JPanel jp = new JPanel();
@@ -89,26 +96,74 @@ public class Get_main_base {
 		title_jl.setHorizontalAlignment(JLabel.LEFT);		
 		title_jl.setFont(title_font);
 		
-				
+		jpc.add(Box.createHorizontalStrut(50));		
 		jpc.add(title_jl);
-		jpc.add(Box.createHorizontalStrut(500));
+		
 		
 		return jpc;
 	}
 	
-	public static JPanel get_card_employees_petition(String title) {
+	// 나도 페이지를 넣어보자
+	public static JPanel get_card_employees_petition(
+			String title, Sinmungo[] petition_info
+	) {
 		JPanel jpc = get_public_panel();
+		ArrayList<Sinmungo> sinList = new ArrayList<Sinmungo>(
+				Arrays.asList(petition_info));
 		
-		jpc.setLayout(new CardLayout());
+		jpc.setLayout(new BorderLayout());		
+		jpc.add(get_title_panel(title), BorderLayout.NORTH);
+		
+		JPanel jpb = new JPanel(new BorderLayout());
+		
+		String[] description = {"접수 번호", "내용", "처리상태", "만료일자"};		
+		jpb.add(get_string_width_panel(description, true), BorderLayout.NORTH);
+		
+		JPanel jpcard = new JPanel(page);
+		jpcard.setBorder(new LineBorder(Color.white, 5));
 		
 		
+		int page_total = (int) Math.ceil((double)petition_info.length / page_input_limit);
+		
+		if(page_total == 1) {
+			jpcard.add(get_employees_petition_panel
+					(Color_list_main.getInside_color(), sinList));
+		} else {
+			
+			for(int i = 0; i < page_total; i++) {
+				ArrayList<Sinmungo> petitions = new ArrayList<Sinmungo>();
+				
+				int page_list = Math.min(
+						page_input_limit, sinList.size());
+				
+				for(int j = 0; j < page_list; j++) {
+					petitions.add(sinList.remove(0));
+				}
+				
+				jpcard.add(get_employees_petition_panel(
+								Color_list_main.getInside_color(),
+								 petitions)
+						, card_name + i
+				);
+				
+			}
+		}
+		
+		
+		jpb.add(jpcard, BorderLayout.CENTER);
+		
+		jpc.add(jpb, BorderLayout.CENTER);
+		jpc.add(get_paje_button(jpcard, page_total), BorderLayout.SOUTH);
+		
+		
+		page.show(jpcard, card_name + 0);
 		
 		return jpc;
 	}
 	
 	
 	public static JPanel get_employees_petition_panel(
-			String title, Color col, Simungo[] petition_info
+			 Color col, ArrayList<Sinmungo> petition_info
 	) {
 		JPanel jpc = get_public_panel();
 		// 타이틀은 해놨으니
@@ -118,29 +173,80 @@ public class Get_main_base {
 		
 		// 그냥 흰줄이고 뭐고 다 하나로 해서 넣으려했는데
 		// 그러지말고 여기서 만들어 넣고 흰줄넣고를 for로 돌려야겠다
-		String[] description = {"접수 번호", "내용", "처리상태", "만료일자"};
+		
 		
 		jpc.setLayout(new BoxLayout(jpc, BoxLayout.Y_AXIS));
-		
-		ArrayList<JPanel> p_list = new ArrayList<>();
 		
 		///여기다가 클래스 분류해 String[]로 만들어 리스트 만들어 저장해줄애 뽑고
 		/// 그 다음에 설명창 만들어서 넣어야지
 		/// 그리고 설명창은 재활용항꺼니까 간격 외부입력으로 바꾸고
 		
-		jpc.add(Box.createVerticalStrut(10));
-		jpc.add(get_title_panel(title));
-		jpc.add(Box.createVerticalStrut(10));
-		
-		jpc.add(get_string_width_panel(description, true));
-		
-		
-		for(Simungo sim : petition_info) {
+		for(Sinmungo sim : petition_info) {
 			jpc.add(get_string_width_panel(get_simungo_info(sim), false));
 		}
-		// 나도 페이지를 넣어보자
+		
+		int len = petition_info.size();
+		if(len < page_input_limit) {
+			for(int i = 0; i < page_input_limit - len; i++) {
+				jpc.add(Box.createVerticalStrut(42));
+			}
+		}
 		
 		return jpc;
+	}
+	
+	protected static JPanel get_paje_button(JPanel card, int page_total) {
+		JPanel jp = get_public_panel();
+		jp.setLayout(new GridLayout(2, 1));
+		
+		JPanel but_jp = get_public_panel();
+		but_jp.setLayout(new GridLayout(1, 2));
+		
+		JPanel page_jp = get_public_panel();
+		page_jp.setLayout(new GridLayout(1, 1));
+		
+		JLabel page_jl = new JLabel();
+		page_jl.setFont(normal_font);
+		page_jl.setHorizontalAlignment(JLabel.CENTER);
+		page_update(page_jl, page_total);
+		
+		IconButton previous =  new IconButton(
+				"이전 페이지", "./IconImage/이전페이지.png");
+		IconButton next = new IconButton(
+				"다음 페이지", "./IconImage/다음페이지.png");
+		// 이런 공용 메서드를 원했어...
+		
+		previous.setHorizontalTextPosition(SwingConstants.RIGHT);
+		next.setHorizontalTextPosition(SwingConstants.LEFT);
+
+		next.addActionListener(e ->{
+			if(new_page != page_total) {				
+				page.next(card);
+				new_page++;
+				page_update(page_jl, page_total);
+			}
+		});
+		
+		previous.addActionListener(e ->{
+			if(new_page != 1) {
+				page.previous(card);
+				new_page--;
+				page_update(page_jl, page_total);
+			}
+		});
+		
+		but_jp.add(previous);
+		but_jp.add(next);
+		page_jp.add(page_jl);
+		
+		jp.add(but_jp);
+		jp.add(page_jp);
+		
+		return jp;
+	}
+	
+	private static void page_update(JLabel page_jl, int page_total) {
+		page_jl.setText(new_page+ " / " + page_total);
 	}
 	
 	// 여기서부터 문제
@@ -171,7 +277,7 @@ public class Get_main_base {
 			
 			
 			if(tf) {
-				jl.setFont(font);
+				jl.setFont(normal_font);
 			} else {
 				jl.setFont(headerFont);
 				if(i == 1) {
@@ -197,8 +303,9 @@ public class Get_main_base {
 				}
 			}
 			
-			jl.setPreferredSize(new Dimension(100, 25));
-			jl.setMaximumSize(new Dimension(100, 25));
+			jl.setPreferredSize(new Dimension(100, 30));
+			jl.setMaximumSize(new Dimension(100, 30));
+			jl.setMinimumSize(new Dimension(100, 30));
 			
 			// 전부 같은 크기로 간주하게 만들기
 			// 너무 긴글 한번 넣어서 확인
@@ -221,25 +328,9 @@ public class Get_main_base {
 		return jpc;
 	}
 	
-//	private static ArrayList<String[]> minwon_filter(Class[] minwon) {
-//		ArrayList<String[]> infos = new ArrayList<String[]>();
-//		
-//		for(Class cla : minwon) {
-//			String name = cla.getClass().getSimpleName();
-//			
-//			if(name.equals("Simungo")) {
-//				
-//				String[] info = get_simungo_info(cla);
-//			} else if(name.equals("Simple_doc")){
-//				
-//			}
-//		}
-//		
-//		return infos;
-//	}
 	
 	
-	protected static String[] get_simungo_info(Simungo sim) {
+	protected static String[] get_simungo_info(Sinmungo sim) {
 		String status = get_status(sim.getStatus());
 		
 		String and_date = " ";

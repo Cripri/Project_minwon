@@ -1,9 +1,14 @@
 package gui.mainframe;
 
+import function.connector.Civil_Connector;
+
 import java.awt.BorderLayout;
+import java.sql.Connection;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
+import static gui.mainframe.MainFrameState.civil;
 
 public class FrameTest extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -22,11 +27,13 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
+		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1);
 		
 		FrameTop ft = new FrameTop();
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
+		//cardPage.add("t상세",pppp);
 		cardPage.add("login", login);
 		cardPage.add("myPage", myPage);
 		cardPage.add("simpleDoc", simpleDoc);
@@ -40,6 +47,7 @@ public class FrameTest extends JFrame {
 	}
 
 	public static void main(String[] args) {
+
 		SwingUtilities.invokeLater(FrameTest::new);
 	}
 }

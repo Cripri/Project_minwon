@@ -13,66 +13,46 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 public class PDFWriter {
-    private Civil_Connector connector;
-    public PDFWriter(int simple_doc_pk,String rrn,Civil_Connector connector) {
-        try {
-            QueryRequest<Simple_doc> target = new QueryRequest<>(
-                    "select * from simple_doc where simple_doc_code like ?",
-                    "findallSimple_doc",
-                    "simple_doc",
-                    simple_doc_pk,
-                    QueryType.SELECT,
-                    Simple_doc.class
-            );
+    public PDFWriter(int simple_doc_pk,String rrn,Civil_Connector con) {
+        QueryRequest<Simple_doc> target = new QueryRequest<>(
+                "select * from simple_doc where simple_doc_code like ?",
+                simple_doc_pk,
+                Simple_doc.class,
+                con
+        );
+        Simple_doc data = target.getSingleResult();
 
-            connector.putQuery(target);
-            Thread.sleep(100);
-            Simple_doc data = target.getSingleResult();
-
-            QueryRequest<Members> userdata = new QueryRequest<>(
-                    "select * from Members where MEMBER_CODE like ?",
-                    "find_userdata",
-                    "Members",
-                    data.getMember_code(),
-                    QueryType.SELECT,
-                    Members.class
-            );
-            connector.putQuery(userdata);
-            Thread.sleep(100);
-            Members mem = userdata.getSingleResult();
-
-            QueryRequest<District> dist = new QueryRequest<>(
-                    "select * from District where DISTRICT_CODE like ?",
-                    "findalldistrict",
-                    "District",
-                    null,
-                    QueryType.SELECT,
-                    District.class
-            );
-            connector.putQuery(dist);
-            Thread.sleep(100);
-            District dis = dist.getSingleResult();
+        QueryRequest<Members> userdata = new QueryRequest<>(
+                "select * from Members where MEMBER_CODE like ?",
+                data.getMember_code(),
+                Members.class,
+                con
+        );
+        Members mem = userdata.getSingleResult();
 
 
+        QueryRequest<District> dist = new QueryRequest<>(
+                "select * from District where DISTRICT_CODE like ?",
+                data.getDistrict_code(),
+                District.class,
+                con
+        );
+        District dis = dist.getSingleResult();
 
-            if(data.getComplaint_category_code().contains("AA")){
-                resident_registration(data,rrn,mem,dis);
-            }else if(data.getComplaint_category_code().equals("AB")){
-                resident_registration_card(data,rrn,mem,dis);
-            }
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+
+        if(data.getComplaint_category_code().contains("AA")){
+            resident_registration(data,rrn,mem,dis);
+        }else if(data.getComplaint_category_code().equals("AB")){
+            resident_registration_card(data,rrn,mem,dis);
         }
     }
 
     private void resident_registration(Simple_doc data,String rrn,Members user,District dis){
         String filePath = "resources/pdf/주민등록표 열람 또는 등ㆍ초본 교부 신청서.pdf";  // 기존 PDF 경로
-        String ROOT_FONT_PATH = "font/NotoSansKR-VariableFont_wght.ttf";
+        String ROOT_FONT_PATH = "resources/font/NotoSansKR-VariableFont_wght.ttf";
         String check = "○";
         String check2 = "Ｖ";
         Date today = data.getComplete_date();
@@ -89,7 +69,7 @@ public class PDFWriter {
             InputStream fontStream = new FileInputStream(new File(ROOT_FONT_PATH));
             PDFont font = PDType0Font.load(document, fontStream);
 
-            PDImageXObject pdImage = PDImageXObject.createFromFile("Sign.png", document);
+            PDImageXObject pdImage = PDImageXObject.createFromFile("resources/sign/sign.png", document);
 
             try (PDPageContentStream contentStream = new PDPageContentStream(
                     document,
@@ -120,15 +100,17 @@ public class PDFWriter {
 
                 if(data.getComplaint_category_code().equals("AA001")) {
                     writeText(document, page, check, font, 166, 750); //등본
-                    writeText(document,page,data.getCount().toString(),font,122 ,563); // 등본 부수
-                    if(data.getAllInclude().equals("Y")){
+                    writeText(document,page,data.getDoc_count().toString(),font,122 ,563); // 등본 부수
+                    if(data.getAll_Included().equals("Y")){
                         writeText(document,page,check,font,172 ,692); //등본 전부
                     }else{
                         if(data.getaddress_history().equals("Y")) {
-                            writeText(document, page, check, font, 305, 665); //주소 변동사항 전체 포함
-                        }else {
-                            writeText(document, page, check, font, 390, 665); //주소 변동사항 최근_년포함
-                            writeText(document,page,data.getAddress_history_years().toString(),font,493 ,665); //_년 포함
+                            if(data.getAddress_history_years() > 0){
+                                writeText(document, page, check, font, 390, 665); //주소 변동사항 최근_년포함
+                                writeText(document,page,data.getAddress_history_years().toString(),font,493 ,665); //_년 포함
+                            }else{
+                                writeText(document, page, check, font, 305, 665); //주소 변동사항 전체 포함
+                            }
                         }
 
                         writeText(document, page, checkedOrEmpty(data.gethousehold_reason(), check), font, 504, 644); //세대 구성 사유
@@ -163,17 +145,19 @@ public class PDFWriter {
                     }
                 }else {
                     writeText(document, page, check, font, 347, 750); //초본
-                    writeText(document,page,data.getCount().toString(),font,122 ,372 ); // 초본 부수
-                    if(data.getAllInclude().equals("Y")){
+                    writeText(document,page,data.getDoc_count().toString(),font,122 ,372 ); // 초본 부수
+                    if(data.getAll_Included().equals("Y")){
                         writeText(document,page,check,font,394 ,692); //초본 전부
                     }else{
                         writeText(document,page,checkedOrEmpty(data.getpersonal_change_details(),check),font,504 ,471); // 개인 인적사항 변경 내용
 
                         if(data.getaddress_history().equals("Y")) {
-                            writeText(document, page, check, font, 315, 445); //과거의 주소 변동 사항 전체
-                        }else{
-                            writeText(document,page,check,font,395 ,445); //직접입력
-                            writeText(document,page,data.getAddress_history_years().toString(),font,496 ,445); //_년 포함
+                            if(data.getAddress_history_years() > 0){
+                                writeText(document,page,check,font,395 ,445); //직접입력
+                                writeText(document,page,data.getAddress_history_years().toString(),font,496 ,445); //_년 포함
+                            }else{
+                                writeText(document, page, check, font, 315, 445); //과거의 주소 변동 사항 전체
+                            }
                         }
 
                         writeText(document,page,checkedOrEmpty(data.gethead_relationship(),check),font,504 ,424); // 과거의 주소 변동 사항 중 세대주의 성명과 세대주와의 관계

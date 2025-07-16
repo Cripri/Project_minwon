@@ -3,7 +3,7 @@ package function.connector;
 
 import java.util.Date;
 
-public class Simungo {
+public class Sinmungo {
 	Integer sinmungo_code;
 	Integer member_code;
 	String member_phonenum;
@@ -20,9 +20,9 @@ public class Simungo {
 	String security_set;
 	String security_password;
 		String status;
+		public Sinmungo(){}
 	
-	
-	public Simungo(Integer sinmungo_code, Integer member_code, String member_phonenum, String member_email,
+	public Sinmungo(Integer sinmungo_code, Integer member_code, String member_phonenum, String member_email,
 			String member_name, Date member_birthday, String sinmungo_title, String sinmungo_content,
 			Integer complaint_area, Date create_date, Date answer_date, Integer employee_code, String employees_answer,
 			String security_set, String security_password, String status) {

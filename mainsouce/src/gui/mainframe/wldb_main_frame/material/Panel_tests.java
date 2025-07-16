@@ -7,7 +7,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import function.connector.Simungo;
+import function.connector.Sinmungo;
 
 public class Panel_tests {
 	
@@ -33,8 +33,8 @@ public class Panel_tests {
 //		tttt.add(gmb.get_string_box_panel(description));
 //		tttt.add(gmb.get_string_box_panel(info));
 		
-		Simungo[] sims = {
-				new Simungo(
+		Sinmungo[] sims = {
+				new Sinmungo(
 						1, 10,
 						"가", "나", "다",
 						new Date(1000 * 60 * 60 * 60),
@@ -42,9 +42,9 @@ public class Panel_tests {
 						100,
 						new Date(),	new Date(1000 * 60 * 60),
 						101010,
-						"라", "마", "바", "사"
+						"라", "마", "바", "C"
 				),
-				new Simungo(
+				new Sinmungo(
 						2, 20,
 						"ㄱ", "ㄴ", "ㄷ",
 						new Date(2000 * 60 * 60 * 60),
@@ -52,19 +52,114 @@ public class Panel_tests {
 						200,
 						new Date(),	new Date(2000 * 60 * 60),
 						202020,
-						"ㄹ", "ㅁ", "ㅂ", "ㅅ"
+						"ㄹ", "ㅁ", "ㅂ", "C"
+				),
+				new Sinmungo(
+						3, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "C"
+				)
+				,
+				new Sinmungo(
+						4, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "C"
+				),
+				new Sinmungo(
+						5, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "I"
+				),
+				new Sinmungo(
+						6, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "I"
+				),
+				new Sinmungo(
+						7, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "I"
+				),
+				new Sinmungo(
+						8, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "P"
+				),
+				new Sinmungo(
+						9, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "P"
+				),
+				new Sinmungo(
+						10, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "P"
+				),
+				new Sinmungo(
+						11, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "P"
+				),
+				new Sinmungo(
+						12, 20,
+						"ㄱ", "ㄴ", "ㄷ",
+						new Date(2000 * 60 * 60 * 60),
+						"제목", "내용",
+						200,
+						new Date(),	new Date(2000 * 60 * 60),
+						202020,
+						"ㄹ", "ㅁ", "ㅂ", "P"
 				)
 		};
 			
 		tttt.add(
-				gmb.get_employees_petition_panel
-					(
-					"클릭한 민원에대한 내용",
-					Color_list_main.getInside_color(),
-					sims
-					)
-				,
-				BorderLayout.CENTER
+				gmb.get_card_employees_petition("타이틀",	sims)
+				,BorderLayout.CENTER
 		);
 		
 		//tttt.add(jp);
