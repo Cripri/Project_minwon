@@ -70,6 +70,7 @@ public class FrameTest extends JFrame {
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();
 		MainFrameState.history.push("login");
+		add(cardPage, BorderLayout.CENTER);
 		setVisible(true);
 	}
 
