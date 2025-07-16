@@ -57,6 +57,7 @@ public class FrameTest extends JFrame {
 		cardPage.add("signUp", signUp);
 		cardPage.add("userInfoEdit", userInfoEdit);
 		
+
 		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
 		cardPage.add("AfterLoginPanel", afterLoginPanel);
 		cardPage.add("ComplaintAnswerListPanel", complaintAnswerListPanel);

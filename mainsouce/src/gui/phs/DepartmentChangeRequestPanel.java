@@ -80,6 +80,7 @@ public class DepartmentChangeRequestPanel extends JPanel {
         centerPanel.add(paginationPanel, BorderLayout.SOUTH);
 
         loadDataAndUpdateTable(currentPage);
+        
     }
 
     private void setComboBoxEditors() {
