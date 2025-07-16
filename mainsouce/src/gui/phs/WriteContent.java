@@ -21,10 +21,6 @@ public class WriteContent extends JPanel {
     public WriteContent() {
         setLayout(new BorderLayout());
 
-        // 상단 바
-        FrameTop topPanel = new FrameTop();
-        add(topPanel, BorderLayout.NORTH);
-
         // 중앙 패널
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));

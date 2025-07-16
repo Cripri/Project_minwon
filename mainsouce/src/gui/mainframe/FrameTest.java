@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import gui.phs.WriteContent;
 //import gui.phs.WriteContent;
 import gui.phs.firstpage.FirstPage;
 
@@ -26,7 +27,7 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
-//		WriteContent write = new WriteContent();
+		WriteContent write = new WriteContent();
 		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1);
 		
 		FrameTop ft = new FrameTop();
@@ -41,14 +42,13 @@ public class FrameTest extends JFrame {
 		cardPage.add("employeeMain", employeeMain);
 		cardPage.add("signUp", signUp);
 		cardPage.add("userInfoEdit", userInfoEdit);
-//		cardPage.add("write", write);
+		cardPage.add("write", write);
 		
 		add(cardPage, BorderLayout.CENTER);
 		
-		MainFrameState.currentCard = "login";
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();
-		MainFrameState.history.push("login");
+		MainFrameState.history.push("firstPage");
 		setVisible(true);
 	}
 

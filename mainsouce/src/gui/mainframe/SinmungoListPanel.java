@@ -98,9 +98,9 @@ public class SinmungoListPanel extends JPanel {
         writeBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
         writeBtn.setBorderPainted(false);
         writeBtn.setFocusPainted(false);
-//        writeBtn.addActionListener((e) -> {
-//        	MainFrameState.card.show("write");
-//        });
+        writeBtn.addActionListener((e) -> {
+        	MainFrameState.card.show("write");
+        });
         
 		bottomPanel.add(writeBtn, BorderLayout.EAST);
 		bottomPanel.add(paginationPanel, BorderLayout.CENTER);

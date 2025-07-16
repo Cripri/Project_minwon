@@ -41,6 +41,8 @@ public class addressComboBoxPanel {
         for(District d : dis) {
         	sidoComboBox.addItem(d.getSd_name());
         }
+        sido = dis.get(0).getSd_name();
+        sggimport(sggComboBox,sido);
         
         sidoComboBox.addActionListener((e) -> {
             sido = (String) sidoComboBox.getSelectedItem();
