@@ -33,7 +33,6 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
-		WriteContent write = new WriteContent();
 		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1);
 		
 		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
@@ -57,7 +56,6 @@ public class FrameTest extends JFrame {
 		cardPage.add("employeeMain", employeeMain);
 		cardPage.add("signUp", signUp);
 		cardPage.add("userInfoEdit", userInfoEdit);
-		cardPage.add("write", write);
 		
 		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
 		cardPage.add("AfterLoginPanel", afterLoginPanel);

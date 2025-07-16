@@ -99,7 +99,7 @@ public class SinmungoListPanel extends JPanel {
         writeBtn.setBorderPainted(false);
         writeBtn.setFocusPainted(false);
         writeBtn.addActionListener((e) -> {
-        	MainFrameState.card.show("write");
+        	MainFrameState.card.show("WriteContent");
         });
         
 		bottomPanel.add(writeBtn, BorderLayout.EAST);
