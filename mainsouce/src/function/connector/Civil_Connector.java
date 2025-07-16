@@ -135,25 +135,49 @@ public class Civil_Connector extends Thread {
             Field[] fields = clazz.getDeclaredFields();
 
             String tableName = clazz.getSimpleName().toLowerCase();
+            String seqName = tableName + "_seq";
+
             List<String> columnNames = new ArrayList<>();
+            List<String> valueExprs = new ArrayList<>();  // 값 표현식: ? 또는 시퀀스 nextval
             List<Object> values = new ArrayList<>();
 
             for (Field f : fields) {
                 f.setAccessible(true);
                 Object value = f.get(obj);
-                if (value != null) {
-                    columnNames.add(f.getName().toLowerCase());
-                    values.add(value);
+
+                String colName = f.getName().toLowerCase();
+
+                // PK 추정: 이름이 'code' 로 끝나는 컬럼
+                if (colName.endsWith("code")) {
+                    if (value == null) {
+                        // 값이 null 이면 시퀀스 nextval 사용
+                        columnNames.add(colName);
+                        valueExprs.add(seqName + ".nextval");
+                    } else {
+                        // 값이 있으면 그대로 insert
+                        columnNames.add(colName);
+                        valueExprs.add("?");
+                        values.add(value);
+                    }
+                } else {
+                    if (value != null) {
+                        columnNames.add(colName);
+                        valueExprs.add("?");
+                        values.add(value);
+                    }
                 }
             }
 
             String cols = String.join(", ", columnNames);
-            String qMarks = String.join(", ", Collections.nCopies(values.size(), "?"));
-            String sql = "INSERT INTO " + tableName + " (" + cols + ") VALUES (" + qMarks + ")";
+            String vals = String.join(", ", valueExprs);
+
+            String sql = "INSERT INTO " + tableName + " (" + cols + ") VALUES (" + vals + ")";
 
             QueryRequest<Object> req = new QueryRequest<>(sql, values, Object.class, this);
             req.getLatch().await();
+
             System.out.println("Insert complete: " + sql);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -212,7 +236,7 @@ public class Civil_Connector extends Thread {
         }
     }
 
-    public <T> T find(Class<T> clazz,Integer pk){
+    public <T> T find(Class<T> clazz,Object pk){
         try{
             Field[] fields = clazz.getDeclaredFields();
 

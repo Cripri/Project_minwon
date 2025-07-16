@@ -2,6 +2,7 @@ package gui.mainframe.components;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -24,7 +25,7 @@ public class addressComboBoxPanel {
         // 시도 콤보박스
         JComboBox<String> sidoComboBox = new JComboBox<>();
         sidoComboBox.setBackground(Color.WHITE);
-        // 월 콤보박스
+        // 시군구 콤보박스
         JComboBox<String> sggComboBox = new JComboBox<>();
         sggComboBox.setBackground(Color.WHITE);
 
@@ -56,6 +57,37 @@ public class addressComboBoxPanel {
         return panel;
     }
 	
+	public String getSido() {
+		return sido;
+	}
+
+	public void setSido(String sido) {
+		this.sido = sido;
+	}
+
+	public String getSigungu() {
+		return sigungu;
+	}
+
+	public void setSigungu(String sigungu) {
+		this.sigungu = sigungu;
+	}
+	
+	public int findDistrictCode(String sido, String sigungu) {
+	      List<Object> list = new ArrayList<>();
+	      list.add(sido);
+	      list.add(sigungu);
+	      QueryRequest<District> qr = new QueryRequest<>(
+	            "select * from district where sd_name like ? and sgg_name like ?",
+	            list,
+	            District.class,
+	            MainFrameState.civil
+	         );
+	      District d = qr.getSingleResult();
+	      
+	      return d != null ? d.getDistrict_code() : -1;
+	   }
+
 	private void sggimport(JComboBox box,String str) {
 		QueryRequest<District> ssgreq = new QueryRequest<>(
                 "select DISTINCT sgg_name FROM district WHERE sd_name = ?",

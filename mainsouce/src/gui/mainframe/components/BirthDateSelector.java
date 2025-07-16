@@ -5,9 +5,9 @@ import java.awt.*;
 
 public class BirthDateSelector {
 	
-	String year;
-	String month;
-	String day;
+	Integer year;
+	Integer month;
+	Integer day;
 
     public JPanel getBirthDatePanel() {
         JPanel panel = new JPanel();
@@ -24,7 +24,8 @@ public class BirthDateSelector {
         yearComboBox.addActionListener((e) -> {
             String selected = (String) yearComboBox.getSelectedItem();
             if (selected != null) {
-                year = selected.replace("년", "");
+                String y = selected.replace("년", "");
+                year = Integer.parseInt(y);
             }
         });
 
@@ -38,7 +39,8 @@ public class BirthDateSelector {
         monthComboBox.addActionListener((e) -> {
             String selected = (String) monthComboBox.getSelectedItem();
             if (selected != null) {
-                month = selected.replace("월", "");
+                String m = selected.replace("월", "");
+                month = Integer.parseInt(m);
             }
         });
 
@@ -52,7 +54,8 @@ public class BirthDateSelector {
         dayComboBox.addActionListener((e) -> {
             String selected = (String) dayComboBox.getSelectedItem();
             if (selected != null) {
-                day = selected.replace("일", "");
+                String d = selected.replace("일", "");
+                day = Integer.parseInt(d);
             }
         });
 
@@ -62,4 +65,28 @@ public class BirthDateSelector {
 
         return panel;
     }
+
+	public Integer getYear() {
+		return year;
+	}
+
+	public void setYear(Integer year) {
+		this.year = year;
+	}
+
+	public Integer getMonth() {
+		return month;
+	}
+
+	public void setMonth(Integer month) {
+		this.month = month;
+	}
+
+	public Integer getDay() {
+		return day;
+	}
+
+	public void setDay(Integer day) {
+		this.day = day;
+	}
 }
