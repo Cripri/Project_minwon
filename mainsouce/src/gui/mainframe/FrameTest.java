@@ -10,10 +10,10 @@ import gui.phs.CivilComplaintDetailPanel;
 import gui.phs.ComplaintAnswerListPanel;
 import gui.phs.DepartmentChangeRequestDetailPanel;
 import gui.phs.DepartmentChangeRequestPanel;
+import gui.phs.FirstPage;
 import gui.phs.RrnApplicationPanel;
 import gui.phs.WriteContent;
 import gui.phs.ManagerMenu.ManagerMenuPanel;
-import gui.phs.firstpage.FirstPage;
 
 public class FrameTest extends JFrame {
 	private static final long serialVersionUID = 1L;
