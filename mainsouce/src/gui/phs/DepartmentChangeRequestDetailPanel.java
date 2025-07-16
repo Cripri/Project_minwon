@@ -11,9 +11,8 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(200, 200, 200));
 
-        // 🔹 상단 패널
-        FrameTop topPanel = new FrameTop();
-        add(topPanel, BorderLayout.NORTH);
+//        FrameTop topPanel = new FrameTop();
+//        add(topPanel, BorderLayout.NORTH);
 
         // 🔹 중앙 패널
         JPanel centerPanel = new JPanel();

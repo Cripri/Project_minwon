@@ -1,4 +1,4 @@
-package gui.phs.firstpage;
+package gui.phs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,9 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import gui.mainframe.MainFrameState;
 import gui.mainframe.SimpleDocPanel;
-import gui.mainframe.components.RoundedButton;
 
 public class FirstPage extends SimpleDocPanel {
 
@@ -30,19 +28,8 @@ public class FirstPage extends SimpleDocPanel {
         centerPanel.setBackground(new Color(217, 217, 217));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(100, 100, 100, 100)); 
 
-        JButton leftButton = new RoundedButton("단순 서류\n출력 민원");
-        JButton rightButton = new RoundedButton("ㅇㅇ구\n 신문고");
-        
-        leftButton.addActionListener((e) -> {
-        	MainFrameState.card.show("simpleDoc");
-        });
-        
-        rightButton.addActionListener((e) -> {
-        	MainFrameState.card.show("sinmungoList");
-        });
-        
-        leftButton.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-        rightButton.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+        JButton leftButton = createCenterButton("단순 서류\n출력 민원");
+        JButton rightButton = createCenterButton("ㅇㅇ구\n신문고");
 
         Dimension buttonSize = new Dimension(300, 300);
         leftButton.setPreferredSize(buttonSize);
@@ -57,5 +44,14 @@ public class FirstPage extends SimpleDocPanel {
         centerPanel.add(Box.createHorizontalGlue());
 
         add(centerPanel, BorderLayout.CENTER);
+    }
+
+    private JButton createCenterButton(String text) {
+        JButton button = new JButton("<html><center>" + text.replace("\n", "<br>") + "</center></html>");
+        button.setBackground(new Color(30, 160, 255));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        button.setFocusPainted(false);
+        return button;
     }
 }
