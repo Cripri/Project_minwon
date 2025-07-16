@@ -168,14 +168,14 @@ public class SignUpPanel extends JPanel {
 
         // --- Submit Button ---
         JButton submitBtn = new RoundedButton("회원가입");
-        submitBtn.addActionListener((e) -> {
-        	Date bDate = new Date();
+		submitBtn.addActionListener((e) -> {
 			if (male.isSelected()) {
 				gender = "m";
 			} else if (female.isSelected()) {
 				gender = "f";
 			}
 
+			Date bDate = new Date();
 			if (bds.getYear() != null && bds.getMonth() != null && bds.getDay() != null) {
 				int year = bds.getYear();
 				int month = bds.getMonth();
@@ -187,88 +187,77 @@ public class SignUpPanel extends JPanel {
 				// TODO 팝업
 				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
 				System.out.println("생년, 월, 일을 모두 선택해주세요.");
+				return;
 			}
-			
+
 			// 값이 선택된 경우만 처리
 			if (address.getSido() != null && address.getSigungu() != null) {
-			    int districtCode = address.findDistrictCode(address.getSido(), address.getSigungu());
-			    System.out.println("선택된 지역 코드: " + districtCode);
+				int districtCode = address.findDistrictCode(address.getSido(), address.getSigungu());
+//			    System.out.println("선택된 지역 코드: " + districtCode);
 
-			    if (districtCode != -1) {
-			        // 정상적인 지역 코드 처리
-			    } else {
-			        // 지역 코드가 없는 경우 처리
-			        System.out.println("해당 지역에 대한 코드가 없습니다.");
-			    }
+				if (districtCode == -1) {
+					System.err.println("해당 지역에 대한 코드가 없습니다.");
+				}
 			} else {
-			    System.out.println("시도와 시군구를 모두 선택해주세요.");
+				System.out.println("시도와 시군구를 모두 선택해주세요.");
+				return;
 			}
 
+			if (addressDetailField.getText().trim().length() == 0) {
+				System.out.println("상세주소를 입력해주세요.");
+				return;
+			}
 
-           
-           if (isDuplication) {
-              // 팝업
-              System.out.println("아이디 중복확인을 해주세요.");
-              return;
-           }
-           if (!isCertification) {
-              // 팝업
-              System.out.println("본인인증을 진행해주세요.");
-              return;
-           } 
-           if (pwField.getPassword().length == 0) {
-              System.out.println("비밀번호를 확인해주세요");
-              return;
-           }
-           if (!pwField.getPassword().equals(pwCheckField)) {
-              System.out.println("비밀번호가 일치하지않습니다.");
-              return;
-           }
-           
-           Members m = new Members();
-           m.setMember_id(idField.getText());
-           m.setMember_password(new String(pwField.getPassword()));
-           m.setMember_name(nameField.getText());
-           m.setMember_birthday(bDate);
-           m.setMember_gender(gender);
-           m.setDistrict_code(address.findDistrictCode(address.getSido(), address.getSigungu())); 
-           m.setMember_ad_detail(addressDetailField.getText());
-           m.setMember_phonenum(phoneNumberField.getText());
-           m.setMember_email(emailField.getText());
-           m.setMember_password_encrypted(Encryptor.encode(new String(pwField.getPassword())));
+			if (isDuplication) {
+				// 팝업
+				System.out.println("아이디 중복확인을 해주세요.");
+				return;
+			}
+			if (nameField.getText().trim().length() == 0) {
+				System.out.println("이름을 입력해주세요.");
+				return;
+			}
+			if (phoneNumberField.getText().trim().length() == 0) {
+				System.out.println("핸드폰 번호를 입력해주세요.");
+				return;
+			}
+			if (!isCertification) {
+				// 팝업
+				System.out.println("본인인증을 진행해주세요.");
+				return;
+			}
+			if (pwField.getPassword().length == 0) {
+				System.out.println("비밀번호를 확인해주세요");
+				return;
+			}
+			String pw = new String(pwField.getPassword());
+			String pwCheck;
+			if (pwCheckField.getPassword() != null) {
+				pwCheck = new String(pwCheckField.getPassword());
+				if (!pw.equals(pwCheck)) {
+					System.out.println("비밀번호가 일치하지않습니다.");
+					return;
+				}
+			} else {
+				System.out.println("비밀번호 확인란을 확인해주세요.");
+				return;
+			}
+			
 
-           
-           // 완성되면 주석 풀기
-           // MainFrameState.civil.insert(m);
-        	if (male.isSelected()) {
-                gender = "m";
-            } else if (female.isSelected()) {
-                gender = "f";
-            }
-        	
-        	if (isDuplication) {
-        		// 팝업
-        		System.out.println("사용할 수 없는 아이디입니다.");
-        		return;
-        	}
-        	if (gender == null) {
-        		// 팝업
-        		System.out.println("성별을 선택해주세요.");
-        		return;
-        	} 
-        	if (!isCertification) {
-        		// 팝업
-        		System.out.println("본인인증을 진행해주세요.");
-        		return;
-        	} 
-        	if (pwField.getPassword().length == 0) {
-        		System.out.println("비밀번호를 확인해주세요");
-        		return;
-        	}
-        	if (pwField.getPassword().equals(pwCheckField)) {
-        		System.out.println("비밀번호를 확인해주세요");
-        		return;
-        	}
+			Members m = new Members();
+			m.setMember_id(idField.getText());
+			m.setMember_password(new String(pwField.getPassword()));
+			m.setMember_name(nameField.getText());
+			m.setMember_birthday(bDate);
+			m.setMember_gender(gender);
+			m.setDistrict_code(address.findDistrictCode(address.getSido(), address.getSigungu()));
+			m.setMember_ad_detail(addressDetailField.getText());
+			m.setMember_phonenum(phoneNumberField.getText());
+			m.setMember_email(emailField.getText());
+			m.setMember_password_encrypted(Encryptor.encode(new String(pwField.getPassword())));
+
+			// 완성되면 주석 풀기
+			// MainFrameState.civil.insert(m);
         });
         
         submitBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
