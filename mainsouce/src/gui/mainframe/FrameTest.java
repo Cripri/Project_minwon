@@ -54,7 +54,7 @@ public class FrameTest extends JFrame {
 		cardPage.add("employeeMain", employeeMain);
 		cardPage.add("signUp", signUp);
 		cardPage.add("userInfoEdit", userInfoEdit);
-		add(cardPage, BorderLayout.CENTER);
+		
 
 		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
 		cardPage.add("AfterLoginPanel", afterLoginPanel);
@@ -65,7 +65,7 @@ public class FrameTest extends JFrame {
 		cardPage.add("WriteContent", writeContent);
 		cardPage.add("ManagerMenuPanel", managerMenuPanel);
 		cardPage.add("FirstPage", firstPage);
-
+		add(cardPage, BorderLayout.CENTER);
 		setVisible(true);
 	}
 
