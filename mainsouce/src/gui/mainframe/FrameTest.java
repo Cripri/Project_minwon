@@ -66,10 +66,8 @@ public class FrameTest extends JFrame {
 		cardPage.add("WriteContent", writeContent);
 		cardPage.add("ManagerMenuPanel", managerMenuPanel);
 
-		MainFrameState.currentCard = "login";
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();
-		MainFrameState.history.push("login");
 		add(cardPage, BorderLayout.CENTER);
 		setVisible(true);
 	}

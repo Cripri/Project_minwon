@@ -14,6 +14,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import function.connector.Employees;
 import function.connector.Members;
 import function.connector.QueryRequest;
 import function.encryption.Encryptor;
@@ -22,6 +23,9 @@ import gui.mainframe.components.RoundedButton;
 
 class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	
+	private JRadioButton radio1;
+	private JRadioButton radio2;
 
 	public LoginPanel() {
         setLayout(new GridBagLayout());
@@ -31,9 +35,9 @@ class LoginPanel extends JPanel {
         // 라디오 버튼
         JPanel radioPanel = new JPanel(new GridLayout(1, 2, 30, 0));
         radioPanel.setBackground(new Color(217, 217, 217));
-        JRadioButton radio1 = new JRadioButton("개인용");
+        radio1 = new JRadioButton("개인용");
         radio1.setBackground(new Color(217, 217, 217));
-        JRadioButton radio2 = new JRadioButton("직원용");
+        radio2 = new JRadioButton("직원용");
         radio2.setBackground(new Color(217, 217, 217));
         radio1.setSelected(true);
         ButtonGroup group = new ButtonGroup();
@@ -45,6 +49,12 @@ class LoginPanel extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 0;
         add(radioPanel, gbc);
+        
+        if (!(radio2.isSelected())) {
+        	System.out.println("직원용아니디롱");
+        } else if (radio2.isSelected()) {
+        	System.out.println("직원용이디롱");
+        }
 
         // 아이디 라벨 + 텍스트필드
         JLabel idLabel = new JLabel("아이디");
@@ -80,36 +90,67 @@ class LoginPanel extends JPanel {
         signUpBtn.addActionListener((e) -> {
         	MainFrameState.card.show("signUp");
         });
-        RoundedButton loginBtn = new RoundedButton("로그인");
-        loginBtn.addActionListener((e) -> {
-        	QueryRequest<Members> request = new QueryRequest<>(
-        		"SELECT * FROM members WHERE MEMBER_ID like ?", 
-        	    idField.getText(),
-        	    Members.class,
-        	    MainFrameState.civil
-        	);
-        	
-        	Members mem = request.getSingleResult();
-        	if (mem == null) {
-        		// 팝업 -> 아이디 틀림
-        		System.out.println("아이디가 틀림");
-        	} else {
-        		String pw = new String(pwField.getPassword());
-        		String enPw = mem.getMember_password_encrypted();
-        		
-        		if (Encryptor.matches(pw, enPw)) {
-        			MainFrameState.login_id = mem.getMember_id();
-        			MainFrameState.frameTop.refreshButtons();
-        			idField.setText("");
-        			pwField.setText("");
-        			// 카드 넘겨주기 mypage로
-        			MainFrameState.card.show("myPage");
-        		} else {
-        			// 팝업 -> 비밀번호 틀림
-        			System.out.println("비밀번호 틀림");
-        		}
-        	}
-        });
+        
+		RoundedButton loginBtn = new RoundedButton("로그인");
+		loginBtn.addActionListener((e) -> {
+
+			if (radio2.isSelected()) {
+				QueryRequest<Employees> request = new QueryRequest<Employees>(
+						"SELECT * FROM employees WHERE employee_id like ?", 
+						idField.getText(), 
+						Employees.class,
+						MainFrameState.civil
+			);
+				Employees employee = request.getSingleResult();
+	
+				if (employee == null) {
+					// 팝업 -> 아이디 틀림
+					System.out.println("아이디가 틀림");
+				} else {
+					String pw = new String(pwField.getPassword());
+					String enPw = employee.getEmployee_password();
+	
+					if (pw.matches(enPw)) {
+						MainFrameState.login_id = employee.getEmployee_id();
+						MainFrameState.frameTop.refreshButtons();
+						idField.setText("");
+						pwField.setText("");
+						MainFrameState.card.show("employeeMain");
+					} else {
+						// 팝업 -> 비밀번호 틀림
+						System.out.println("비밀번호 틀림");
+					}
+				}
+			}
+
+			QueryRequest<Members> request = new QueryRequest<>(
+					"SELECT * FROM members WHERE MEMBER_ID like ?",
+					idField.getText(), 
+					Members.class, 
+					MainFrameState.civil
+			);
+
+			Members mem = request.getSingleResult();
+			if (mem == null) {
+				// 팝업 -> 아이디 틀림
+				System.out.println("아이디가 틀림");
+			} else {
+				String pw = new String(pwField.getPassword());
+				String enPw = mem.getMember_password_encrypted();
+
+				if (Encryptor.matches(pw, enPw)) {
+					MainFrameState.login_id = mem.getMember_id();
+					MainFrameState.frameTop.refreshButtons();
+					idField.setText("");
+					pwField.setText("");
+					// 카드 넘겨주기 mypage로
+					MainFrameState.card.show("myPage");
+				} else {
+					// 팝업 -> 비밀번호 틀림
+					System.out.println("비밀번호 틀림");
+				}
+			}
+		});
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 20, 0));
         buttonPanel.setBackground(new Color(217, 217, 217));
