@@ -11,9 +11,8 @@ public class ComplaintAnswerListPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(220, 220, 220));
 
-        // 🔹 상단 패널
-        FrameTop topPanel = new FrameTop();
-        add(topPanel, BorderLayout.NORTH);
+//        FrameTop topPanel = new FrameTop();
+//        add(topPanel, BorderLayout.NORTH);
 
         // 🔹 중앙 전체 패널
         JPanel centerPanel = new JPanel();

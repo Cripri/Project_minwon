@@ -8,11 +8,14 @@ import java.awt.FlowLayout;
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import gui.mainframe.FrameTop;
 
@@ -21,9 +24,8 @@ public class WriteContent extends JPanel {
     public WriteContent() {
         setLayout(new BorderLayout());
 
-        // 상단 바
-        FrameTop topPanel = new FrameTop();
-        add(topPanel, BorderLayout.NORTH);
+//        FrameTop topPanel = new FrameTop();
+//        add(topPanel, BorderLayout.NORTH);
 
         // 중앙 패널
         JPanel centerPanel = new JPanel();
@@ -59,5 +61,19 @@ public class WriteContent extends JPanel {
         centerPanel.add(contentPanel);
 
         add(centerPanel, BorderLayout.CENTER);
+
+        // ▶ 전송 버튼 패널 (오른쪽 아래)
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.setBackground(new Color(217, 217, 217));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 60));
+
+        JButton submitButton = new JButton("전송");
+        submitButton.setPreferredSize(new Dimension(100, 30));
+        submitButton.setBackground(new Color(45, 140, 240));
+        submitButton.setForeground(Color.WHITE);
+        submitButton.setFocusPainted(false);
+
+        bottomPanel.add(submitButton);
+        add(bottomPanel, BorderLayout.SOUTH);
     }
 }
