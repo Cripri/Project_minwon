@@ -27,12 +27,12 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
+		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1);
 		
 		FrameTop ft = new FrameTop();
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
-		
 		cardPage.add("login", login);
 		cardPage.add("myPage", myPage);
 		cardPage.add("simpleDoc", simpleDoc);
