@@ -1,4 +1,4 @@
-package gui.phs.firstpage;
+package gui.phs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
