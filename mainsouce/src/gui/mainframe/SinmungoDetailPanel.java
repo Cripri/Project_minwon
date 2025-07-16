@@ -27,6 +27,10 @@ public class SinmungoDetailPanel extends JPanel {
     public SinmungoDetailPanel(Object pk) {
         init(pk);
     }
+    
+    public SinmungoDetailPanel(Object pk, String s) {
+    	init2(pk);
+    }
 
     private void init(Object pk) {
         setName("마이페이지 신문고 상세");
@@ -38,6 +42,22 @@ public class SinmungoDetailPanel extends JPanel {
         container.setBorder(new EmptyBorder(30, 30, 30, 30));
 
         container.add(MyPage.titlePanel("마이페이지", "신문고 상세 내역"));
+        container.add(sinmungoTableSection(pk));
+
+        add(container);
+        setVisible(true);
+    }
+    
+    private void init2(Object pk) {
+        setName("신문고 상세");
+        setLayout(new BorderLayout());
+
+        JPanel container = new JPanel();
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setBackground(new Color(217, 217, 217));
+        container.setBorder(new EmptyBorder(30, 30, 30, 30));
+
+        container.add(MyPage.titlePanel("신문고", "상세 내역"));
         container.add(sinmungoTableSection(pk));
 
         add(container);

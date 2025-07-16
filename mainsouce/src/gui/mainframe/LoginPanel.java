@@ -98,7 +98,7 @@ class LoginPanel extends JPanel {
         		String enPw = mem.getMember_password_encrypted();
         		
         		if (Encryptor.matches(pw, enPw)) {
-        			MainFrameState.login_id = mem.getMember_id();
+        			MainFrameState.member = mem;
         			MainFrameState.frameTop.refreshButtons();
         			idField.setText("");
         			pwField.setText("");

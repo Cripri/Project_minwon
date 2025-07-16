@@ -33,7 +33,7 @@ public class CardLayoutPanel extends JPanel {
 		if (!MainFrameState.history.isEmpty()) {
 			String previous = MainFrameState.history.pop();
 
-			if (MainFrameState.login_id != null && previous.equals("login")) {
+			if (MainFrameState.member != null && previous.equals("login")) {
 				previous = "myPage";
 			}
 
