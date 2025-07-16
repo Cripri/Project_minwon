@@ -1,6 +1,7 @@
 package gui.phs;
 
 import gui.mainframe.FrameTop;
+import gui.mainframe.MainFrameState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -93,6 +94,7 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         listButton.setForeground(Color.WHITE);
         listButton.setFocusPainted(false);
         listButton.setPreferredSize(new Dimension(90, 30));
+        
 
         buttonRow.add(rejectButton);
         buttonRow.add(changeDeptButton);
@@ -109,15 +111,5 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    // 테스트용 main
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("부서변경 요청내역");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(800, 600);
-            frame.setLocationRelativeTo(null);
-            frame.setContentPane(new DepartmentChangeRequestDetailPanel());
-            frame.setVisible(true);
-        });
-    }
+
 }
