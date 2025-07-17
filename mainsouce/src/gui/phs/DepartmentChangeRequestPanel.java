@@ -33,6 +33,13 @@ public class DepartmentChangeRequestPanel extends JPanel {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         add(centerPanel, BorderLayout.CENTER);
 
+        // 제목 라벨 추가
+        JLabel titleLabel = new JLabel("민원 부서변경", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 22));
+        titleLabel.setPreferredSize(new Dimension(400, 40));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        centerPanel.add(titleLabel, BorderLayout.NORTH);
+
         // 테이블 컬럼
         String[] columns = {"접수 번호", "내용", "처리 상태", "현재 배정부서", "접수 날짜"};
 
