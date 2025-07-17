@@ -3,6 +3,7 @@ package gui.mainframe.wldb_main_frame.material;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -105,11 +106,9 @@ public class Get_main_base {
 	
 	// 나도 페이지를 넣어보자
 	public static JPanel get_card_employees_petition(
-			String title, Sinmungo[] petition_info
+			String title, ArrayList<Sinmungo> petition_info
 	) {
 		JPanel jpc = get_public_panel();
-		ArrayList<Sinmungo> sinList = new ArrayList<Sinmungo>(
-				Arrays.asList(petition_info));
 		
 		jpc.setLayout(new BorderLayout());		
 		jpc.add(get_title_panel(title), BorderLayout.NORTH);
@@ -123,21 +122,21 @@ public class Get_main_base {
 		jpcard.setBorder(new LineBorder(Color.white, 5));
 		
 		
-		int page_total = (int) Math.ceil((double)petition_info.length / page_input_limit);
+		int page_total = (int) Math.ceil((double)petition_info.size() / page_input_limit);
 		
 		if(page_total == 1) {
 			jpcard.add(get_employees_petition_panel
-					(Color_list_main.getInside_color(), sinList));
+					(Color_list_main.getInside_color(), petition_info));
 		} else {
 			
 			for(int i = 0; i < page_total; i++) {
 				ArrayList<Sinmungo> petitions = new ArrayList<Sinmungo>();
 				
 				int page_list = Math.min(
-						page_input_limit, sinList.size());
+						page_input_limit, petition_info.size());
 				
 				for(int j = 0; j < page_list; j++) {
-					petitions.add(sinList.remove(0));
+					petitions.add(petition_info.remove(0));
 				}
 				
 				jpcard.add(get_employees_petition_panel(
@@ -156,7 +155,7 @@ public class Get_main_base {
 		jpc.add(get_paje_button(jpcard, page_total), BorderLayout.SOUTH);
 		
 		
-		page.show(jpcard, card_name + 0);
+		page.show(jpcard, card_name);
 		
 		return jpc;
 	}
@@ -181,8 +180,15 @@ public class Get_main_base {
 		/// 그 다음에 설명창 만들어서 넣어야지
 		/// 그리고 설명창은 재활용항꺼니까 간격 외부입력으로 바꾸고
 		
+		jpc.setTransferHandler(null);
+		
 		for(Sinmungo sim : petition_info) {
-			jpc.add(get_string_width_panel(get_simungo_info(sim), false));
+			JPanel tm_jp = get_string_width_panel(get_simungo_info(sim), false);
+			
+			tm_jp.setMaximumSize(new Dimension(3000, 110));
+			//tm_jp.setAlignmentX(Component.LEFT_ALIGNMENT);
+			// 좀더 왼쪽으로 가주길 원했어...
+			jpc.add(tm_jp);
 		}
 		
 		int len = petition_info.size();
@@ -303,9 +309,9 @@ public class Get_main_base {
 				}
 			}
 			
-			jl.setPreferredSize(new Dimension(100, 30));
-			jl.setMaximumSize(new Dimension(100, 30));
-			jl.setMinimumSize(new Dimension(100, 30));
+			jl.setPreferredSize(new Dimension(130, 30));
+			jl.setMaximumSize(new Dimension(130, 30));
+			jl.setMinimumSize(new Dimension(130, 30));
 			
 			// 전부 같은 크기로 간주하게 만들기
 			// 너무 긴글 한번 넣어서 확인
@@ -317,6 +323,10 @@ public class Get_main_base {
 			// 이게 공간을 너무 늘려두니 누르는 범위가 너무 크게 나온다
 			// 하지만 다른 방법이 생각나지 않는다...
 			
+			// 중간에 선 넣으려고 Box랑 섞어 썪더니 창을 늘리면 늘어나네...
+			// 이걸 우찌해야하나...
+			// Box에도 setsize 할수있으면 좋을텐데...
+			// ... 잠까 닝거 되려나?
 			jpc.add(jl, grc);
 		}
 		

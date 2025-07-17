@@ -1,17 +1,25 @@
-package gui.mainframe.wldb_main_frame.material;
+package gui.mainframe.wldb_main_frame;
 
 import java.awt.BorderLayout;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import function.connector.QueryRequest;
 import function.connector.Sinmungo;
+import gui.mainframe.MainFrameState;
+import gui.mainframe.wldb_main_frame.material.Get_main_base;
 
 public class Panel_tests {
 	
 	static Get_main_base gmb = new Get_main_base();
+	static get_main_card_frames gems = new get_main_card_frames();
+	
 	
 	public static void main(String[] args) {
 		JFrame tttt = new JFrame();
@@ -156,9 +164,22 @@ public class Panel_tests {
 						"ㄹ", "ㅁ", "ㅂ", "P"
 				)
 		};
+		ArrayList<Sinmungo> sinsA = new ArrayList<Sinmungo>(Arrays.asList(sims));
 			
+		
+		QueryRequest<Sinmungo> request = new QueryRequest<>(
+				"SELECT * FROM Sinmungo",
+				null,
+				Sinmungo.class,
+				MainFrameState.civil
+			);
+		ArrayList<Sinmungo> sins = new ArrayList<>(request.getResultList());
+		
+		
 		tttt.add(
-				gmb.get_card_employees_petition("타이틀",	sims)
+				//gmb.get_card_employees_petition("타이틀",	sinsA)
+				//gmb.get_card_employees_petition("타이틀",	sins)
+				gems.get_employees_sinmungo_list_panel("타이틀")
 				,BorderLayout.CENTER
 		);
 		
