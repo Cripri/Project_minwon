@@ -1,6 +1,7 @@
 package gui.mainframe;
 
 import function.drawingsign.DrawingSign;
+import gui.mainframe.components.IconButton;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,7 +31,7 @@ public class FrameTop extends JPanel {
         // 이전 버튼 패널 (기존과 동일)
         JPanel previousButtonPanel = new JPanel(new GridLayout(0, 1));
         previousButtonPanel.setBackground(new Color(217, 217, 217));
-        JButton previousBtn = new JButton("뒤로가기");
+        JButton previousBtn = new IconButton("뒤로가기", "resources/IconImage/뒤로가기.png");
         previousBtn.setOpaque(false);
         previousBtn.setContentAreaFilled(false);
         previousBtn.setBorderPainted(false);
@@ -49,29 +50,36 @@ public class FrameTop extends JPanel {
         boolean login = MainFrameState.member != null;
         boolean emplogin = MainFrameState.employee != null;
 
-        JButton mainPageBtn = new JButton("메인페이지");
+        JButton mainPageBtn = new IconButton("메인페이지", "resources/IconImage/메인페이지.png");
         mainPageBtn.setOpaque(false);
         mainPageBtn.setContentAreaFilled(false);
         mainPageBtn.setBorderPainted(false);
         mainPageBtn.addActionListener((e) -> {
-            MainFrameState.card.show("firstPage");
+        	if (emplogin) {
+        		MainFrameState.card.show("employeeMain");
+        	} else {
+        		MainFrameState.card.show("firstPage");
+        	}
         });
 
-        JButton myPageBtn = new JButton("마이페이지");
+        JButton myPageBtn = new IconButton("마이페이지", "resources/IconImage/마이페이지.png");
         myPageBtn.setOpaque(false);
         myPageBtn.setContentAreaFilled(false);
         myPageBtn.setBorderPainted(false);
         myPageBtn.addActionListener((e) -> {
             if (login) {
                 MainFrameState.card.show("myPage");
-            } else {
+            } else if (emplogin) {
+            	MainFrameState.card.show("employeeMain");
+            }
+            else {
                 MainFrameState.card.show("login");
             }
         });
 
         JButton loginBtn;
         if (login || emplogin) {
-            loginBtn = new JButton("로그아웃");
+            loginBtn = new IconButton("로그아웃", "resources/IconImage/로그아웃.png");
             if (emplogin) {
             	loginBtn.addActionListener((e) -> {
                     MainFrameState.employee = null;  // 로그아웃 처리
@@ -86,7 +94,7 @@ public class FrameTop extends JPanel {
             	});
             }
         } else {
-            loginBtn = new JButton("로그인");
+            loginBtn = new IconButton("로그인", "resources/IconImage/로그인.png");
             loginBtn.addActionListener((e) -> {
                 // 로그인 창으로 이동 또는 로그인 처리
                 MainFrameState.card.show("login");
