@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -16,15 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
-import function.connector.Members;
-import function.connector.Sinmungo;
-import gui.mainframe.MainFrameState;
+import javax.swing.SwingConstants;
 
 public class WriteContent extends JPanel {
 
     public WriteContent() {
         setLayout(new BorderLayout());
+        
+     // 🔷 제목 라벨 "민원 작성"
+        JLabel pageTitle = new JLabel("민원 작성", SwingConstants.CENTER);
+        pageTitle.setFont(new Font("맑은 고딕", Font.BOLD, 24));
+        pageTitle.setOpaque(true); 
+        pageTitle.setBackground(new Color(217, 217, 217)); 
+        pageTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        add(pageTitle, BorderLayout.NORTH);
 
         // 중앙 패널
         JPanel centerPanel = new JPanel();
@@ -76,39 +80,6 @@ public class WriteContent extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
 
-        JButton completeButton = new JButton("작성완료");
-        completeButton.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-        completeButton.setBackground(new Color(0, 120, 215));
-        completeButton.setForeground(Color.WHITE);
-        completeButton.setFocusPainted(false);
-        completeButton.setBorderPainted(false);
-        completeButton.setOpaque(true);
-        completeButton.setPreferredSize(new Dimension(100, 30));
-        
-        completeButton.addActionListener((e) -> {
-        	Members m =  MainFrameState.member;
-        	Sinmungo s = new Sinmungo();
-        	s.setMember_code(m.getMember_code());
-        	
-        	s.setSinmungo_title(titleField.getText());
-        	s.setSinmungo_content(contentArea.getText());
-        	if (pwdField.getText() != null) {
-        		s.setSecurity_set("t");
-        		s.setSecurity_password(pwdField.getText());
-        	} else {
-        		s.setSecurity_set("f");
-        		s.setSecurity_password(null);
-        	}
-        	s.setCreate_date(new Date());
-        	s.setStatus("P");
-        	// TODO 팝업 
-        	
-        	// 팝업 완료되면 주석 풀기
-        	// MainFrameState.civil.insert(s);
-        });
-        
-        buttonPanel.add(completeButton);
-
         // 컴포넌트 구성
         centerPanel.add(titlePasswordPanel);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
@@ -123,8 +94,8 @@ public class WriteContent extends JPanel {
         bottomPanel.setBackground(new Color(217, 217, 217));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 60));
 
-        JButton submitButton = new JButton("전송");
-        submitButton.setPreferredSize(new Dimension(100, 30));
+        JButton submitButton = new JButton("작성 완료");
+        submitButton.setPreferredSize(new Dimension(120, 40));
         submitButton.setBackground(new Color(45, 140, 240));
         submitButton.setForeground(Color.WHITE);
         submitButton.setFocusPainted(false);
