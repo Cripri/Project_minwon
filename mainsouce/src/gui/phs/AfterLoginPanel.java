@@ -14,6 +14,13 @@ public class AfterLoginPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(217, 217, 217));
 
+        // 🔹 제목 라벨 (상단에 추가)
+        JLabel titleLabel = new JLabel("비회원 로그인", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 24));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
+        add(titleLabel, BorderLayout.NORTH);
+
+        // 🔹 입력 폼 패널
         JPanel formPanel = new JPanel(new GridLayout(10, 1, 5, 10));
         formPanel.setBorder(BorderFactory.createEmptyBorder(30, 250, 30, 250));
         formPanel.setBackground(new Color(217, 217, 217));
@@ -76,6 +83,8 @@ public class AfterLoginPanel extends JPanel {
         ButtonGroup regionGroup = new ButtonGroup();
         regionGroup.add(sameBtn);
         regionGroup.add(differentBtn);
+        rows[6].add(sameBtn);
+        rows[6].add(differentBtn);
 
         rows[6].add(new JLabel("주소"));
         rows[6].add(new addressComboBoxPanel().addressComboBoxPanel());
@@ -87,13 +96,13 @@ public class AfterLoginPanel extends JPanel {
         ButtonGroup securityGroup = new ButtonGroup();
         securityGroup.add(securityYes);
         rows[7].add(securityYes);
-        
 
         // 안내문
         JLabel warningLabel = new JLabel("* 선택할 경우 외부로 비밀번호 제외, 비회원은 신청정보와 일치할 때만 확인할 수 있습니다.");
         rows[8].add(warningLabel);
 
         this.add(formPanel, BorderLayout.CENTER);
+        
     }
 
     public JPanel createBirthdatePanel() {

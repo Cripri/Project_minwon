@@ -6,9 +6,6 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -21,24 +18,10 @@ import javax.swing.SwingConstants;
 
 import function.connector.QueryRequest;
 import function.connector.Sinmungo;
-import gui.mainframe.MainFrameState;
 
 public class ComplaintAnswerListPanel extends JPanel {
 	
-	static Sinmungo sinmungo_info = null;
-	static Integer pk = 1;
-	
-	static {
-		QueryRequest<Sinmungo> query_request = new QueryRequest<>(
-				"SELECT * FROM Sinmungo WHERE sinmungo_code like ?",
-				pk,
-				Sinmungo.class,
-				MainFrameState.civil				
-		);
-		sinmungo_info = query_request.getSingleResult();
-	}
-
-    public ComplaintAnswerListPanel() {
+	  public ComplaintAnswerListPanel() {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(220, 220, 220));
 
@@ -75,10 +58,8 @@ public class ComplaintAnswerListPanel extends JPanel {
         // 값 (아래)
         JPanel valuePanel = new JPanel(new GridLayout(1, 3, 10, 5));
         valuePanel.setBackground(new Color(240, 240, 240));
-        JLabel val1 = new JLabel(
-        		sinmungo_info.getSinmungo_code().toString(), SwingConstants.LEFT);
-        JLabel val2 = new JLabel(
-        		sinmungo_info.getMember_name(), SwingConstants.LEFT);
+        JLabel val1 = new JLabel("AA1234-215466", SwingConstants.LEFT);
+        JLabel val2 = new JLabel("어쩌구씨", SwingConstants.LEFT);
         JLabel val3 = new JLabel();
         for (JLabel val : new JLabel[]{val1, val2, val3}) {
             val.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
@@ -94,7 +75,7 @@ public class ComplaintAnswerListPanel extends JPanel {
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15))); // 간격
 
         // 🔸 2. 제목 영역
-        JTextArea titleArea = new JTextArea(sinmungo_info.getSinmungo_title());
+        JTextArea titleArea = new JTextArea("제목");
         titleArea.setFont(new Font("맑은고딕", Font.BOLD, 16));
         titleArea.setEditable(false);
         titleArea.setBackground(Color.WHITE);
@@ -109,7 +90,7 @@ public class ComplaintAnswerListPanel extends JPanel {
         JPanel contentPanel = new JPanel(new GridLayout(1, 2, 20, 0));
         contentPanel.setBackground(new Color(240, 240, 240));
 
-        JTextArea requestArea = new JTextArea(sinmungo_info.getSinmungo_content());
+        JTextArea requestArea = new JTextArea("민원내용");
         requestArea.setFont(new Font("맑은고딕", Font.PLAIN, 14));
         requestArea.setEditable(false);
         requestArea.setBackground(Color.WHITE);
@@ -117,7 +98,7 @@ public class ComplaintAnswerListPanel extends JPanel {
         requestArea.setWrapStyleWord(true);
         requestArea.setBorder(BorderFactory.createTitledBorder("민원내용"));
 
-        JTextArea answerArea = new JTextArea(sinmungo_info.getEmployees_answer());
+        JTextArea answerArea = new JTextArea("답변내용");
         answerArea.setFont(new Font("맑은고딕", Font.PLAIN, 14));
         answerArea.setEditable(true); // 수정 가능
         answerArea.setBackground(Color.WHITE);
@@ -150,20 +131,6 @@ public class ComplaintAnswerListPanel extends JPanel {
             btn.setPreferredSize(new Dimension(90, 30));
             buttonRow.add(btn);
         }
-        
-        confirmButton.addActionListener(e ->{
-        	Object[] sets = {answerArea.getText(), pk};
-        	List<Object> list = new ArrayList<Object>(Arrays.asList(sets));
-        	
-        	QueryRequest<Sinmungo> query_request = new QueryRequest<>(
-        			"UPDATE Sinmungo"
-        			+ " SET employees_answer = ?"
-        			+ " WHERE sinmungo_code like ?",
-        			Arrays.asList(sets),
-        			Sinmungo.class,
-    				MainFrameState.civil        			
-        		);
-        });
 
         bottomPanel.add(buttonRow);
         add(bottomPanel, BorderLayout.SOUTH);
