@@ -44,6 +44,7 @@ public class FrameTest extends JFrame {
 		RrnApplicationPanel rrnApplicationPanel = new RrnApplicationPanel();
 		WriteContent writeContent = new WriteContent();
 		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel(); 
+		MainFrameState.employeeMainPanel = employeeMain;
 
 		FrameTop ft = new FrameTop();
 		add(ft, BorderLayout.NORTH);

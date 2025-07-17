@@ -106,12 +106,17 @@ class LoginPanel extends JPanel {
 				} else {
 					String pw = new String(pwField.getPassword());
 					String enPw = employee.getEmployee_password();
-	
+
 					if (pw.matches(enPw)) {
 						MainFrameState.employee = employee;
 						MainFrameState.frameTop.refreshButtons();
 						idField.setText("");
 						pwField.setText("");
+						
+						if (MainFrameState.employeeMainPanel != null) {
+		                    MainFrameState.employeeMainPanel.refreshPanel();
+		                }
+
 						MainFrameState.card.show("employeeMain");
 					} else {
 						// 팝업 -> 비밀번호 틀림
