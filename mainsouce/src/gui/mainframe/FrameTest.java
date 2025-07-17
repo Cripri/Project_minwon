@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import gui.phs.WriteContent;
 import gui.phs.AfterLoginPanel;
 import gui.phs.CivilComplaintDetailPanel;
 import gui.phs.ComplaintAnswerListPanel;
@@ -12,7 +13,6 @@ import gui.phs.DepartmentChangeRequestDetailPanel;
 import gui.phs.DepartmentChangeRequestPanel;
 import gui.phs.FirstPage;
 import gui.phs.RrnApplicationPanel;
-import gui.phs.WriteContent;
 import gui.phs.ManagerMenu.ManagerMenuPanel;
 
 public class FrameTest extends JFrame {
@@ -33,7 +33,7 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
-		// SinmungoDetailPanel pppp = new SinmungoDetailPanel(1); // 필요 시 추가
+		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1);
 		
 		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
 		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
@@ -57,6 +57,7 @@ public class FrameTest extends JFrame {
 		cardPage.add("signUp", signUp);
 		cardPage.add("userInfoEdit", userInfoEdit);
 		
+
 		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
 		cardPage.add("AfterLoginPanel", afterLoginPanel);
 		cardPage.add("ComplaintAnswerListPanel", complaintAnswerListPanel);
