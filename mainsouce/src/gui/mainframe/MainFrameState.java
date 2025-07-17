@@ -12,6 +12,7 @@ public class MainFrameState {
 	public static Members member;
 	public static Employees employee;
 	public static FrameTop frameTop;
+	public static EmployeeMainPanel employeeMainPanel;
 	
 	public static Stack<String> history = new Stack<>();   // 뒤로가기 스택
 	public static Stack<String> future = new Stack<>();    // 앞으로가기 스택
