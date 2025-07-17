@@ -100,7 +100,7 @@ class LoginPanel extends JPanel {
 						idField.getText(), 
 						Employees.class,
 						MainFrameState.civil
-			);
+						);
 				Employees employee = request.getSingleResult();
 	
 				if (employee == null) {
@@ -111,7 +111,7 @@ class LoginPanel extends JPanel {
 					String enPw = employee.getEmployee_password();
 	
 					if (pw.matches(enPw)) {
-						MainFrameState.login_id = employee.getEmployee_id();
+						MainFrameState.employee = employee;
 						MainFrameState.frameTop.refreshButtons();
 						idField.setText("");
 						pwField.setText("");
@@ -121,33 +121,32 @@ class LoginPanel extends JPanel {
 						System.out.println("비밀번호 틀림");
 					}
 				}
-			}
-
-			QueryRequest<Members> request = new QueryRequest<>(
-					"SELECT * FROM members WHERE MEMBER_ID like ?",
-					idField.getText(), 
-					Members.class, 
-					MainFrameState.civil
-			);
-
-			Members mem = request.getSingleResult();
-			if (mem == null) {
-				// 팝업 -> 아이디 틀림
-				System.out.println("아이디가 틀림");
 			} else {
-				String pw = new String(pwField.getPassword());
-				String enPw = mem.getMember_password_encrypted();
-
-				if (Encryptor.matches(pw, enPw)) {
-					MainFrameState.login_id = mem.getMember_id();
-					MainFrameState.frameTop.refreshButtons();
-					idField.setText("");
-					pwField.setText("");
-					// 카드 넘겨주기 mypage로
-					MainFrameState.card.show("myPage");
+				QueryRequest<Members> request = new QueryRequest<>(
+						"SELECT * FROM members WHERE MEMBER_ID like ?",
+						idField.getText(),
+						Members.class,
+						MainFrameState.civil
+						);
+				Members mem = request.getSingleResult();
+				if (mem == null) {
+					// 팝업 -> 아이디 틀림
+					System.out.println("아이디가 틀림");
 				} else {
-					// 팝업 -> 비밀번호 틀림
-					System.out.println("비밀번호 틀림");
+					String pw = new String(pwField.getPassword());
+					String enPw = mem.getMember_password_encrypted();
+
+					if (Encryptor.matches(pw, enPw)) {
+						MainFrameState.member = mem;
+						MainFrameState.frameTop.refreshButtons();
+						idField.setText("");
+						pwField.setText("");
+						// 카드 넘겨주기 mypage로
+						MainFrameState.card.show("myPage");
+					} else {
+						// 팝업 -> 비밀번호 틀림
+						System.out.println("비밀번호 틀림");
+					}
 				}
 			}
 		});
