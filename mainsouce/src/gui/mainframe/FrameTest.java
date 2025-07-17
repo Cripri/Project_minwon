@@ -48,6 +48,7 @@ public class FrameTest extends JFrame {
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
+		cardPage.add("userInfoEdit", userInfoEdit);
 		cardPage.add("firstPage", firstPage);
 		cardPage.add("login", login);
 		cardPage.add("myPage", myPage);
@@ -55,7 +56,6 @@ public class FrameTest extends JFrame {
 		cardPage.add("sinmungoList", sinmungoList);
 		cardPage.add("employeeMain", employeeMain);
 		cardPage.add("signUp", signUp);
-		cardPage.add("userInfoEdit", userInfoEdit);
 		
 
 		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
