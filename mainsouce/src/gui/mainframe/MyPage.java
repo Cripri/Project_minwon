@@ -2,12 +2,15 @@ package gui.mainframe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -30,6 +33,15 @@ import gui.mainframe.components.RoundedButton;
 public class MyPage extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private final int PAGE_SIZE = 5;
+	
+	// 신문고 페이지 관련
+	private int requestCurrentPage = 0;
+	private JPanel requestTableContainer;
+	
+	// 문서 페이지 관련
+	private int issueCurrentPage = 0;
+	private JPanel issueTableContainer;
 
 	public MyPage() {
         setName("마이페이지");
@@ -72,144 +84,327 @@ public class MyPage extends JPanel {
     }
 
     private JPanel requestTableSection() {
-        String[] headers = {"번호", "제목", "처리기관", "등록일", "답변일"};
-        List<Sinmungo> list = MainFrameState.civil.selectAll(Sinmungo.class);
-        Object[][] rows = new Object[list.size()][headers.length];
-        
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-        for (int i = 0; i < rows.length; i++) {
-        	Sinmungo l = list.get(i);
-			rows[i][0] = l.getSinmungo_code();
-			rows[i][1] = l.getSinmungo_title();
-			Employees e = MainFrameState.civil.find(Employees.class, l.getEmployee_code());
-			Department d = MainFrameState.civil.find(Department.class, e.getDepartment_code());
-			rows[i][2] = d.getDepartment_name();
-			String create_date = formatter.format(l.getCreate_date());
-			rows[i][3] = create_date;
-			if (l.getAnswer_date() == null) {
-				rows[i][4] = "답변 없음";
-			} else {
-				String answer_date = formatter.format(l.getAnswer_date());
-				rows[i][4] = answer_date;
-			}
-		}
-
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
-        panel.setBorder(new CompoundBorder(
+        JPanel container = new JPanel();
+        container.setLayout(new BorderLayout());
+        container.setBackground(Color.WHITE);
+        container.setBorder(new CompoundBorder(
             new LineBorder(Color.LIGHT_GRAY),
             new EmptyBorder(10, 10, 10, 10)
         ));
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10);
-        gbc.fill = GridBagConstraints.BOTH;
+        requestTableContainer = new JPanel();
+        requestTableContainer.setLayout(new BoxLayout(requestTableContainer, BoxLayout.Y_AXIS));
+        container.add(requestTableContainer, BorderLayout.CENTER);
+
+        List<Sinmungo> list = MainFrameState.civil.selectAll(Sinmungo.class);
+        
+        // 페이지네이션
+        JPanel navPanel = new JPanel();
+        navPanel.setBackground(Color.WHITE);
+
+        // 이전, 다음 버튼
+        RoundedButton prev = new RoundedButton("이전");
+        RoundedButton next = new RoundedButton("다음");
+
+        prev.addActionListener(e -> {
+            if (requestCurrentPage > 0) {
+                requestCurrentPage--;
+                updateRequestTable();
+            }
+        });
+
+        next.addActionListener(e -> {
+            int totalRows = list.size();
+            if ((requestCurrentPage + 1) * PAGE_SIZE < totalRows) {
+                requestCurrentPage++;
+                updateRequestTable();
+            }
+        });
+        navPanel.add(prev);
+
+        // 페이지 번호 버튼 생성
+        int totalRows = list.size();
+        int totalPages = (int) Math.ceil((double) totalRows / PAGE_SIZE);
+
+        for (int i = 0; i < totalPages; i++) {
+            int pageIndex = i;
+            RoundedButton pageButton = new RoundedButton(String.valueOf(i + 1));
+            if (i == requestCurrentPage) {
+                pageButton.setEnabled(false); // 현재 페이지는 비활성화
+            }
+            pageButton.addActionListener(e -> {
+                requestCurrentPage = pageIndex;
+                updateRequestTable();
+            });
+            navPanel.add(pageButton);
+        }
+
+        navPanel.add(next);
+        container.add(navPanel, BorderLayout.SOUTH);
+
+        updateRequestTable(); // 초기 렌더링
+
+        container.setPreferredSize(new Dimension(1500, 300));
+        return container;
+    }
+    
+    private void updateRequestTable() {
+        requestTableContainer.removeAll();
+
+        String[] headers = {"번호", "제목", "처리기관", "등록일", "답변일"};
+        int[] columnWidths = {80, 920, 200, 150, 150};
+
+        List<Sinmungo> list = MainFrameState.civil.selectAll(Sinmungo.class);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         Font font = new Font("맑은 고딕", Font.PLAIN, 13);
         Font headerFont = new Font("맑은 고딕", Font.BOLD, 14);
 
-        double[] columnWeights = {0.1, 0.4, 0.2, 0.15, 0.15};
+        int headerHeight = 40;
+        int rowHeight = 40;
 
         // 헤더
-        for (int col = 0; col < headers.length; col++) {
-            gbc.gridx = col;
-            gbc.gridy = 0;
-            gbc.weightx = columnWeights[col];
-            JLabel label = new JLabel(headers[col], SwingConstants.CENTER);
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
+        headerPanel.setBackground(new Color(240, 240, 240));
+        headerPanel.setPreferredSize(new Dimension(0, headerHeight));
+        headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, headerHeight));
+
+        for (int i = 0; i < headers.length; i++) {
+            JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
             label.setFont(headerFont);
-            panel.add(label, gbc);
+            label.setPreferredSize(new Dimension(columnWidths[i], headerHeight));
+            label.setMaximumSize(new Dimension(columnWidths[i], headerHeight));
+            label.setMinimumSize(new Dimension(columnWidths[i], headerHeight));
+            headerPanel.add(label);
         }
+        requestTableContainer.add(headerPanel);
 
-        // 데이터 행
-        for (int row = 0; row < list.size(); row++) {
-            for (int col = 0; col < headers.length; col++) {
-                gbc.gridx = col;
-                gbc.gridy = row + 1;
-                gbc.weightx = columnWeights[col];
+        // 현재 페이지 데이터
+        int start = requestCurrentPage * PAGE_SIZE;
+        int end = Math.min(start + PAGE_SIZE, list.size());
 
-                JLabel dataLabel = new JLabel(rows[row][col].toString(), SwingConstants.CENTER);
-                dataLabel.setFont(font);
-                panel.add(dataLabel, gbc);
+        for (int i = start; i < end; i++) {
+            Sinmungo sinmungo = list.get(i);
+            Employees emp = MainFrameState.civil.find(Employees.class, sinmungo.getEmployee_code());
+            Department dept = MainFrameState.civil.find(Department.class, emp.getDepartment_code());
+
+            JPanel rowPanel = new JPanel();
+            rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
+            rowPanel.setBackground(Color.WHITE);
+            rowPanel.setPreferredSize(new Dimension(0, rowHeight));
+            rowPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, rowHeight));
+            rowPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            String[] data = {
+                String.valueOf(sinmungo.getSinmungo_code()),
+                sinmungo.getSinmungo_title(),
+                dept.getDepartment_name(),
+                formatter.format(sinmungo.getCreate_date()),
+                sinmungo.getAnswer_date() == null ? "답변 없음" : formatter.format(sinmungo.getAnswer_date())
+            };
+
+            for (int j = 0; j < data.length; j++) {
+                JLabel label = new JLabel(data[j], SwingConstants.CENTER);
+                label.setFont(font);
+                label.setPreferredSize(new Dimension(columnWidths[j], rowHeight));
+                label.setMaximumSize(new Dimension(columnWidths[j], rowHeight));
+                label.setMinimumSize(new Dimension(columnWidths[j], rowHeight));
+                rowPanel.add(label);
             }
+
+            rowPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    System.out.println("신청내역 클릭: " + sinmungo.getSinmungo_code());
+                }
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    rowPanel.setBackground(new Color(230, 230, 250));
+                }
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    rowPanel.setBackground(Color.WHITE);
+                }
+            });
+            requestTableContainer.add(rowPanel);
         }
-        return panel;
+        requestTableContainer.revalidate();
+        requestTableContainer.repaint();
     }
+
 
     private JPanel issueTableSection() {
-        String[] headers = {"번호", "신청문서", "출력", "등록일", "처리일"};
+        JPanel container = new JPanel();
+        container.setLayout(new BorderLayout());
+        container.setBackground(Color.WHITE);
+        container.setBorder(new CompoundBorder(
+                new LineBorder(Color.LIGHT_GRAY),
+                new EmptyBorder(10, 10, 10, 10)
+            ));
+
+        issueTableContainer = new JPanel();
+        issueTableContainer.setLayout(new BoxLayout(issueTableContainer, BoxLayout.Y_AXIS));
+        container.add(issueTableContainer, BorderLayout.CENTER);
+
         List<Simple_doc> list = MainFrameState.civil.selectAll(Simple_doc.class);
-        Object[][] rows = new Object[list.size()][headers.length];
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         
-        for (int i = 0; i < rows.length; i++) {
-        	Simple_doc l = list.get(i);
-			rows[i][0] = l.getSimple_doc_code();
-			Complaint_category_info category = MainFrameState.civil.find(Complaint_category_info.class, l.getComplaint_category_code()); 
-			rows[i][1] = category.getComplaint_category_name();
-			rows[i][2] = "출력";
-			String create_date = formatter.format(l.getCreate_date());
-			rows[i][3] = create_date;
-			if (list.get(i).getComplete_date() == null) {
-				rows[i][4] = "처리중";
-			} else {
-				String answer_date = formatter.format(list.get(i).getComplete_date());
-				rows[i][4] = answer_date;
-			}
-		}
+        // 페이지네이션 버튼
+        JPanel navPanel = new JPanel();
+        navPanel.setBackground(Color.WHITE);
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
-        panel.setBorder(new CompoundBorder(
-            new LineBorder(Color.LIGHT_GRAY),
-            new EmptyBorder(10, 10, 10, 10)
-        ));
+        RoundedButton prev = new RoundedButton("이전");
+        RoundedButton next = new RoundedButton("다음");
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 10, 5, 10);
-        gbc.fill = GridBagConstraints.BOTH;
+        prev.addActionListener(e -> {
+            if (issueCurrentPage > 0) {
+                issueCurrentPage--;
+                updateIssueTable();
+            }
+        });
+
+        next.addActionListener(e -> {
+            int totalRows = list.size();
+            if ((issueCurrentPage + 1) * PAGE_SIZE < totalRows) {
+                issueCurrentPage++;
+                updateIssueTable();
+            }
+        });
+
+        navPanel.add(prev);
+
+        // 페이지 번호 버튼
+        int totalRows = list.size();
+        int totalPages = (int) Math.ceil((double) totalRows / PAGE_SIZE);
+
+        for (int i = 0; i < totalPages; i++) {
+            final int pageIndex = i;
+            RoundedButton pageButton = new RoundedButton(String.valueOf(i + 1));
+            if (i == issueCurrentPage) {
+                pageButton.setEnabled(false); // 현재 페이지는 비활성화
+            }
+            pageButton.addActionListener(e -> {
+                issueCurrentPage = pageIndex;
+                updateIssueTable();
+            });
+            navPanel.add(pageButton);
+        }
+
+        navPanel.add(next);
+        container.add(navPanel, BorderLayout.SOUTH);
+
+        updateIssueTable(); // 초기 렌더링
+
+        container.setPreferredSize(new Dimension(1500, 300));
+        return container;
+    }
+
+    private void updateIssueTable() {
+        issueTableContainer.removeAll();
+
+        String[] headers = {"번호", "신청문서", "출력", "등록일", "처리일"};
+        int[] columnWidths = {80, 920, 200, 150, 150};
+
+        List<Simple_doc> list = MainFrameState.civil.selectAll(Simple_doc.class);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         Font font = new Font("맑은 고딕", Font.PLAIN, 13);
         Font headerFont = new Font("맑은 고딕", Font.BOLD, 14);
 
-        double[] columnWeights = {0.1, 0.4, 0.2, 0.15, 0.15};
+        int headerHeight = 40;
+        int rowHeight = 40;
 
-        // 헤더
-        for (int col = 0; col < headers.length; col++) {
-            gbc.gridx = col;
-            gbc.gridy = 0;
-            gbc.weightx = columnWeights[col];
-            JLabel label = new JLabel(headers[col], SwingConstants.CENTER);
+        // 헤더 패널
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.X_AXIS));
+        headerPanel.setBackground(new Color(240, 240, 240));
+        headerPanel.setPreferredSize(new Dimension(0, headerHeight));
+        headerPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, headerHeight));
+
+        for (int i = 0; i < headers.length; i++) {
+            JLabel label = new JLabel(headers[i], SwingConstants.CENTER);
             label.setFont(headerFont);
-            panel.add(label, gbc);
+            label.setPreferredSize(new Dimension(columnWidths[i], headerHeight));
+            label.setMaximumSize(new Dimension(columnWidths[i], headerHeight));
+            label.setMinimumSize(new Dimension(columnWidths[i], headerHeight));
+            headerPanel.add(label);
         }
+        issueTableContainer.add(headerPanel);
 
-        // 데이터 행
-        for (int row = 0; row < rows.length; row++) {
-            for (int col = 0; col < headers.length; col++) {
-                gbc.gridx = col;
-                gbc.gridy = row + 1;
-                gbc.weightx = columnWeights[col];
+        // 현재 페이지 데이터
+        int start = issueCurrentPage * PAGE_SIZE;
+        int end = Math.min(start + PAGE_SIZE, list.size());
 
-                if (col == 2) {
-                	RoundedButton btn = new RoundedButton("출력");
-                    btn.setPreferredSize(new Dimension(120, 30));
-                    btn.setForeground(Color.WHITE);
-                    btn.setFocusPainted(false);
-                    btn.setFont(font);
-                    btn.setBorderPainted(false);
+        for (int i = start; i < end; i++) {
+            Simple_doc doc = list.get(i);
+            Complaint_category_info category = MainFrameState.civil.find(Complaint_category_info.class, doc.getComplaint_category_code());
 
+            JPanel rowPanel = new JPanel();
+            rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
+            rowPanel.setBackground(Color.WHITE);
+            rowPanel.setPreferredSize(new Dimension(0, rowHeight));
+            rowPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, rowHeight));
+            rowPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            String[] data = {
+                String.valueOf(doc.getSimple_doc_code()),
+                category.getComplaint_category_name(),
+                "출력", // 출력 버튼 대신 텍스트 자리
+                formatter.format(doc.getCreate_date()),
+                doc.getComplete_date() == null ? "처리중" : formatter.format(doc.getComplete_date())
+            };
+
+            for (int j = 0; j < data.length; j++) {
+                if (j == 2) { // 출력 버튼 위치
                     JPanel btnWrapper = new JPanel();
                     btnWrapper.setBackground(Color.WHITE);
+                    btnWrapper.setPreferredSize(new Dimension(columnWidths[j], rowHeight));
+                    btnWrapper.setMaximumSize(new Dimension(columnWidths[j], rowHeight));
+                    btnWrapper.setMinimumSize(new Dimension(columnWidths[j], rowHeight));
+                    btnWrapper.setLayout(new GridBagLayout());
+
+                    RoundedButton btn = new RoundedButton("출력");
+                    btn.setPreferredSize(new Dimension(70, 30));
+                    btn.setFont(font);
+                    btn.setForeground(Color.WHITE);
+                    btn.setFocusPainted(false);
+                    btn.setBorderPainted(false);
+                    btn.addActionListener(e -> {
+                        System.out.println("출력 클릭: " + doc.getSimple_doc_code());
+                    });
+
                     btnWrapper.add(btn);
-                    panel.add(btnWrapper, gbc);
+                    rowPanel.add(btnWrapper);
                 } else {
-                    JLabel dataLabel = new JLabel(rows[row][col].toString(), SwingConstants.CENTER);
-                    dataLabel.setFont(font);
-                    panel.add(dataLabel, gbc);
+                    JLabel label = new JLabel(data[j], SwingConstants.CENTER);
+                    label.setFont(font);
+                    label.setPreferredSize(new Dimension(columnWidths[j], rowHeight));
+                    label.setMaximumSize(new Dimension(columnWidths[j], rowHeight));
+                    label.setMinimumSize(new Dimension(columnWidths[j], rowHeight));
+                    rowPanel.add(label);
                 }
             }
+
+            rowPanel.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    System.out.println("행 클릭: " + doc.getSimple_doc_code());
+                }
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    rowPanel.setBackground(new Color(230, 230, 250));
+                }
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    rowPanel.setBackground(Color.WHITE);
+                }
+            });
+            issueTableContainer.add(rowPanel);
         }
-        return panel;
+        issueTableContainer.revalidate();
+        issueTableContainer.repaint();
     }
+
+
+    
 }
