@@ -99,10 +99,10 @@ public class SinmungoListPanel extends JPanel {
         writeBtn.setBorderPainted(false);
         writeBtn.setFocusPainted(false);
         writeBtn.addActionListener((e) -> {
-        	if (MainFrameState.member != null) {
+        	if (MainFrameState.member == null) {
         		MainFrameState.card.show("login");        		
         	} else {
-        		MainFrameState.card.show("WriteContent");
+        		MainFrameState.card.show("SinmungoinfoPanel");
         	}
         });
         
