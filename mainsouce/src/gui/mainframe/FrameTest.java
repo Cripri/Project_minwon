@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import gui.phs.WriteContent;
-import gui.phs.AfterLoginPanel;
 import gui.phs.CivilComplaintDetailPanel;
 import gui.phs.ComplaintAnswerListPanel;
 import gui.phs.DepartmentChangeRequestDetailPanel;
@@ -35,7 +34,7 @@ public class FrameTest extends JFrame {
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
 		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1, "마이페이지");
 		
-		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
+		//AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
 		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
 		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
