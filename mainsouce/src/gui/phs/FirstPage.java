@@ -44,7 +44,7 @@ public class FirstPage extends SimpleDocPanel {
         
         
         leftButton.addActionListener((e) -> {
-        	MainFrameState.card.show("login");
+        	MainFrameState.card.show("simpleDoc");
         });
         
         rightButton.addActionListener((e) -> {
@@ -63,9 +63,7 @@ public class FirstPage extends SimpleDocPanel {
     private RoundedButton createCenterButton(String text) {
         RoundedButton button = new RoundedButton(text);
         button.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-        // 만약 RoundedButton에서 기본 배경색, 전경색이 다르다면 필요시 아래 설정 추가
-        // button.setBackground(new Color(30, 160, 255));
-        // button.setForeground(Color.WHITE);
+        
         return button;
     }
 }

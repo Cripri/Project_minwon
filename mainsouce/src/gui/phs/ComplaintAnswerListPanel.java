@@ -1,68 +1,66 @@
 package gui.phs;
 
-import gui.mainframe.FrameTop;
-
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 
 public class ComplaintAnswerListPanel extends JPanel {
 
     public ComplaintAnswerListPanel() {
-        setLayout(new BorderLayout(10, 10));
-        setBackground(new Color(220, 220, 220));
+        setLayout(new BorderLayout());
+        setBackground(Color.WHITE);
 
-//        FrameTop topPanel = new FrameTop();
-//        add(topPanel, BorderLayout.NORTH);
+        // 제목 라벨: "민원신청내역" 가운데 정렬
+        JLabel titleLabel = new JLabel("민원신청내역", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        this.add(titleLabel, BorderLayout.NORTH);
 
-        // 🔹 중앙 전체 패널
+        // 메인 콘텐츠 패널
         JPanel centerPanel = new JPanel();
+        centerPanel.setBackground(Color.WHITE);
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
-        centerPanel.setBackground(new Color(240, 240, 240));
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 30, 30, 30));
 
-        // 🔸 1. 신청인 정보 패널
+        // 안내 텍스트
         JPanel infoPanel = new JPanel(new BorderLayout());
-        infoPanel.setBackground(new Color(240, 240, 240));
-        infoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        infoPanel.setBackground(Color.WHITE);
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
 
-        // 라벨 (위)
-        JPanel labelPanel = new JPanel(new GridLayout(1, 3, 10, 5));
-        labelPanel.setBackground(new Color(240, 240, 240));
-        JLabel lbl1 = new JLabel("접수번호", SwingConstants.LEFT);
-        JLabel lbl2 = new JLabel("성명", SwingConstants.LEFT);
-        JLabel lbl3 = new JLabel();
+        JLabel infoLabel = new JLabel("클릭한 민원에 대한 내용 (ex 합당된 민원, 결제확인증, 처리완료된민원, 혹은 전체에서 검색된내용)");
+        infoLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+        infoLabel.setHorizontalAlignment(SwingConstants.LEFT);
+        infoPanel.add(infoLabel, BorderLayout.WEST);
 
-        for (JLabel lbl : new JLabel[]{lbl1, lbl2, lbl3}) {
-            lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
-            lbl.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        }
-
-        labelPanel.add(lbl1);
-        labelPanel.add(lbl2);
-        labelPanel.add(lbl3);
-
-        // 값 (아래)
-        JPanel valuePanel = new JPanel(new GridLayout(1, 3, 10, 5));
-        valuePanel.setBackground(new Color(240, 240, 240));
-        JLabel val1 = new JLabel("AA1234-215466", SwingConstants.LEFT);
-        JLabel val2 = new JLabel("어쩌구씨", SwingConstants.LEFT);
-        JLabel val3 = new JLabel();
-        for (JLabel val : new JLabel[]{val1, val2, val3}) {
-            val.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-        }
-
-        valuePanel.add(val1);
-        valuePanel.add(val2);
-        valuePanel.add(val3);
-
-        infoPanel.add(labelPanel, BorderLayout.NORTH);
-        infoPanel.add(valuePanel, BorderLayout.SOUTH);
         centerPanel.add(infoPanel);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 15))); // 간격
 
-        // 🔸 2. 제목 영역
+        // 테이블
+        JTable table = createStyledTable();
+        JScrollPane tableScroll = new JScrollPane(table);
+        tableScroll.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+        centerPanel.add(tableScroll);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+
+        // 상세 정보 패널 (접수번호, 성명 등)
+        JPanel detailInfoPanel = new JPanel(new GridLayout(1, 2, 10, 5));
+        detailInfoPanel.setBackground(new Color(240, 240, 240));
+        detailInfoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+
+        JLabel lblReceipt = new JLabel("접수번호: AA1234-215466");
+        lblReceipt.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        JLabel lblName = new JLabel("성명: 어쩌구씨");
+        lblName.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+
+        detailInfoPanel.add(lblReceipt);
+        detailInfoPanel.add(lblName);
+
+        centerPanel.add(detailInfoPanel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // 제목 영역
         JTextArea titleArea = new JTextArea("제목");
-        titleArea.setFont(new Font("맑은고딕", Font.BOLD, 16));
+        titleArea.setFont(new Font("맑은 고딕", Font.BOLD, 16));
         titleArea.setEditable(false);
         titleArea.setBackground(Color.WHITE);
         titleArea.setLineWrap(true);
@@ -72,12 +70,12 @@ public class ComplaintAnswerListPanel extends JPanel {
         centerPanel.add(titleArea);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // 🔸 3. 민원내용 / 답변내용
+        // 민원내용 / 답변내용 패널
         JPanel contentPanel = new JPanel(new GridLayout(1, 2, 20, 0));
         contentPanel.setBackground(new Color(240, 240, 240));
 
         JTextArea requestArea = new JTextArea("민원내용");
-        requestArea.setFont(new Font("맑은고딕", Font.PLAIN, 14));
+        requestArea.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         requestArea.setEditable(false);
         requestArea.setBackground(Color.WHITE);
         requestArea.setLineWrap(true);
@@ -85,20 +83,21 @@ public class ComplaintAnswerListPanel extends JPanel {
         requestArea.setBorder(BorderFactory.createTitledBorder("민원내용"));
 
         JTextArea answerArea = new JTextArea("답변내용");
-        answerArea.setFont(new Font("맑은고딕", Font.PLAIN, 14));
+        answerArea.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
         answerArea.setEditable(true); // 수정 가능
         answerArea.setBackground(Color.WHITE);
         answerArea.setLineWrap(true);
         answerArea.setWrapStyleWord(true);
-        answerArea.setBorder(BorderFactory.createTitledBorder("수정 가능"));
+        answerArea.setBorder(BorderFactory.createTitledBorder("답변내용 (수정 가능)"));
 
         contentPanel.add(requestArea);
         contentPanel.add(answerArea);
 
         centerPanel.add(contentPanel);
-        add(centerPanel, BorderLayout.CENTER);
 
-        // 🔹 하단 버튼 패널
+        this.add(centerPanel, BorderLayout.CENTER);
+
+        // 하단 버튼 패널
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
         bottomPanel.setBackground(new Color(220, 220, 220));
@@ -119,6 +118,43 @@ public class ComplaintAnswerListPanel extends JPanel {
         }
 
         bottomPanel.add(buttonRow);
-        add(bottomPanel, BorderLayout.SOUTH);
+        this.add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    private JTable createStyledTable() {
+        String[] columnNames = {"접수 번호", "내용", "처리상태", "만료일자", "추가신청"};
+        Object[][] data = {
+            {"AA0702-0001", "주민등록 등초본 발급 신청", "처리완료", "2025-07-09", ""},
+            {"DA0702-0001", "여권 재발급 신청", "처리중", "2025-07-22", ""},
+            {"DA0702-0002", "여권 재발급 신청", "미확인", "2025-07-22", ""},
+            {"DA0702-0002", "여권 재발급 신청", "반려", "2025-07-22", ""}
+        };
+
+        DefaultTableModel model = new DefaultTableModel(data, columnNames) {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        JTable table = new JTable(model);
+        table.setRowHeight(35);
+        table.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
+        table.setShowGrid(true);
+        table.setGridColor(new Color(220, 220, 220));
+        table.setFillsViewportHeight(true);
+
+        // 헤더 스타일
+        table.getTableHeader().setFont(new Font("맑은 고딕", Font.BOLD, 13));
+        table.getTableHeader().setBackground(new Color(240, 240, 240));
+        table.getTableHeader().setReorderingAllowed(false);
+
+        // 가운데 정렬
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+        for (int i = 0; i < table.getColumnCount(); i++) {
+            table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        return table;
     }
 }
