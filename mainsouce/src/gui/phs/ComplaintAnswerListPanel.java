@@ -47,53 +47,53 @@ public class ComplaintAnswerListPanel extends JPanel {
         detailInfoPanel.setBackground(new Color(240, 240, 240));
         detailInfoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
 
-////        JLabel lblReceipt = new JLabel("접수번호: AA1234-215466");
-//        lblReceipt.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-//        JLabel lblName = new JLabel("성명: 어쩌구씨");
-//        lblName.setFont(new Font("맑은 고딕", Font.BOLD, 14));
-//
-//        detailInfoPanel.add(lblReceipt);
-//        detailInfoPanel.add(lblName);
-//
-//        centerPanel.add(detailInfoPanel);
-//        centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-//
-//        // 제목 영역
-//        JTextArea titleArea = new JTextArea("제목");
-//        titleArea.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-//        titleArea.setEditable(false);
-//        titleArea.setBackground(Color.WHITE);
-//        titleArea.setLineWrap(true);
-//        titleArea.setWrapStyleWord(true);
-//        titleArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-//        titleArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-//        centerPanel.add(titleArea);
-//        centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
-//
-//        // 민원내용 / 답변내용 패널
-//        JPanel contentPanel = new JPanel(new GridLayout(1, 2, 20, 0));
-//        contentPanel.setBackground(new Color(240, 240, 240));
-//
-//        JTextArea requestArea = new JTextArea("민원내용");
-//        requestArea.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-//        requestArea.setEditable(false);
-//        requestArea.setBackground(Color.WHITE);
-//        requestArea.setLineWrap(true);
-//        requestArea.setWrapStyleWord(true);
-//        requestArea.setBorder(BorderFactory.createTitledBorder("민원내용"));
-//
-//        JTextArea answerArea = new JTextArea("답변내용");
-//        answerArea.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-//        answerArea.setEditable(true); // 수정 가능
-//        answerArea.setBackground(Color.WHITE);
-//        answerArea.setLineWrap(true);
-//        answerArea.setWrapStyleWord(true);
-//        answerArea.setBorder(BorderFactory.createTitledBorder("답변내용 (수정 가능)"));
+        JLabel lblReceipt = new JLabel("접수번호: AA1234-215466");
+        lblReceipt.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+        JLabel lblName = new JLabel("성명: 어쩌구씨");
+        lblName.setFont(new Font("맑은 고딕", Font.BOLD, 14));
 
-//        contentPanel.add(requestArea);
-//        contentPanel.add(answerArea);
-//
-//        centerPanel.add(contentPanel);
+        detailInfoPanel.add(lblReceipt);
+        detailInfoPanel.add(lblName);
+
+        centerPanel.add(detailInfoPanel);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // 제목 영역
+        JTextArea titleArea = new JTextArea("제목");
+        titleArea.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        titleArea.setEditable(false);
+        titleArea.setBackground(Color.WHITE);
+        titleArea.setLineWrap(true);
+        titleArea.setWrapStyleWord(true);
+        titleArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        titleArea.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
+        centerPanel.add(titleArea);
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
+
+        // 민원내용 / 답변내용 패널
+        JPanel contentPanel = new JPanel(new GridLayout(1, 2, 20, 0));
+        contentPanel.setBackground(new Color(240, 240, 240));
+
+        JTextArea requestArea = new JTextArea("민원내용");
+        requestArea.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+        requestArea.setEditable(false);
+        requestArea.setBackground(Color.WHITE);
+        requestArea.setLineWrap(true);
+        requestArea.setWrapStyleWord(true);
+        requestArea.setBorder(BorderFactory.createTitledBorder("민원내용"));
+
+        JTextArea answerArea = new JTextArea("답변내용");
+        answerArea.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+        answerArea.setEditable(true); // 수정 가능
+        answerArea.setBackground(Color.WHITE);
+        answerArea.setLineWrap(true);
+        answerArea.setWrapStyleWord(true);
+        answerArea.setBorder(BorderFactory.createTitledBorder("답변내용 (수정 가능)"));
+
+        contentPanel.add(requestArea);
+        contentPanel.add(answerArea);
+
+        centerPanel.add(contentPanel);
 
         this.add(centerPanel, BorderLayout.CENTER);
 

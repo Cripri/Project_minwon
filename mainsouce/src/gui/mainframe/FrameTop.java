@@ -47,6 +47,7 @@ public class FrameTop extends JPanel {
         topButtonPanel.removeAll();
 
         boolean login = MainFrameState.member != null;
+        boolean emplogin = MainFrameState.employee != null;
 
         JButton mainPageBtn = new JButton("메인페이지");
         mainPageBtn.setOpaque(false);
@@ -69,13 +70,21 @@ public class FrameTop extends JPanel {
         });
 
         JButton loginBtn;
-        if (login) {
+        if (login || emplogin) {
             loginBtn = new JButton("로그아웃");
-            loginBtn.addActionListener((e) -> {
-                MainFrameState.member = null;  // 로그아웃 처리
-                refreshButtons(); // 버튼 갱신
-                MainFrameState.card.show("login");
-            });
+            if (emplogin) {
+            	loginBtn.addActionListener((e) -> {
+                    MainFrameState.employee = null;  // 로그아웃 처리
+                    refreshButtons(); // 버튼 갱신
+                    MainFrameState.card.show("login");
+            	});
+            } else if (login) {
+            	loginBtn.addActionListener((e) -> {
+            		MainFrameState.member = null;  // 로그아웃 처리
+            		refreshButtons(); // 버튼 갱신
+            		MainFrameState.card.show("login");
+            	});
+            }
         } else {
             loginBtn = new JButton("로그인");
             loginBtn.addActionListener((e) -> {

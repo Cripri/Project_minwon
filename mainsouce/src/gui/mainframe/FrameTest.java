@@ -5,7 +5,14 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import gui.phs.*;
+import gui.phs.WriteContent;
+import gui.phs.AfterLoginPanel;
+import gui.phs.CivilComplaintDetailPanel;
+import gui.phs.ComplaintAnswerListPanel;
+import gui.phs.DepartmentChangeRequestDetailPanel;
+import gui.phs.DepartmentChangeRequestPanel;
+import gui.phs.FirstPage;
+import gui.phs.RrnApplicationPanel;
 import gui.phs.ManagerMenu.ManagerMenuPanel;
 
 public class FrameTest extends JFrame {
@@ -26,8 +33,9 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
-
-		SinmungoinfoPanel sinmungoinfopanel = new SinmungoinfoPanel();
+		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1, "마이페이지");
+		
+		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
 		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
 		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
@@ -40,9 +48,18 @@ public class FrameTest extends JFrame {
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
+		cardPage.add("userInfoEdit", userInfoEdit);
 		
-
-
+//		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
+//		cardPage.add("AfterLoginPanel", afterLoginPanel);
+//		cardPage.add("ComplaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함 
+//		cardPage.add("DepartmentChangeRequestPanel", departmentChangeRequestPanel); // 완성 창 제목 넣어주면 좋음
+//		cardPage.add("DepartmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); 주민번호 지워야함
+//		cardPage.add("RrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
+//		cardPage.add("WriteContent", writeContent); // 작성완료 버튼 지우기 
+//		cardPage.add("ManagerMenuPanel", managerMenuPanel); // 위에 제목 만드
+		
+		
 		cardPage.add("firstPage", firstPage);
 		cardPage.add("login", login);
 		cardPage.add("myPage", myPage);
@@ -50,18 +67,9 @@ public class FrameTest extends JFrame {
 		cardPage.add("sinmungoList", sinmungoList);
 		cardPage.add("employeeMain", employeeMain);
 		cardPage.add("signUp", signUp);
-		cardPage.add("userInfoEdit", userInfoEdit);
+		
 
-		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
-		cardPage.add("SinmungoinfoPanel", sinmungoinfopanel);
-		cardPage.add("ComplaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함
-		cardPage.add("DepartmentChangeRequestPanel", departmentChangeRequestPanel); // 완성 창 제목 넣어주면 좋음
-		cardPage.add("DepartmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); //주민번호 지워야함
-		cardPage.add("RrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
-		cardPage.add("WriteContent", writeContent); // 작성완료 버튼 지우기
-		cardPage.add("ManagerMenuPanel", managerMenuPanel); // 위에 제목 만드
-
-
+		
 
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();

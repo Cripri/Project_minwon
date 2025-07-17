@@ -50,12 +50,6 @@ class LoginPanel extends JPanel {
         gbc.gridy = 0;
         add(radioPanel, gbc);
         
-        if (!(radio2.isSelected())) {
-        	System.out.println("직원용아니디롱");
-        } else if (radio2.isSelected()) {
-        	System.out.println("직원용이디롱");
-        }
-
         // 아이디 라벨 + 텍스트필드
         JLabel idLabel = new JLabel("아이디");
         gbc.gridx = 0;
