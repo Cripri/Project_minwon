@@ -46,7 +46,7 @@ public class FrameTop extends JPanel {
     public void refreshButtons() {
         topButtonPanel.removeAll();
 
-        boolean login = MainFrameState.login_id != null;
+        boolean login = MainFrameState.member != null;
 
         JButton mainPageBtn = new JButton("메인페이지");
         mainPageBtn.setOpaque(false);
@@ -72,7 +72,7 @@ public class FrameTop extends JPanel {
         if (login) {
             loginBtn = new JButton("로그아웃");
             loginBtn.addActionListener((e) -> {
-                MainFrameState.login_id = null;  // 로그아웃 처리
+                MainFrameState.member = null;  // 로그아웃 처리
                 refreshButtons(); // 버튼 갱신
                 MainFrameState.card.show("login");
             });

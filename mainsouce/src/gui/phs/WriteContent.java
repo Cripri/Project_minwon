@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -15,7 +16,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
+
+import function.connector.Members;
+import function.connector.Sinmungo;
+import gui.mainframe.MainFrameState;
 
 public class WriteContent extends JPanel {
 
@@ -80,6 +84,29 @@ public class WriteContent extends JPanel {
         completeButton.setBorderPainted(false);
         completeButton.setOpaque(true);
         completeButton.setPreferredSize(new Dimension(100, 30));
+        
+        completeButton.addActionListener((e) -> {
+        	Members m =  MainFrameState.member;
+        	Sinmungo s = new Sinmungo();
+        	s.setMember_code(m.getMember_code());
+        	
+        	s.setSinmungo_title(titleField.getText());
+        	s.setSinmungo_content(contentArea.getText());
+        	if (pwdField.getText() != null) {
+        		s.setSecurity_set("t");
+        		s.setSecurity_password(pwdField.getText());
+        	} else {
+        		s.setSecurity_set("f");
+        		s.setSecurity_password(null);
+        	}
+        	s.setCreate_date(new Date());
+        	s.setStatus("P");
+        	// TODO 팝업 
+        	
+        	// 팝업 완료되면 주석 풀기
+        	// MainFrameState.civil.insert(s);
+        });
+        
         buttonPanel.add(completeButton);
 
         // 컴포넌트 구성

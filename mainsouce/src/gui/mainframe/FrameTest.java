@@ -33,7 +33,7 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
-		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1);
+		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1, "마이페이지");
 		
 		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
 		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
