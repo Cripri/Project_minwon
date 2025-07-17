@@ -18,6 +18,7 @@ import function.connector.Employees;
 import function.connector.Members;
 import function.connector.QueryRequest;
 import function.encryption.Encryptor;
+import gui.mainframe.components.RoundButton;
 import gui.mainframe.components.RoundedButton;
 
 class LoginPanel extends JPanel {
@@ -85,10 +86,6 @@ class LoginPanel extends JPanel {
         });
         
 		RoundedButton loginBtn = new RoundedButton("로그인");
-		
-		idField.addActionListener(e -> loginBtn.doClick());
-        pwField.addActionListener(e -> loginBtn.doClick());
-        
 		loginBtn.addActionListener((e) -> {
 
 			if (radio2.isSelected()) {
@@ -160,14 +157,29 @@ class LoginPanel extends JPanel {
         add(buttonPanel, gbc);
 
         // 원형 버튼
-        RoundedButton guestLogin = new RoundedButton("비회원 로그인");
-        guestLogin.setPreferredSize(new Dimension(190, 35));
-        guestLogin.addActionListener((e) -> {
-        	MainFrameState.card.show("guestLogin");
-        });
+        RoundButton kakaoBtn = new RoundButton("K");
+        kakaoBtn.setBackground(new Color(254, 229, 0));
+        kakaoBtn.setForeground(Color.BLACK);
+        kakaoBtn.setPreferredSize(new Dimension(50, 50));
+
+        RoundButton naverBtn = new RoundButton("N");
+        naverBtn.setBackground(new Color(3, 199, 90));
+        naverBtn.setForeground(Color.WHITE);
+        naverBtn.setPreferredSize(new Dimension(50, 50));
+
+        RoundButton passBtn = new RoundButton("P");
+        passBtn.setBackground(new Color(255, 59, 75));
+        passBtn.setForeground(Color.WHITE);
+        passBtn.setPreferredSize(new Dimension(50, 50));
+
+        JPanel roundPanel = new JPanel(new GridLayout(1, 3, 20, 0));
+        roundPanel.setBackground(new Color(217, 217, 217));
+        roundPanel.add(kakaoBtn);
+        roundPanel.add(naverBtn);
+        roundPanel.add(passBtn);
 
         gbc.gridx = 1;
         gbc.gridy = 4;
-        add(guestLogin, gbc);
+        add(roundPanel, gbc);
     }
 }

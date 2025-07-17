@@ -20,8 +20,8 @@ public class PaginationPanel extends JPanel {
         setOpaque(false);
         setLayout(new FlowLayout(FlowLayout.CENTER));
 
-        IconButton prevBtn = new IconButton("이전 페이지", "resources/IconImage/이전페이지.png");
-        IconButton nextBtn = new IconButton("다음 페이지", "resources/IconImage/다음페이지.png");
+        IconButton prevBtn = new IconButton("이전 페이지", "./IconImage/이전페이지.png");
+        IconButton nextBtn = new IconButton("다음 페이지", "./IconImage/다음페이지.png");
         pageLabel = new JLabel();
 
         prevBtn.setHorizontalTextPosition(SwingConstants.RIGHT);
