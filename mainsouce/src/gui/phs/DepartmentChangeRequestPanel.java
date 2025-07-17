@@ -1,15 +1,9 @@
 package gui.phs;
 
-import gui.mainframe.FrameTop;
-import gui.phs.common.BasicFrame;
-
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.JTableHeader;
+import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class DepartmentChangeRequestPanel extends JPanel {
 
@@ -25,28 +19,25 @@ public class DepartmentChangeRequestPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
 
-//        FrameTop topPanel = new FrameTop();
-//        add(topPanel, BorderLayout.NORTH);
-
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBackground(new Color(245, 245, 245));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         add(centerPanel, BorderLayout.CENTER);
 
         // 제목 라벨 추가
-        JLabel titleLabel = new JLabel("민원 부서변경", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("민원 부서 변경 요청", SwingConstants.CENTER);
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 22));
         titleLabel.setPreferredSize(new Dimension(400, 40));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.add(titleLabel, BorderLayout.NORTH);
 
         // 테이블 컬럼
-        String[] columns = {"접수 번호", "내용", "처리 상태", "현재 배정부서", "접수 날짜"};
+        String[] columns = {"접수 번호", "제목", "처리 상태", "현재 배정부서", "접수 날짜"};
 
         model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 1 || column == 2 || column == 3;
+                return false; // 모든 셀 수정 불가능
             }
         };
 
@@ -58,51 +49,52 @@ public class DepartmentChangeRequestPanel extends JPanel {
         table.setSelectionBackground(new Color(200, 220, 255));
         table.setSelectionForeground(Color.BLACK);
 
+        // 셀 렌더링 커스터마이즈
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable tbl, Object val, boolean isSelected,
                                                            boolean hasFocus, int row, int col) {
                 Component comp = super.getTableCellRendererComponent(tbl, val, isSelected, hasFocus, row, col);
+
                 if (!isSelected) {
                     comp.setBackground(row % 2 == 0 ? Color.WHITE : new Color(245, 245, 245));
                 }
                 setHorizontalAlignment(SwingConstants.CENTER);
+
+                // 처리 상태 컬럼에 색상 추가
+                if (col == 2) {
+                    String status = val.toString();
+                    if ("완료".equals(status)) {
+                        comp.setForeground(new Color(0, 128, 0)); // 녹색
+                    } else if ("처리중".equals(status)) {
+                        comp.setForeground(new Color(200, 100, 0)); // 주황색
+                    } else {
+                        comp.setForeground(Color.BLACK);
+                    }
+                } else {
+                    comp.setForeground(Color.BLACK);
+                }
+
                 return comp;
             }
         });
 
+        // 테이블 헤더 스타일
         JTableHeader header = table.getTableHeader();
         header.setBackground(new Color(70, 130, 180));
         header.setForeground(Color.WHITE);
         header.setFont(header.getFont().deriveFont(Font.BOLD, 14f));
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
-        setComboBoxEditors();
-
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         centerPanel.add(scrollPane, BorderLayout.CENTER);
 
+        // 페이지네이션 패널
         paginationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         centerPanel.add(paginationPanel, BorderLayout.SOUTH);
 
         loadDataAndUpdateTable(currentPage);
-        
-    }
-
-    private void setComboBoxEditors() {
-        String[] contents = {"민원내용1", "민원내용2", "민원내용3"};
-        String[] statuses = {"처리중", "완료", "대기"};
-        String[] departments = {"행정부서", "마케팅부서", "지원부서"};
-
-        JComboBox<String> contentCombo = new JComboBox<>(contents);
-        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(contentCombo));
-
-        JComboBox<String> statusCombo = new JComboBox<>(statuses);
-        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(statusCombo));
-
-        JComboBox<String> departmentCombo = new JComboBox<>(departments);
-        table.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(departmentCombo));
     }
 
     private Object[][] fetchDataFromDB(int page, int pageSize) {
@@ -112,11 +104,11 @@ public class DepartmentChangeRequestPanel extends JPanel {
 
         Object[][] data = new Object[end - start][5];
         for (int i = start; i < end; i++) {
-            data[i - start][0] = (i + 1) + "";  // 접수 번호
-            data[i - start][1] = "내용 " + (i + 1);
-            data[i - start][2] = i % 3 == 0 ? "완료" : "처리중";
-            data[i - start][3] = i % 2 == 0 ? "행정부서" : "마케팅부서";
-            data[i - start][4] = "2025-07-14";
+            data[i - start][0] = (i + 1) + "";                    // 접수 번호
+            data[i - start][1] = "제목 예시";                     // 제목
+            data[i - start][2] = i % 3 == 0 ? "완료" : "처리중";   // 처리 상태
+            data[i - start][3] = i % 2 == 0 ? "행정부서" : "마케팅부서"; // 배정부서
+            data[i - start][4] = "2025-07-14";                   // 날짜
         }
 
         totalDataCount = totalExampleData;
@@ -125,7 +117,7 @@ public class DepartmentChangeRequestPanel extends JPanel {
     }
 
     private void loadDataAndUpdateTable(int page) {
-        model.setRowCount(0);
+        model.setRowCount(0); // 기존 데이터 삭제
 
         Object[][] pageData = fetchDataFromDB(page, rowsPerPage);
 
@@ -152,12 +144,7 @@ public class DepartmentChangeRequestPanel extends JPanel {
                 btn.setForeground(Color.WHITE);
             }
 
-            btn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    loadDataAndUpdateTable(Integer.parseInt(btn.getText()));
-                }
-            });
+            btn.addActionListener(e -> loadDataAndUpdateTable(Integer.parseInt(btn.getText())));
 
             paginationPanel.add(btn);
         }

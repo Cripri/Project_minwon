@@ -224,16 +224,4 @@ public class RrnApplicationPanel extends JPanel {
         option1.addActionListener(updateCheckBoxPanels);
         option2.addActionListener(updateCheckBoxPanels);
     }
-
-    // 테스트용 main
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("민원 작성");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(700, 600);
-            frame.setLocationRelativeTo(null);
-            frame.setContentPane(new RrnApplicationPanel());
-            frame.setVisible(true);
-        });
-    }
 }

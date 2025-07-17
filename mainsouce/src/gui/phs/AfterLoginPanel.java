@@ -15,7 +15,7 @@ public class AfterLoginPanel extends JPanel {
         setBackground(new Color(217, 217, 217));
 
         // 🔹 제목 라벨 (상단에 추가)
-        JLabel titleLabel = new JLabel("비회원 로그인", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel("신청인 기본 정보", SwingConstants.CENTER);
         titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 24));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 10, 10, 10));
         add(titleLabel, BorderLayout.NORTH);
@@ -33,7 +33,7 @@ public class AfterLoginPanel extends JPanel {
         }
 
         // 이름
-        rows[0].add(new JLabel("신청인"));
+        rows[0].add(new JLabel("이름"));
         JTextField nameField = new JTextField(20);
         rows[0].add(nameField);
 
@@ -76,18 +76,40 @@ public class AfterLoginPanel extends JPanel {
 
         // 민원발생지역
         rows[6].add(new JLabel("민원발생지역"));
+
         JRadioButton sameBtn = new JRadioButton("동일", true);
         JRadioButton differentBtn = new JRadioButton("다름");
         sameBtn.setBackground(new Color(217, 217, 217));
         differentBtn.setBackground(new Color(217, 217, 217));
+
         ButtonGroup regionGroup = new ButtonGroup();
         regionGroup.add(sameBtn);
         regionGroup.add(differentBtn);
+
         rows[6].add(sameBtn);
         rows[6].add(differentBtn);
 
-        rows[6].add(new JLabel("주소"));
-        rows[6].add(new addressComboBoxPanel().addressComboBoxPanel());
+        // 주소 라벨과 주소 패널
+        JLabel addressLabel = new JLabel("주소");
+        JPanel addressPanel = new addressComboBoxPanel().addressComboBoxPanel();
+        rows[6].add(addressLabel);
+        rows[6].add(addressPanel);
+
+        // 처음에는 동일이 선택되어 있으므로 주소 숨김
+        addressLabel.setVisible(false);
+        addressPanel.setVisible(false);
+
+        // 라디오 버튼 클릭 이벤트
+        ActionListener toggleAddressVisibility = e -> {
+            boolean showAddress = differentBtn.isSelected();
+            addressLabel.setVisible(showAddress);
+            addressPanel.setVisible(showAddress);
+            rows[6].revalidate();
+            rows[6].repaint();
+        };
+
+        sameBtn.addActionListener(toggleAddressVisibility);
+        differentBtn.addActionListener(toggleAddressVisibility);
 
         // 보안설정
         rows[7].add(new JLabel("보안설정"));
@@ -102,6 +124,19 @@ public class AfterLoginPanel extends JPanel {
         rows[8].add(warningLabel);
 
         this.add(formPanel, BorderLayout.CENTER);
+        
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomPanel.setBackground(new Color(217, 217, 217));
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 60));  // 오른쪽 정렬 & 여백
+
+        JButton completeButton = new JButton("완료");
+        completeButton.setPreferredSize(new Dimension(100, 35));
+        completeButton.setBackground(new Color(45, 140, 240));  // 파란색
+        completeButton.setForeground(Color.WHITE);              // 글자 흰색
+        completeButton.setFocusPainted(false);
+
+        bottomPanel.add(completeButton);
+        this.add(bottomPanel, BorderLayout.SOUTH);
         
     }
 

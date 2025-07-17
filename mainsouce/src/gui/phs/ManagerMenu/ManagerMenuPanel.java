@@ -22,6 +22,14 @@ public class ManagerMenuPanel extends JPanel {
 //        FrameTop topPanel = new FrameTop();
 //        add(topPanel, BorderLayout.NORTH);
 
+        JLabel pageTitle = new JLabel("직원 계정 관리", SwingConstants.CENTER);
+        pageTitle.setFont(new Font("맑은 고딕", Font.BOLD, 24));
+        pageTitle.setOpaque(true); 
+        pageTitle.setBackground(new Color(245, 245, 245)); 
+        pageTitle.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        add(pageTitle, BorderLayout.NORTH);
+        
+        
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         centerPanel.setBackground(new Color(245, 245, 245));
@@ -30,9 +38,6 @@ public class ManagerMenuPanel extends JPanel {
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         actionPanel.setOpaque(false);
 
-        JButton filterBtn = new JButton("검색필터");
-        styleButton(filterBtn);
-        actionPanel.add(filterBtn);
 
         JButton createBtn = new JButton("계정 생성");
         createBtn.setBackground(new Color(70, 130, 180));
@@ -91,15 +96,49 @@ public class ManagerMenuPanel extends JPanel {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         centerPanel.add(scrollPane, BorderLayout.CENTER);
 
-        filterBtn.addActionListener(e -> {
-            JOptionPane.showMessageDialog(this, "Comming soon...");
-        });
-
         createBtn.addActionListener(e -> {
             Window parentWindow = SwingUtilities.getWindowAncestor(this);
             AccountCreateDialog dialog = new AccountCreateDialog(parentWindow, userData -> model.addRow(userData));
             dialog.setVisible(true);
         });
+        
+        //완료 버튼
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 10));
+        bottomPanel.setBackground(new Color(245, 245, 245));
+
+        JButton completeBtn = new JButton("완료");
+        completeBtn.setPreferredSize(new Dimension(100, 35));
+        completeBtn.setBackground(new Color(45, 140, 240)); // 파란색
+        completeBtn.setForeground(Color.WHITE);
+        completeBtn.setFocusPainted(false);
+        completeBtn.setFont(new Font("맑은 고딕", Font.BOLD, 13));
+
+        // 버튼 클릭 이벤트 (예: 콘솔 출력)
+        completeBtn.addActionListener(e -> {
+            JLabel messageLabel = new JLabel("완료", SwingConstants.CENTER);
+            messageLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+
+            JButton okButton = new JButton("확인");
+            okButton.setPreferredSize(new Dimension(80, 30));
+
+            JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(completeBtn), "알림", Dialog.ModalityType.APPLICATION_MODAL);
+            dialog.setLayout(new BorderLayout(10, 10));
+            dialog.add(messageLabel, BorderLayout.CENTER);
+            JPanel buttonPanel = new JPanel();
+            buttonPanel.add(okButton);
+            dialog.add(buttonPanel, BorderLayout.SOUTH);
+
+            dialog.pack();
+            dialog.setResizable(false);
+            dialog.setLocationRelativeTo(null);  // 화면 가운데에 띄우기
+
+            okButton.addActionListener(ev -> dialog.dispose());
+
+            dialog.setVisible(true);
+        });
+        
+        bottomPanel.add(completeBtn);
+        add(bottomPanel, BorderLayout.SOUTH);
     }
 
     private void setupIconRenderers() {
