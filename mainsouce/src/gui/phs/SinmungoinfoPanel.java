@@ -2,15 +2,12 @@ package gui.phs;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.time.LocalDate;
-import java.time.Year;
 import javax.swing.*;
 
 import function.connector.Sinmungo;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.addressComboBoxPanel;
 
-import static gui.mainframe.MainFrameState.civil;
 import static gui.mainframe.MainFrameState.member;
 
 public class SinmungoinfoPanel extends JPanel {
@@ -65,8 +62,8 @@ public class SinmungoinfoPanel extends JPanel {
 
         // 생년월일 + 성별
         rows[4].add(new JLabel("생년월일"));
-        JPanel birthdatePanel = new BirthDateSelector().getBirthDatePanel();
-        rows[4].add(birthdatePanel);
+        JPanel birth = new BirthDateSelector().getBirthDatePanel();
+        rows[4].add(birth);
 
         rows[4].add(new JLabel("성별:"));
         JComboBox<String> genderBox = new JComboBox<>(new String[]{"남성", "여성"});
@@ -137,7 +134,8 @@ public class SinmungoinfoPanel extends JPanel {
         completeButton.addActionListener(e -> {
             Sinmungo nsin = new Sinmungo();
             nsin.setMember_code(member.getMember_code());
-//            nsin.setMember_birthday(birthdatePanel);
+            nsin.setMember_birthday(member.getMember_birthday());
+            
             nsin.setMember_name(nameField.getText());
             nsin.setComplaint_area(address.findDistrictCode(address.getSido(),address.getSigungu()));
 
