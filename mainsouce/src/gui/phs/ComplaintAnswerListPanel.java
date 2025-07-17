@@ -11,9 +11,8 @@ public class ComplaintAnswerListPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(220, 220, 220));
 
-        // 🔹 상단 패널
-        FrameTop topPanel = new FrameTop();
-        add(topPanel, BorderLayout.NORTH);
+//        FrameTop topPanel = new FrameTop();
+//        add(topPanel, BorderLayout.NORTH);
 
         // 🔹 중앙 전체 패널
         JPanel centerPanel = new JPanel();
@@ -31,7 +30,7 @@ public class ComplaintAnswerListPanel extends JPanel {
         labelPanel.setBackground(new Color(240, 240, 240));
         JLabel lbl1 = new JLabel("접수번호", SwingConstants.LEFT);
         JLabel lbl2 = new JLabel("성명", SwingConstants.LEFT);
-        JLabel lbl3 = new JLabel("주민등록번호", SwingConstants.LEFT);
+        JLabel lbl3 = new JLabel();
 
         for (JLabel lbl : new JLabel[]{lbl1, lbl2, lbl3}) {
             lbl.setFont(lbl.getFont().deriveFont(Font.BOLD));
@@ -47,8 +46,7 @@ public class ComplaintAnswerListPanel extends JPanel {
         valuePanel.setBackground(new Color(240, 240, 240));
         JLabel val1 = new JLabel("AA1234-215466", SwingConstants.LEFT);
         JLabel val2 = new JLabel("어쩌구씨", SwingConstants.LEFT);
-        JLabel val3 = new JLabel("123456-7890123", SwingConstants.LEFT);
-
+        JLabel val3 = new JLabel();
         for (JLabel val : new JLabel[]{val1, val2, val3}) {
             val.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
         }

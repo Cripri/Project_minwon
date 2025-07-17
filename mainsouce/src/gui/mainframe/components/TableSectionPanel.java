@@ -66,7 +66,7 @@ public class TableSectionPanel extends JPanel {
                         public void mouseClicked(MouseEvent e) {
                             //JOptionPane.showMessageDialog(null, "상세 페이지 이동: " + p.getTitle());
 
-                            card.add(new SinmungoDetailPanel(p.getNumber()), "detailPanel_" + p.getNumber());
+                            card.add(new SinmungoDetailPanel(p.getNumber(), "마이페이지 아님"), "detailPanel_" + p.getNumber());
                             card.show("detailPanel_" + p.getNumber());
                         }
                     });

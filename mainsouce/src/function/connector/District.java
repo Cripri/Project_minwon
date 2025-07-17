@@ -1,5 +1,10 @@
 package function.connector;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import gui.mainframe.MainFrameState;
+
 public class District {
 	Integer district_code;
 	Integer sd_code;
