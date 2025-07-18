@@ -300,6 +300,20 @@ public class Get_pop_up_frames{
 		return pop;
 	}
 
+	
+	public static JFrame get_pop_up_duplicate_id_frame(boolean tf) {
+		JFrame pop = geb.get_pop_up_base_small("중복 알림", col);
+
+		pop.setLayout(new GridLayout(3, 1));
+		
+		String you_can = tf ? "사용 가능한 아이디 입니다" : "사용할 수 없는 아이디 입니다";
+
+		pop.add(new JPanel());
+		pop.add(geb.get_public_pop_up_you_did(you_can));
+		pop.add(geb.get_ok_button_panel(pop));
+
+		return pop;
+	}
 
 
 	public static <T> JFrame get_yn_frame (String str1, T obj){
