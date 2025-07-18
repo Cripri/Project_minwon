@@ -2,15 +2,21 @@ package gui.phs;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.time.LocalDate;
-import java.time.Year;
 import javax.swing.*;
 
+import function.connector.Sinmungo;
+import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.addressComboBoxPanel;
 
-public class AfterLoginPanel extends JPanel {
+import static gui.mainframe.MainFrameState.member;
 
-    public AfterLoginPanel() {
+public class SinmungoinfoPanel extends JPanel {
+
+    static{
+
+    }
+
+    public SinmungoinfoPanel() {
         setLayout(new BorderLayout());
         setBackground(new Color(217, 217, 217));
 
@@ -45,7 +51,9 @@ public class AfterLoginPanel extends JPanel {
 
         // 주소
         rows[2].add(new JLabel("주소"));
-        rows[2].add(new addressComboBoxPanel().addressComboBoxPanel());
+        addressComboBoxPanel address = new addressComboBoxPanel();
+        rows[2].add(address.addressComboBoxPanel());
+
 
         // 연락처
         rows[3].add(new JLabel("연락처"));
@@ -54,8 +62,8 @@ public class AfterLoginPanel extends JPanel {
 
         // 생년월일 + 성별
         rows[4].add(new JLabel("생년월일"));
-        JPanel birthdatePanel = createBirthdatePanel();
-        rows[4].add(birthdatePanel);
+        JPanel birth = new BirthDateSelector().getBirthDatePanel();
+        rows[4].add(birth);
 
         rows[4].add(new JLabel("성별:"));
         JComboBox<String> genderBox = new JComboBox<>(new String[]{"남성", "여성"});
@@ -111,17 +119,9 @@ public class AfterLoginPanel extends JPanel {
         sameBtn.addActionListener(toggleAddressVisibility);
         differentBtn.addActionListener(toggleAddressVisibility);
 
-        // 보안설정
-        rows[7].add(new JLabel("보안설정"));
-        JRadioButton securityYes = new JRadioButton();
-        securityYes.setBackground(new Color(217, 217, 217));
-        ButtonGroup securityGroup = new ButtonGroup();
-        securityGroup.add(securityYes);
-        rows[7].add(securityYes);
-
         // 안내문
         JLabel warningLabel = new JLabel("* 선택할 경우 외부로 비밀번호 제외, 비회원은 신청정보와 일치할 때만 확인할 수 있습니다.");
-        rows[8].add(warningLabel);
+        rows[7].add(warningLabel);
 
         this.add(formPanel, BorderLayout.CENTER);
         
@@ -130,6 +130,17 @@ public class AfterLoginPanel extends JPanel {
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 60));  // 오른쪽 정렬 & 여백
 
         JButton completeButton = new JButton("완료");
+
+        completeButton.addActionListener(e -> {
+            Sinmungo nsin = new Sinmungo();
+            nsin.setMember_code(member.getMember_code());
+            nsin.setMember_birthday(member.getMember_birthday());
+            
+            nsin.setMember_name(nameField.getText());
+            nsin.setComplaint_area(address.findDistrictCode(address.getSido(),address.getSigungu()));
+
+        });
+
         completeButton.setPreferredSize(new Dimension(100, 35));
         completeButton.setBackground(new Color(45, 140, 240));  // 파란색
         completeButton.setForeground(Color.WHITE);              // 글자 흰색
@@ -138,49 +149,5 @@ public class AfterLoginPanel extends JPanel {
         bottomPanel.add(completeButton);
         this.add(bottomPanel, BorderLayout.SOUTH);
         
-    }
-
-    public JPanel createBirthdatePanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        panel.setOpaque(false);
-
-        int currentYear = Year.now().getValue();
-        int startYear = 1850;
-        int count = currentYear - startYear + 1;
-        String[] yearStrings = new String[count];
-        for (int i = 0; i < count; i++) {
-            yearStrings[i] = String.valueOf(currentYear - i);
-        }
-
-        JComboBox<String> yearsBox = new JComboBox<>(yearStrings);
-        JComboBox<Integer> monthsBox = new JComboBox<>();
-        JComboBox<Integer> daysBox = new JComboBox<>();
-
-        for (int i = 1; i <= 12; i++) monthsBox.addItem(i);
-        for (int i = 1; i <= 31; i++) daysBox.addItem(i);
-
-        ActionListener updateDays = e -> {
-            int year = Integer.parseInt((String) yearsBox.getSelectedItem());
-            int month = (Integer) monthsBox.getSelectedItem();
-            int maxDay = LocalDate.of(year, month, 1).lengthOfMonth();
-            Integer selectedDay = (Integer) daysBox.getSelectedItem();
-
-            daysBox.removeAllItems();
-            for (int i = 1; i <= maxDay; i++) daysBox.addItem(i);
-            if (selectedDay != null && selectedDay <= maxDay) daysBox.setSelectedItem(selectedDay);
-        };
-
-        yearsBox.addActionListener(updateDays);
-        monthsBox.addActionListener(updateDays);
-
-        yearsBox.setPreferredSize(new Dimension(60, 23));
-        monthsBox.setPreferredSize(new Dimension(45, 23));
-        daysBox.setPreferredSize(new Dimension(45, 23));
-
-        panel.add(yearsBox); panel.add(new JLabel("년"));
-        panel.add(monthsBox); panel.add(new JLabel("월"));
-        panel.add(daysBox); panel.add(new JLabel("일"));
-
-        return panel;
     }
 }
