@@ -78,11 +78,11 @@ public class SignUpPanel extends JPanel {
                Members mem = request.getSingleResult();
                if (mem == null) {
                   // 팝업 사용가능한 아이디입니다.
-                  System.out.println("사용가능한 아이디");
+            	  Get_pop_up_frames.get_pop_up_duplicate_id_frame(true);
                   isDuplication = false;
                } else {
                   // 팝업 이미 사용중인 아이디입니다.
-                  System.out.println("사용불가능한 아이디");
+            	   Get_pop_up_frames.get_pop_up_duplicate_id_frame(false);
                   isDuplication = true;
                }
         });
@@ -203,12 +203,12 @@ public class SignUpPanel extends JPanel {
 					System.err.println("해당 지역에 대한 코드가 없습니다.");
 				}
 			} else {
-				System.out.println("시도와 시군구를 모두 선택해주세요.");
+				Get_pop_up_frames.get_wrong_frame("주소");
 				return;
 			}
 
 			if (addressDetailField.getText().trim().length() == 0) {
-				System.out.println("상세주소를 입력해주세요.");
+				Get_pop_up_frames.get_wrong_frame("상세주소");
 				return;
 			}
 
