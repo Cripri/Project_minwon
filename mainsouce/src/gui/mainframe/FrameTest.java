@@ -5,7 +5,15 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import gui.phs.*;
+//import gui.phs.AfterLoginPanel;
+import gui.phs.CivilComplaintDetailPanel;
+import gui.phs.ComplaintAnswerListPanel;
+import gui.phs.DepartmentChangeRequestDetailPanel;
+import gui.phs.DepartmentChangeRequestPanel;
+import gui.phs.FirstPage;
+import gui.phs.RrnApplicationPanel;
+import gui.phs.SinmungoinfoPanel;
+import gui.phs.WriteContent;
 import gui.phs.ManagerMenu.ManagerMenuPanel;
 
 public class FrameTest extends JFrame {
@@ -27,7 +35,9 @@ public class FrameTest extends JFrame {
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
 		GuestLoginPanel guestLogin = new GuestLoginPanel();
-
+		
+//		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
+//		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
 		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
 		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();

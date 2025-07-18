@@ -185,6 +185,40 @@ public class SignUpPanel extends JPanel {
                 System.out.println("콤보박스걸림");
                 return;
             }
+            
+			Date bDate = new Date();
+			if (bds.getYear() != null && bds.getMonth() != null && bds.getDay() != null) {
+				int year = bds.getYear();
+				int month = bds.getMonth();
+				int day = bds.getDay();
+
+				LocalDate bLocalDate = LocalDate.of(year, month, day);
+				bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+			} else {
+				
+				// TODO 팝업
+				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
+				System.out.println("생년, 월, 일을 모두 선택해주세요.");
+				return;
+			}
+
+			// 값이 선택된 경우만 처리
+			if (address.getSido() != null && address.getSigungu() != null) {
+				int districtCode = address.findDistrictCode(address.getSido(), address.getSigungu());
+//			    System.out.println("선택된 지역 코드: " + districtCode);
+
+				if (districtCode == -1) {
+					System.err.println("해당 지역에 대한 코드가 없습니다.");
+				}
+			} else {
+				System.out.println("시도와 시군구를 모두 선택해주세요.");
+				return;
+			}
+
+			if (addressDetailField.getText().trim().length() == 0) {
+				System.out.println("상세주소를 입력해주세요.");
+				return;
+			}
 
 			if (isDuplication) {
 				// 팝업
@@ -216,7 +250,7 @@ public class SignUpPanel extends JPanel {
             int year = bds.getYear();
             int month = bds.getMonth();
             int day = bds.getDay();
-            Date bDate = new Date();
+//            Date bDate = new Date();
             LocalDate bLocalDate = LocalDate.of(year, month, day);
             bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 

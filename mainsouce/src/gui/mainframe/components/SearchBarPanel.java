@@ -18,14 +18,15 @@ public class SearchBarPanel extends JPanel {
 	
 	private static final long serialVersionUID = 1L;
 	private final JTextField searchField;
-	private final JButton searchButton = new JButton("검색");
+	private final RoundedButton searchButton = new RoundedButton("검색");
+	
 
     public SearchBarPanel() {
         setLayout(new BorderLayout());
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
+        
         ImageIcon search = new ImageIcon("resources/IconImage/돋보기.png");
         Image searchImg = search.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
         JLabel searchIcon = new JLabel(new ImageIcon(searchImg));
