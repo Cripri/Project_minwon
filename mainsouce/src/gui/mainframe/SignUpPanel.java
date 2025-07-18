@@ -10,9 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -32,6 +30,7 @@ import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
 import gui.mainframe.components.RoundedButton;
 import gui.mainframe.components.addressComboBoxPanel;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 public class SignUpPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -132,16 +131,10 @@ public class SignUpPanel extends JPanel {
         row++;
         
         PlaceholderTextField phoneNumberField = new PlaceholderTextField("010-1234-5678", 15);
-        RoundedButton certificationButton = new RoundedButton("본인인증");
-        
-        certificationButton.addActionListener((e) -> {
-           // 본인인증 만들어지면 수정
-           isCertification = true;
-        });
         
         PlaceholderTextField emailField = new PlaceholderTextField("example@email.com", 15);
 
-        addRow(formPanel, gbc, row++, "핸드폰번호", phoneNumberField, certificationButton, labelFont, inputFont);
+        addRow(formPanel, gbc, row++, "핸드폰번호", phoneNumberField, null, labelFont, inputFont);
         addRow(formPanel, gbc, row++, "이메일", emailField, null, labelFont, inputFont);
 
         // 주소
@@ -176,15 +169,15 @@ public class SignUpPanel extends JPanel {
 				gender = "f";
 			}
             
-            if(!FieldCheck.validateFields(this,addressDetailField,nameField,phoneNumberField,pwField)){
-                System.out.println("암튼머걸림");
-                return;
-            }
-
-            if(!FieldCheck.validateComboBox(bds.getYearbox(),bds.getMonthbox(),bds.getDaybox(),address.getsidocombo(),address.getsigungucombo())){
-                System.out.println("콤보박스걸림");
-                return;
-            }
+//            if(!FieldCheck.validateFields(this,addressDetailField,nameField,phoneNumberField,pwField)){
+//            	System.out.println("암튼머걸림");
+//            	return;
+//            }
+//
+//            if(!FieldCheck.validateComboBox(bds.getYearbox(),bds.getMonthbox(),bds.getDaybox(),address.getsidocombo(),address.getsigungucombo())){
+//            	System.out.println("콤보박스걸림");
+//                return;
+//            }
             
 			Date bDate = new Date();
 			if (bds.getYear() != null && bds.getMonth() != null && bds.getDay() != null) {
@@ -196,9 +189,8 @@ public class SignUpPanel extends JPanel {
 				bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			} else {
 				
-				// TODO 팝업
 				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
-				System.out.println("생년, 월, 일을 모두 선택해주세요.");
+				Get_pop_up_frames.get_wrong_frame("생년월일");
 				return;
 			}
 
@@ -226,13 +218,6 @@ public class SignUpPanel extends JPanel {
 				return;
 			}
             
-			if (!isCertification) {
-				// 팝업
-				System.out.println("본인인증을 진행해주세요.");
-				return;
-			}
-            
-            
 			String pw = new String(pwField.getPassword());
 			String pwCheck;
 			if (pwCheckField.getPassword() != null) {
@@ -246,14 +231,6 @@ public class SignUpPanel extends JPanel {
 				return;
 			}
             
-            //생년월일
-            int year = bds.getYear();
-            int month = bds.getMonth();
-            int day = bds.getDay();
-//            Date bDate = new Date();
-            LocalDate bLocalDate = LocalDate.of(year, month, day);
-            bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
 			Members m = new Members();
 			m.setMember_id(idField.getText());
 			m.setMember_password(new String(pwField.getPassword()));
