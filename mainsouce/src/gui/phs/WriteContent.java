@@ -99,7 +99,7 @@ public class WriteContent extends JPanel {
         	s.setSinmungo_content(contentArea.getText());
         	
         	// 부서이름 or "판별 불가"
-        	String dep = ComplaintClassifier.classify(titleField.getText());
+        	String dep = ComplaintClassifier.classify(contentArea.getText());
         	QueryRequest<Department> request = new QueryRequest<Department>(
         			"select * from department where department_name like ?", 
         			dep,
