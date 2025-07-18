@@ -606,7 +606,7 @@ public class Get_base {
 	
 	protected static JLabel get_pop_up_login_out(String str1) {
 		
-		String content = str1 == null ? str1 + "님 환영합니다." : "로그아웃 되셨습니다.";
+		String content = str1 != null ? str1 + "님 환영합니다." : "로그아웃 되셨습니다.";
 		
 		return get_word_center(content);
 	}
