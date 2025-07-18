@@ -9,7 +9,7 @@ import javax.swing.JFrame;
 import gui.popup.wldb.pop_up_material.Botton_input_state;
 import gui.popup.wldb.pop_up_material.Color_list;
 import gui.popup.wldb.pop_up_material.Get_base;
-import gui.popup.wldb.pop_up_material.Get_pop_up_buttons;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 public class Button_test {
 	
@@ -18,7 +18,7 @@ public class Button_test {
 	static Botton_input_state delet_state = new Botton_input_state();
 	static Botton_input_state sinmungo_state = new Botton_input_state();
 	
-	static Get_pop_up_buttons get_pop = new Get_pop_up_buttons();
+	static Get_pop_up_frames get_pop = new Get_pop_up_frames();
 	
 	
 	public static void main(String[] args) {
