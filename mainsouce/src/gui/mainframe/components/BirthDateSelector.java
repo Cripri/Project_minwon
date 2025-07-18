@@ -4,10 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BirthDateSelector {
-
-    Integer year;
-    Integer month;
-    Integer day;
+	
+	Integer year;
+	Integer month;
+	Integer day;
 
     private JComboBox<String> yearComboBox;
     private JComboBox<String> monthComboBox;
@@ -18,13 +18,13 @@ public class BirthDateSelector {
         panel.setBackground(new Color(217, 217, 217));
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
 
-        // ---------- 년도 콤보박스 ----------
-        yearComboBox = new JComboBox<>();
+        // 년도 콤보박스
+
         yearComboBox.setBackground(Color.WHITE);
         for (int y = 2025; y >= 1926; y--) {
             yearComboBox.addItem(y + "년");
         }
-
+        
         yearComboBox.addActionListener((e) -> {
             String selected = (String) yearComboBox.getSelectedItem();
             if (selected != null) {
@@ -33,8 +33,8 @@ public class BirthDateSelector {
             }
         });
 
-        // ---------- 월 콤보박스 ----------
-        monthComboBox = new JComboBox<>();
+        // 월 콤보박스
+
         monthComboBox.setBackground(Color.WHITE);
         for (int m = 1; m <= 12; m++) {
             monthComboBox.addItem(m + "월");
@@ -48,8 +48,8 @@ public class BirthDateSelector {
             }
         });
 
-        // ---------- 일 콤보박스 ----------
-        dayComboBox = new JComboBox<>();
+        // 일 콤보박스
+
         dayComboBox.setBackground(Color.WHITE);
         // 초기 기본값 (예: 31일까지 표시)
         for (int d = 1; d <= 31; d++) {
@@ -70,6 +70,21 @@ public class BirthDateSelector {
         return panel;
     }
 
+    public JComboBox getYearbox(){
+        return yearComboBox;
+    }
+
+    public JComboBox getMonthbox(){
+        return monthComboBox;
+    }
+
+    public JComboBox getDaybox(){
+        return dayComboBox;
+    }
+
+	public Integer getYear() {
+		return year;
+	}
     // --------------------- 도우미 메서드 ---------------------
 
     private void updateDayComboBox() {
@@ -102,9 +117,6 @@ public class BirthDateSelector {
 
     // --------------------- Getter/Setter ---------------------
 
-    public Integer getYear() {
-        return year;
-    }
 
     public void setYear(Integer year) {
         this.year = year;
