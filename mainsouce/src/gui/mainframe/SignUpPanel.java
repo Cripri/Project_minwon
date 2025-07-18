@@ -184,6 +184,7 @@ public class SignUpPanel extends JPanel {
 				LocalDate bLocalDate = LocalDate.of(year, month, day);
 				bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			} else {
+				
 				// TODO 팝업
 				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
 				System.out.println("생년, 월, 일을 모두 선택해주세요.");

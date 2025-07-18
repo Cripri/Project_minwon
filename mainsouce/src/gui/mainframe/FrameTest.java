@@ -12,6 +12,7 @@ import gui.phs.DepartmentChangeRequestDetailPanel;
 import gui.phs.DepartmentChangeRequestPanel;
 import gui.phs.FirstPage;
 import gui.phs.RrnApplicationPanel;
+import gui.phs.SinmungoinfoPanel;
 import gui.phs.WriteContent;
 import gui.phs.ManagerMenu.ManagerMenuPanel;
 
@@ -36,6 +37,7 @@ public class FrameTest extends JFrame {
 		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1, "마이페이지");
 		GuestLoginPanel guestLogin = new GuestLoginPanel();
 		
+		SinmungoinfoPanel sinmungoInfo = new SinmungoinfoPanel();
 //		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
 		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
 		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
@@ -69,6 +71,7 @@ public class FrameTest extends JFrame {
 		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
 		cardPage.add("writeContent", writeContent); // 작성완료 버튼 지우기 
 		cardPage.add("managerMenuPanel", managerMenuPanel); // 위에 제목 만드
+		cardPage.add("sinmungoInfo", sinmungoInfo);
 		
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();
