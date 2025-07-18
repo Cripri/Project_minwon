@@ -25,22 +25,17 @@ import gui.mainframe.MainFrameState;
 
 public class CivilComplaintDetailPanel extends JPanel {
 
-    static Sinmungo sinmungo_info = null;
-    static Integer pk = 1;
-
-    static {
-        QueryRequest<Sinmungo> query_request = new QueryRequest<>(
-                "SELECT * FROM Sinmungo WHERE sinmungo_code like ?",
-                pk,
-                Sinmungo.class,
-                MainFrameState.civil
-        );
-        sinmungo_info = query_request.getSingleResult();
-    }
-
-    public CivilComplaintDetailPanel() {
+    public CivilComplaintDetailPanel(Integer pk) {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(220, 220, 220));
+        
+        QueryRequest<Sinmungo> request = new QueryRequest<>(
+        		"SELECT * FROM Sinmungo WHERE sinmungo_code = ?",
+        		pk,
+        		Sinmungo.class,
+        		MainFrameState.civil
+        		);
+        Sinmungo sinmungo_info = request.getSingleResult();
 
 //        FrameTop topPanel = new FrameTop();
 //        add(topPanel, BorderLayout.NORTH);
@@ -142,6 +137,10 @@ public class CivilComplaintDetailPanel extends JPanel {
 
         JButton confirmButton = new JButton("답변 확정");
         JButton listButton = new JButton("목록으로");
+        
+        listButton.addActionListener(e -> {
+            MainFrameState.card.prev();
+        });
 
         for (JButton btn : new JButton[]{confirmButton, listButton}) {
             btn.setBackground(new Color(30, 144, 255));
@@ -156,7 +155,7 @@ public class CivilComplaintDetailPanel extends JPanel {
             List<Object> list = new ArrayList<Object>(Arrays.asList(sets));
 
             QueryRequest<Sinmungo> query_request = new QueryRequest<>(
-                    "UPDATE Sinmungo"
+                    "UPDATE Sinmungo"	
                             + " SET employees_answer = ?"
                             + " WHERE sinmungo_code like ?",
                     Arrays.asList(sets),

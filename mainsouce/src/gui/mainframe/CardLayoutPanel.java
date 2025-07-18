@@ -36,6 +36,10 @@ public class CardLayoutPanel extends JPanel {
 			if (MainFrameState.member != null && previous.equals("login")) {
 				previous = "myPage";
 			}
+			
+			if (MainFrameState.employee != null && previous.equals("login")) {
+				previous = "employeeMain";
+			}
 
 			MainFrameState.future.push(MainFrameState.currentCard);
 			MainFrameState.currentCard = previous;
