@@ -1,17 +1,13 @@
 package gui.mainframe;
 
+import static gui.mainframe.MainFrameState.civil;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-
-import function.connector.Department;
-import function.connector.QueryRequest;
-import function.connector.Sinmungo;
-import gui.mainframe.model.Petition;
-
-import javax.swing.border.EmptyBorder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,12 +16,17 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
+import function.connector.Department;
+import function.connector.Sinmungo;
 import gui.mainframe.components.PaginationPanel;
 import gui.mainframe.components.RoundedButton;
 import gui.mainframe.components.SearchBarPanel;
 import gui.mainframe.components.TableCardPanel;
-import static gui.mainframe.MainFrameState.civil;
+import gui.mainframe.model.Petition;
+import gui.phs.CivilComplaintDetailPanel;
+import gui.phs.SinmungoinfoPanel;
 
 public class SinmungoListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -102,7 +103,17 @@ public class SinmungoListPanel extends JPanel {
         	if (MainFrameState.member == null) {
         		MainFrameState.card.show("login");        		
         	} else {
-        		MainFrameState.card.show("SinmungoinfoPanel");
+        		Component[] components = MainFrameState.card.getComponents();
+            	for (Component comp : components) {
+            	    if (comp instanceof SinmungoinfoPanel) {
+            	    	// 신문고인포패널 있었다면 제거
+            	        MainFrameState.card.remove(comp);
+            	        break;
+            	    }
+            	}
+            	SinmungoinfoPanel infoPanel = new SinmungoinfoPanel();
+            	MainFrameState.card.add("sinmungoinfoPanel", infoPanel);
+        		MainFrameState.card.show("sinmungoinfoPanel");
         	}
         });
         
