@@ -1,11 +1,23 @@
 package gui.popup.wldb.pop_up_material;
 
+import static gui.mainframe.MainFrameState.civil;
+
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import function.connector.Sinmungo;
+import static gui.mainframe.MainFrameState.civil;
+
 
 
 public class Get_pop_up_frames{
@@ -14,6 +26,7 @@ public class Get_pop_up_frames{
 	static Color_list col = new Color_list();
 	static Get_base geb = new Get_base();
 	
+		
 	
 	static Botton_input_state creation_state = new Botton_input_state();
 	
@@ -287,4 +300,66 @@ public class Get_pop_up_frames{
 		return pop;		
 	}
 
+	
+	
+	public static <T> JFrame get_yn_frame (String str1, T obj){
+		
+		JFrame delets = geb.get_pop_up_base_small("확인", col);
+		delets.setLayout(new GridLayout(2, 1));
+		
+		delets.add(geb.get_public_pop_up_you_did(str1));
+		
+		JPanel jp = new JPanel(null);
+		jp.setOpaque(false);
+		
+		JButton yes = new JButton("예");
+		JButton no = new JButton("아니요");
+		
+		yes.setFont(new Font("기본", Font.CENTER_BASELINE, 20));
+		no.setFont(new Font("기본", Font.CENTER_BASELINE, 20));
+		yes.setBackground(new Color(241, 95, 95));
+		no.setBackground(new Color(103, 153, 255));
+		yes.setBounds(55, 10,
+				100, 40);
+		no.setBounds(215, 10,
+				100, 40);
+		
+		yes.addActionListener(e ->{		
+			try {
+				Class<?> clazz = obj.getClass();
+				Object instance = clazz.getDeclaredConstructor().newInstance();
+								
+		        Method[] fields = clazz.getDeclaredMethods();
+		        Method update;
+		        
+		        for(Method m : fields) {
+		        	String name = m.getName().toLowerCase();
+		        	
+		        	if(name.endsWith("update")) {
+		        		m.setAccessible(true);	        		
+						m.invoke(instance);		
+						
+						break;
+		        	}
+		        	
+		        }
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			delets.dispose();			
+		});
+		
+		no.addActionListener(e ->{
+			delets.dispose();
+		});
+		
+		jp.add(yes);
+		jp.add(no);
+		
+		delets.add(jp);
+
+		return delets;
+	}
 }

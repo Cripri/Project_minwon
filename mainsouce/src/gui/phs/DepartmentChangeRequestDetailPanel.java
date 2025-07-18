@@ -1,5 +1,7 @@
 package gui.phs;
 
+import static gui.mainframe.MainFrameState.civil;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -27,6 +29,7 @@ import function.connector.Employees;
 import function.connector.QueryRequest;
 import function.connector.Sinmungo;
 import gui.mainframe.MainFrameState;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 public class DepartmentChangeRequestDetailPanel extends JPanel {
 
@@ -34,18 +37,11 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
     private final Font boldFont = new Font("맑은고딕", Font.BOLD, 14);
     private final Font titleFont = new Font("맑은고딕", Font.BOLD, 20);
 
-    private static Sinmungo sinmungo_info = null;
     private static Integer pk = 1;
-	
-	static {
-		QueryRequest<Sinmungo> query_request = new QueryRequest<>(
-				"SELECT * FROM Sinmungo WHERE sinmungo_code like ?",
-				pk,
-				Sinmungo.class,
-				MainFrameState.civil				
-		);
-		sinmungo_info = query_request.getSingleResult();
-	}
+    private static Sinmungo sinmungo_info = civil.find(Sinmungo.class, pk);
+    private static ArrayList<Employees> emp_list;
+    // 나중에 다른패널에서 더 받아올수있게되면 지워야할듯
+    
     
     public DepartmentChangeRequestDetailPanel() {
         setLayout(new BorderLayout(10, 10));
@@ -129,14 +125,8 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         changeDeptButton.setPreferredSize(new Dimension(90, 30));
         changeDeptButton.setFont(defaultFont);
 
-        QueryRequest<Department> query = new QueryRequest<>(
-    			"SELECT * FROM Department",
-    			null,
-    			Department.class,
-				MainFrameState.civil        			
-    		);
        
-        ArrayList<Department> epartments = new ArrayList<>(query.getResultList());
+        ArrayList<Department> epartments = new ArrayList<>(civil.selectAll(Department.class));
         String[] d_names = new String[epartments.size()];
         Integer[] d_cord = new Integer[epartments.size()];
         
@@ -161,25 +151,18 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
 						MainFrameState.civil        			
 		    		);
 		    	
-		    	ArrayList<Employees> emp_list = new ArrayList<>(request.getResultList());
+		    	emp_list = new ArrayList<>(request.getResultList());
 		    	Collections.shuffle(emp_list);
 		
-		    	Object[] sets = {emp_list.get(0).getEmployee_code(), "I", pk};
-		    	List<Object> list = new ArrayList<Object>(Arrays.asList(sets));
+		    	System.out.println("작동 위치 확인1");
 		    	
+		    	boolean tf[] = {false, true};
 		    	
-		    	QueryRequest<Sinmungo> query_request = new QueryRequest<>(
-		    			"UPDATE Sinmungo"
-		    			+ " SET"
-		    			+ " employee_code = ?,"
-		    			+ " status = ?"
-		    			+ " WHERE"
-		    			+ " sinmungo_code like ?",
-		    			Arrays.asList(sets),
-		    			Sinmungo.class,
-						MainFrameState.civil        			
-		    		);
-		    	
+				Get_pop_up_frames.get_yn_frame(
+						"정말로 " + deptComboBox.getSelectedItem() + "(으)로 변경하시겠습니까?"
+						, this
+				);
+	
         	}
         	
         	
@@ -225,4 +208,12 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         label.setFont(defaultFont);
         return label;
     }
+    
+    public static void start_update() {
+    	System.out.println("작동 위치 확인2");
+    	sinmungo_info.setStatus("P");
+    	sinmungo_info.setEmployee_code(emp_list.get(0).getEmployee_code());
+    	
+    	civil.update(sinmungo_info);
+	}
 }

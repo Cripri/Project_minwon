@@ -59,7 +59,7 @@ public class Get_base {
 			}
 			
 			
-			sys(state.getInput_texts().get(word));
+			
 			
 			find_next(state, jt);				
 		});		
@@ -110,7 +110,7 @@ public class Get_base {
 				int index = dpt_jco.getSelectedIndex() == -1 ?
 						0 : dpt_jco.getSelectedIndex();
 				state.setDpt(tm[index]);
-				sys(state.getDpt());
+		
 				dpt_jco.hidePopup();
 				
 				find_next(state, dpt_jco);
@@ -158,7 +158,7 @@ public class Get_base {
 				int index = posin_jco.getSelectedIndex() == -1 ?
 						0 : posin_jco.getSelectedIndex();
 				state.setPosin(tm[index]);
-				sys(state.getPosin());
+				
 				posin_jco.hidePopup();
 				
 				find_next(state, posin_jco);
@@ -199,7 +199,6 @@ public class Get_base {
 				boolean can = change_dep_jco.getSelectedIndex() == 1 ?
 						true : false;
 				state.setChange_dep_authority(can);
-				sys("" + state.getChange_dep_authority());
 				change_dep_jco.hidePopup();
 				
 				find_next(state, change_dep_jco);
@@ -323,7 +322,6 @@ public class Get_base {
 			state.setMemo(texts);
 			if((!texts.equals(set_guide)) && texts.length() > 1) {
 				state.getPop_up().dispose();
-				sys(state.getMemo());
 			} else {
 				JFrame no = get_now_not_input_panel("민원 본문");
 				memo.grabFocus();
@@ -492,6 +490,9 @@ public class Get_base {
 		}
 	}
 	
+	
+	
+	
 	private static JFrame get_now_not_input_panel(String lack) {
 		JFrame no = new JFrame("경고");
 		
@@ -517,12 +518,6 @@ public class Get_base {
 	}
 
 	
-	private static void sys(String ant) {// 시험용
-		Boolean test = true;
-		if(test) {
-			System.out.println("작동한다!! " + ant);
-		}
-	}
 	
 	
 	protected static JFrame get_pop_up_base(
@@ -604,7 +599,7 @@ public class Get_base {
 		// 이거말고 경우의 수가 또 뭐가 있지?
 	}
 	
-	protected static JLabel get_public_pop_up_you_did(String str) {
+	public static JLabel get_public_pop_up_you_did(String str) {
 		
 		return get_word_center(str);
 	}
@@ -637,6 +632,7 @@ public class Get_base {
 
 	
 }
+
 
 
 
