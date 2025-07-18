@@ -65,6 +65,8 @@ public class BirthDateSelector {
         panel.add(yearComboBox);
         panel.add(monthComboBox);
         panel.add(dayComboBox);
+        
+        applySelection();
 
         return panel;
     }
@@ -85,6 +87,18 @@ public class BirthDateSelector {
 		return year;
 	}
     // --------------------- 도우미 메서드 ---------------------
+	
+	public void applySelection() {
+	    if (year != null) {
+	    	yearComboBox.setSelectedItem(year + "년");
+	    }
+	    if (month != null) {
+	    	monthComboBox.setSelectedItem(month + "월");
+	    }
+	    if (day != null) {
+	    	dayComboBox.setSelectedItem(day + "일");
+	    }
+	}
 
     private void updateDayComboBox() {
         if (year == null || month == null) return;

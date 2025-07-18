@@ -58,6 +58,8 @@ public class addressComboBoxPanel {
 
         panel.add(sidoComboBox);
         panel.add(sggComboBox);
+        
+        applySelection();
 
         return panel;
     }
@@ -84,6 +86,16 @@ public class addressComboBoxPanel {
 
 	public JComboBox getsigungucombo(){
 		return sggComboBox;
+	}
+	
+	public void applySelection() {
+	    if (sido != null) {
+	        sidoComboBox.setSelectedItem(sido);
+	        sggimport(sggComboBox, sido);
+	    }
+	    if (sigungu != null) {
+	        sggComboBox.setSelectedItem(sigungu);
+	    }
 	}
 	
 	public int findDistrictCode(String sido, String sigungu) {
