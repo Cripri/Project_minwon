@@ -50,6 +50,7 @@ public class Button_test {
 		test.add(employees_delet);
 		test.add(sinmungo_reply);
 		test.add(pop_ups);
+		
 	}
 
 }

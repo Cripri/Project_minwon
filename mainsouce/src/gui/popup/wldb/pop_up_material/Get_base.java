@@ -59,7 +59,7 @@ public class Get_base {
 			}
 			
 			
-			sys(state.getInput_texts().get(word));
+			
 			
 			find_next(state, jt);				
 		});		
@@ -110,7 +110,7 @@ public class Get_base {
 				int index = dpt_jco.getSelectedIndex() == -1 ?
 						0 : dpt_jco.getSelectedIndex();
 				state.setDpt(tm[index]);
-				sys(state.getDpt());
+		
 				dpt_jco.hidePopup();
 				
 				find_next(state, dpt_jco);
@@ -158,7 +158,7 @@ public class Get_base {
 				int index = posin_jco.getSelectedIndex() == -1 ?
 						0 : posin_jco.getSelectedIndex();
 				state.setPosin(tm[index]);
-				sys(state.getPosin());
+				
 				posin_jco.hidePopup();
 				
 				find_next(state, posin_jco);
@@ -199,7 +199,6 @@ public class Get_base {
 				boolean can = change_dep_jco.getSelectedIndex() == 1 ?
 						true : false;
 				state.setChange_dep_authority(can);
-				sys("" + state.getChange_dep_authority());
 				change_dep_jco.hidePopup();
 				
 				find_next(state, change_dep_jco);
@@ -283,7 +282,7 @@ public class Get_base {
 		JPanel memo_jp = get_panel(col);
 		memo_jp.setLayout(new BorderLayout());
 		
-		JTextArea memo = new JTextArea();
+		JTextArea memo = new JTextArea();		
 		memo.setBorder(new LineBorder(col.getInside_color(), 5));
 		state.Nexts_add(memo);
 		
@@ -323,7 +322,6 @@ public class Get_base {
 			state.setMemo(texts);
 			if((!texts.equals(set_guide)) && texts.length() > 1) {
 				state.getPop_up().dispose();
-				sys(state.getMemo());
 			} else {
 				JFrame no = get_now_not_input_panel("민원 본문");
 				memo.grabFocus();
@@ -492,6 +490,9 @@ public class Get_base {
 		}
 	}
 	
+	
+	
+	
 	private static JFrame get_now_not_input_panel(String lack) {
 		JFrame no = new JFrame("경고");
 		
@@ -517,12 +518,6 @@ public class Get_base {
 	}
 
 	
-	private static void sys(String ant) {// 시험용
-		Boolean test = true;
-		if(test) {
-			System.out.println("작동한다!! " + ant);
-		}
-	}
 	
 	
 	protected static JFrame get_pop_up_base(
@@ -577,7 +572,7 @@ public class Get_base {
 	}
 	
 	
-	protected static JLabel get_public_pop_up_you_did(
+	protected static JLabel get_public_pop_up_you_did_double(
 			int index1, int index2,
 			String str1 , String str2
 	) {
@@ -604,30 +599,14 @@ public class Get_base {
 		// 이거말고 경우의 수가 또 뭐가 있지?
 	}
 	
-	protected static JLabel get_public_pop_up_you_did_triple(
-			int index1, int index2, int index3,
-			String str1 , String str2, String str3
-	) {
-		String[] contents1 = {
-				"을(를) ", "이(가) ", "의 "};
-		String[] contents2 = {
-				"이(가) ", "을(를) ", "으로 ", "으로인해 "};
-		String[] contents3 = {
-				"되었습니다.", "하셨습니다.", "하시겠습니까?"};
-		String content = 
-				str1 + contents1[index1] 
-				+ str2 + contents2[index2]
-				+ str3 + contents3[index3];
+	public static JLabel get_public_pop_up_you_did(String str) {
 		
-		
-		return get_word_center(content);
-		// 사용예 : 0000계정의 삭제처리가 완료되었습니다
-		// 아 맞다, ㅇㅇ의 ㅇㅇ이 ㅇㅇㅇ으로 수정되었습니다
+		return get_word_center(str);
 	}
 	
-	protected static JLabel get_pop_up_login_out(String str1, boolean in_out) {
+	protected static JLabel get_pop_up_login_out(String str1) {
 		
-		String content = in_out ? str1 + "님 환영합니다." : "로그아웃 되셨습니다.";
+		String content = str1 == null ? str1 + "님 환영합니다." : "로그아웃 되셨습니다.";
 		
 		return get_word_center(content);
 	}
@@ -647,12 +626,12 @@ public class Get_base {
 		String content = new String("권한이 부족합니다");
 		
 		return get_word_center(content);
+		
 	}
 	
 	
-
-	
 }
+
 
 
 
