@@ -118,11 +118,16 @@ public class ComplaintAnswerListPanel extends JPanel {
         for (int i = 0; i < list.size(); i++) {
             Sinmungo sinmungo = list.get(i);
             Employees emp = MainFrameState.civil.find(Employees.class, sinmungo.getEmployee_code());
-            Department dept = MainFrameState.civil.find(Department.class, emp.getDepartment_code());
+            Department dept;
+            if (emp != null) {
+            	dept = MainFrameState.civil.find(Department.class, emp.getDepartment_code());
+            } else {
+            	dept = null;
+            }
 
             data[i][0] = sinmungo.getSinmungo_code();
             data[i][1] = sinmungo.getSinmungo_title();
-            data[i][2] = dept.getDepartment_name();
+            data[i][2] = dept != null ? dept.getDepartment_name() : "판별 불가";
             data[i][3] = sdf.format(sinmungo.getCreate_date());
             data[i][4] = sinmungo.getAnswer_date() != null ? sdf.format(sinmungo.getAnswer_date()) : "답변 없음";
         }
@@ -154,19 +159,19 @@ public class ComplaintAnswerListPanel extends JPanel {
                 if (row >= 0) {
                     Integer sinmungoCode = Integer.parseInt(table.getValueAt(row, 0).toString());
 
-                    Component[] components = MainFrameState.card.getComponents();
-                	for (Component comp : components) {
-                	    if (comp instanceof CivilComplaintDetailPanel) {
-                	    	// 디테일 패널이 원래 있었다면 제거
-                	        MainFrameState.card.remove(comp);
-                	        break;
-                	    }
-                	}
+//                    Component[] components = MainFrameState.card.getComponents();
+//                	for (Component comp : components) {
+//                	    if (comp instanceof CivilComplaintDetailPanel) {
+//                	    	// 디테일 패널이 원래 있었다면 제거
+//                	        MainFrameState.card.remove(comp);
+//                	        break;
+//                	    }
+//                	}
 
                 	// 새로운 상세 패널 생성 후 추가
                 	CivilComplaintDetailPanel detailPanel = new CivilComplaintDetailPanel(sinmungoCode);
-                	MainFrameState.card.add(detailPanel, "detail");
-                	MainFrameState.card.show("detail");
+                	MainFrameState.card.add(detailPanel, "detail_" + sinmungoCode);
+                	MainFrameState.card.show("detail_" + sinmungoCode);
                 }
             }
         });

@@ -150,7 +150,9 @@ class LoginPanel extends JPanel {
 					        MainFrameState.postLoginTarget = null;  // 한 번 쓰고 비워줌
 						} else {
 							// 카드 넘겨주기 mypage로
-							MainFrameState.card.show("myPage");
+							MyPage myPage = new MyPage();
+							MainFrameState.card.add("myPage", myPage);
+							MainFrameState.card.show("firstPage");
 						}
 					} else {
 						// 팝업 -> 비밀번호 틀림
