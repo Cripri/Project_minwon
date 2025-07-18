@@ -217,6 +217,7 @@ public class MyPage extends JPanel {
                 @Override
                 public void mouseClicked(MouseEvent e) {
                     System.out.println("신청내역 클릭: " + sinmungo.getSinmungo_code());
+
                 }
                 @Override
                 public void mouseEntered(MouseEvent e) {

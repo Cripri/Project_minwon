@@ -143,8 +143,15 @@ class LoginPanel extends JPanel {
 						MainFrameState.frameTop.refreshButtons();
 						idField.setText("");
 						pwField.setText("");
-						// 카드 넘겨주기 mypage로
-						MainFrameState.card.show("myPage");
+						
+						String next = MainFrameState.postLoginTarget;
+						if (next != null) {
+					        MainFrameState.card.show(next);
+					        MainFrameState.postLoginTarget = null;  // 한 번 쓰고 비워줌
+						} else {
+							// 카드 넘겨주기 mypage로
+							MainFrameState.card.show("myPage");
+						}
 					} else {
 						// 팝업 -> 비밀번호 틀림
 						System.out.println("비밀번호 틀림");

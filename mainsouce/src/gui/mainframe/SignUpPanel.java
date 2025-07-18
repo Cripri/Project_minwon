@@ -27,6 +27,7 @@ import javax.swing.border.EmptyBorder;
 import function.connector.Members;
 import function.connector.QueryRequest;
 import function.encryption.Encryptor;
+import function.isfield.FieldCheck;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
 import gui.mainframe.components.RoundedButton;
@@ -174,7 +175,17 @@ public class SignUpPanel extends JPanel {
 			} else if (female.isSelected()) {
 				gender = "f";
 			}
+            
+            if(!FieldCheck.validateFields(this,addressDetailField,nameField,phoneNumberField,pwField)){
+                System.out.println("암튼머걸림");
+                return;
+            }
 
+            if(!FieldCheck.validateComboBox(bds.getYearbox(),bds.getMonthbox(),bds.getDaybox(),address.getsidocombo(),address.getsigungucombo())){
+                System.out.println("콤보박스걸림");
+                return;
+            }
+            
 			Date bDate = new Date();
 			if (bds.getYear() != null && bds.getMonth() != null && bds.getDay() != null) {
 				int year = bds.getYear();
@@ -184,6 +195,7 @@ public class SignUpPanel extends JPanel {
 				LocalDate bLocalDate = LocalDate.of(year, month, day);
 				bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			} else {
+				
 				// TODO 팝업
 				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
 				System.out.println("생년, 월, 일을 모두 선택해주세요.");
@@ -213,23 +225,14 @@ public class SignUpPanel extends JPanel {
 				System.out.println("아이디 중복확인을 해주세요.");
 				return;
 			}
-			if (nameField.getText().trim().length() == 0) {
-				System.out.println("이름을 입력해주세요.");
-				return;
-			}
-			if (phoneNumberField.getText().trim().length() == 0) {
-				System.out.println("핸드폰 번호를 입력해주세요.");
-				return;
-			}
+            
 			if (!isCertification) {
 				// 팝업
 				System.out.println("본인인증을 진행해주세요.");
 				return;
 			}
-			if (pwField.getPassword().length == 0) {
-				System.out.println("비밀번호를 확인해주세요");
-				return;
-			}
+            
+            
 			String pw = new String(pwField.getPassword());
 			String pwCheck;
 			if (pwCheckField.getPassword() != null) {
@@ -242,7 +245,14 @@ public class SignUpPanel extends JPanel {
 				System.out.println("비밀번호 확인란을 확인해주세요.");
 				return;
 			}
-			
+            
+            //생년월일
+            int year = bds.getYear();
+            int month = bds.getMonth();
+            int day = bds.getDay();
+//            Date bDate = new Date();
+            LocalDate bLocalDate = LocalDate.of(year, month, day);
+            bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
 			Members m = new Members();
 			m.setMember_id(idField.getText());

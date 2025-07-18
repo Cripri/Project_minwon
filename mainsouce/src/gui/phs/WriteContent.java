@@ -104,7 +104,8 @@ public class WriteContent extends JPanel {
         	// TODO 팝업 
         	
         	// 팝업 완료되면 주석 풀기
-        	// MainFrameState.civil.insert(s);
+        	 MainFrameState.civil.insert(s);
+        	 MainFrameState.card.show("myPage");
         });
         
         buttonPanel.add(completeButton);

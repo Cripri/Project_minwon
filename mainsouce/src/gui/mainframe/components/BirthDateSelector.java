@@ -4,27 +4,26 @@ import javax.swing.*;
 import java.awt.*;
 
 public class BirthDateSelector {
+	
+	Integer year;
+	Integer month;
+	Integer day;
 
-    Integer year;
-    Integer month;
-    Integer day;
-
-    private JComboBox<String> yearComboBox;
-    private JComboBox<String> monthComboBox;
-    private JComboBox<String> dayComboBox;
+     JComboBox<String> yearComboBox = new JComboBox<>();
+     JComboBox<String> monthComboBox= new JComboBox<>();
+     JComboBox<String> dayComboBox= new JComboBox<>();
 
     public JPanel getBirthDatePanel() {
         JPanel panel = new JPanel();
         panel.setBackground(new Color(217, 217, 217));
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
 
-        // ---------- 년도 콤보박스 ----------
-        yearComboBox = new JComboBox<>();
+        // 년도 콤보박스
         yearComboBox.setBackground(Color.WHITE);
+        yearComboBox.addItem(null);
         for (int y = 2025; y >= 1926; y--) {
             yearComboBox.addItem(y + "년");
         }
-
         yearComboBox.addActionListener((e) -> {
             String selected = (String) yearComboBox.getSelectedItem();
             if (selected != null) {
@@ -33,9 +32,9 @@ public class BirthDateSelector {
             }
         });
 
-        // ---------- 월 콤보박스 ----------
-        monthComboBox = new JComboBox<>();
+        // 월 콤보박스
         monthComboBox.setBackground(Color.WHITE);
+        monthComboBox.addItem(null);
         for (int m = 1; m <= 12; m++) {
             monthComboBox.addItem(m + "월");
         }
@@ -48,9 +47,9 @@ public class BirthDateSelector {
             }
         });
 
-        // ---------- 일 콤보박스 ----------
-        dayComboBox = new JComboBox<>();
+        // 일 콤보박스
         dayComboBox.setBackground(Color.WHITE);
+        dayComboBox.addItem(null);
         // 초기 기본값 (예: 31일까지 표시)
         for (int d = 1; d <= 31; d++) {
             dayComboBox.addItem(d + "일");
@@ -66,11 +65,40 @@ public class BirthDateSelector {
         panel.add(yearComboBox);
         panel.add(monthComboBox);
         panel.add(dayComboBox);
+        
+        applySelection();
 
         return panel;
     }
 
+    public JComboBox getYearbox(){
+        return yearComboBox;
+    }
+
+    public JComboBox getMonthbox(){
+        return monthComboBox;
+    }
+
+    public JComboBox getDaybox(){
+        return dayComboBox;
+    }
+
+	public Integer getYear() {
+		return year;
+	}
     // --------------------- 도우미 메서드 ---------------------
+	
+	public void applySelection() {
+	    if (year != null) {
+	    	yearComboBox.setSelectedItem(year + "년");
+	    }
+	    if (month != null) {
+	    	monthComboBox.setSelectedItem(month + "월");
+	    }
+	    if (day != null) {
+	    	dayComboBox.setSelectedItem(day + "일");
+	    }
+	}
 
     private void updateDayComboBox() {
         if (year == null || month == null) return;
@@ -102,9 +130,6 @@ public class BirthDateSelector {
 
     // --------------------- Getter/Setter ---------------------
 
-    public Integer getYear() {
-        return year;
-    }
 
     public void setYear(Integer year) {
         this.year = year;

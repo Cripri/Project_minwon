@@ -1,7 +1,6 @@
 package gui.phs;
 
 import gui.mainframe.FrameTop;
-import gui.phs.common.BasicFrame;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

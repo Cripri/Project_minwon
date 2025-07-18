@@ -17,6 +17,7 @@ public class MainFrameState {
 	public static Stack<String> history = new Stack<>();   // 뒤로가기 스택
 	public static Stack<String> future = new Stack<>();    // 앞으로가기 스택
 	public static String currentCard = "firstPage";
+	public static String postLoginTarget = null;  // 로그인 성공 후 이동할 화면
 
 	static{
 		civil = new Civil_Connector();

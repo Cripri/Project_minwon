@@ -2,9 +2,12 @@ package gui.phs;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,6 +146,30 @@ public class ComplaintAnswerListPanel extends JPanel {
         for (int i = 0; i < table.getColumnCount(); i++) {
             table.getColumnModel().getColumn(i).setCellRenderer(center);
         }
+        
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.getSelectedRow();
+                if (row >= 0) {
+                    Integer sinmungoCode = Integer.parseInt(table.getValueAt(row, 0).toString());
+
+                    Component[] components = MainFrameState.card.getComponents();
+                	for (Component comp : components) {
+                	    if (comp instanceof CivilComplaintDetailPanel) {
+                	    	// 디테일 패널이 원래 있었다면 제거
+                	        MainFrameState.card.remove(comp);
+                	        break;
+                	    }
+                	}
+
+                	// 새로운 상세 패널 생성 후 추가
+                	CivilComplaintDetailPanel detailPanel = new CivilComplaintDetailPanel(sinmungoCode);
+                	MainFrameState.card.add(detailPanel, "detail");
+                	MainFrameState.card.show("detail");
+                }
+            }
+        });
 
         return table;
     }
