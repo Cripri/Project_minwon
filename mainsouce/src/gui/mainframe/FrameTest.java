@@ -12,6 +12,7 @@ import gui.phs.DepartmentChangeRequestDetailPanel;
 import gui.phs.DepartmentChangeRequestPanel;
 import gui.phs.FirstPage;
 import gui.phs.RrnApplicationPanel;
+import gui.phs.SinmungoinfoPanel;
 import gui.phs.WriteContent;
 import gui.phs.ManagerMenu.ManagerMenuPanel;
 
@@ -36,7 +37,7 @@ public class FrameTest extends JFrame {
 		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1, "마이페이지");
 		GuestLoginPanel guestLogin = new GuestLoginPanel();
 		
-//		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
+		SinmungoinfoPanel sinmungoinfoPanel = new SinmungoinfoPanel();
 		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
 		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
@@ -62,7 +63,7 @@ public class FrameTest extends JFrame {
 		cardPage.add("guestLogin", guestLogin);
 		
 		cardPage.add("civilComplaintDetailPanel", civilComplaintDetailPanel);
-//		cardPage.add("afterLoginPanel", afterLoginPanel);
+		cardPage.add("SinmungoinfoPanel", sinmungoinfoPanel);
 		cardPage.add("complaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함 
 		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel); // 완성 창 제목 넣어주면 좋음
 		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); // 주민번호 지워야함
