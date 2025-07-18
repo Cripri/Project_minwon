@@ -16,6 +16,9 @@ public class addressComboBoxPanel {
 	
 	String sido;
 	String sigungu;
+
+	JComboBox<String> sidoComboBox = new JComboBox<>();
+	JComboBox<String> sggComboBox = new JComboBox<>();
 	
 	public JPanel addressComboBoxPanel() {
 		
@@ -23,10 +26,8 @@ public class addressComboBoxPanel {
         panel.setBackground(new Color(217, 217, 217));
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
         // 시도 콤보박스
-        JComboBox<String> sidoComboBox = new JComboBox<>();
-        sidoComboBox.setBackground(Color.WHITE);
+		sidoComboBox.setBackground(Color.WHITE);
         // 시군구 콤보박스
-        JComboBox<String> sggComboBox = new JComboBox<>();
         sggComboBox.setBackground(Color.WHITE);
 
         QueryRequest<District> sidoreq = new QueryRequest<>(
@@ -37,7 +38,8 @@ public class addressComboBoxPanel {
         );
         
         List<District> dis = sidoreq.getResultList();
-        
+
+		sidoComboBox.addItem(null);
         for(District d : dis) {
         	sidoComboBox.addItem(d.getSd_name());
         }
@@ -48,7 +50,8 @@ public class addressComboBoxPanel {
             sido = (String) sidoComboBox.getSelectedItem();
             sggimport(sggComboBox,sido);
         });
-        
+
+		sggComboBox.addItem(null);
         sggComboBox.addActionListener((e) -> {
         	sigungu = (String) sggComboBox.getSelectedItem();
         });
@@ -73,6 +76,14 @@ public class addressComboBoxPanel {
 
 	public void setSigungu(String sigungu) {
 		this.sigungu = sigungu;
+	}
+
+	public JComboBox getsidocombo(){
+		return sidoComboBox;
+	}
+
+	public JComboBox getsigungucombo(){
+		return sggComboBox;
 	}
 	
 	public int findDistrictCode(String sido, String sigungu) {
