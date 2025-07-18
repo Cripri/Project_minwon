@@ -202,6 +202,8 @@ public class PDFWriter {
 
     private void resident_registration_card(Simple_doc data, String rrn, Members user, District dis){
 
+
+
     }
 
     private void writeText(PDDocument doc, PDPage page, String str, PDFont font, int tx, int ty) throws IOException {

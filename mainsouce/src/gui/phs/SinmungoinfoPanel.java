@@ -2,6 +2,9 @@ package gui.phs;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.swing.*;
 
 import function.connector.Sinmungo;
@@ -155,10 +158,16 @@ public class SinmungoinfoPanel extends JPanel {
             }
 
             //System.out.println("검증끝 진행함");
+            int year = birth.getYear();
+            int month = birth.getMonth();
+            int day = birth.getDay();
+            Date bDate = new Date();
+            LocalDate bLocalDate = LocalDate.of(year, month, day);
+            bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
             Sinmungo nsin = new Sinmungo();
             nsin.setMember_code(member.getMember_code());
-            nsin.setMember_birthday(member.getMember_birthday());
+            nsin.setMember_birthday(bDate);
             nsin.setMember_phonenum(phoneField.getText());
             nsin.setMember_email(member.getMember_email());
             nsin.setMember_name(nameField.getText());
