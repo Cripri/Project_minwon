@@ -8,6 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import gui.mainframe.components.IconButton;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 // 버튼들은 나중에 픽토그램 이미지로 변경 예정
 public class FrameTop extends JPanel {
@@ -82,12 +83,14 @@ public class FrameTop extends JPanel {
 			if (emplogin) {
 				loginBtn.addActionListener((e) -> {
 					MainFrameState.employee = null; // 로그아웃 처리
+					Get_pop_up_frames.get_log_in_out_frame(null);
 					refreshButtons(); // 버튼 갱신
 					MainFrameState.card.show("login");
 				});
 			} else if (login) {
 				loginBtn.addActionListener((e) -> {
 					MainFrameState.member = null; // 로그아웃 처리
+					Get_pop_up_frames.get_log_in_out_frame(null);
 					refreshButtons(); // 버튼 갱신
 					MainFrameState.card.show("login");
 				});
