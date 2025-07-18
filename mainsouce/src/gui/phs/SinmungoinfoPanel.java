@@ -17,6 +17,8 @@ public class SinmungoinfoPanel extends JPanel {
 
     }
 
+    static boolean showAddress;
+
     public SinmungoinfoPanel() {
         setLayout(new BorderLayout());
         setBackground(new Color(217, 217, 217));
@@ -110,9 +112,10 @@ public class SinmungoinfoPanel extends JPanel {
         addressLabel.setVisible(false);
         addressPanel.setVisible(false);
 
+
         // 라디오 버튼 클릭 이벤트
         ActionListener toggleAddressVisibility = e -> {
-            boolean showAddress = differentBtn.isSelected();
+            showAddress = differentBtn.isSelected();
             addressLabel.setVisible(showAddress);
             addressPanel.setVisible(showAddress);
             rows[6].revalidate();
@@ -135,16 +138,23 @@ public class SinmungoinfoPanel extends JPanel {
         JButton completeButton = new JButton("완료");
 
         completeButton.addActionListener(e -> {
-            if(FieldCheck.validateFields(this,nameField,phoneField)){
+            if(!FieldCheck.validateFields(this,nameField,phoneField)){
+                //System.out.println("텍스트필드검증함");
                 return;
             }
-            if(FieldCheck.validateComboBox(this,address.getsidocombo(),address.getsigungucombo(),birth.getYearbox(),birth.getMonthbox(),birth.getDaybox())){
+            if(!FieldCheck.validateComboBox(this,address.getsidocombo(),address.getsigungucombo(),birth.getYearbox(),birth.getMonthbox(),birth.getDaybox())){
+                //System.out.println("콤보박스 검증");
                 return;
+            }
+            
+            if(showAddress){
+                if(!FieldCheck.validateComboBox(this,hideaddress.getsigungucombo(),hideaddress.getsidocombo())){
+                    //System.out.println("검증검증");
+                    return;
+                }
             }
 
-            if(differentBtn.isSelected()){
-                FieldCheck.validateComboBox(this,hideaddress.getsigungucombo(),hideaddress.getsigungucombo());
-            }
+            //System.out.println("검증끝 진행함");
 
             Sinmungo nsin = new Sinmungo();
             nsin.setMember_code(member.getMember_code());

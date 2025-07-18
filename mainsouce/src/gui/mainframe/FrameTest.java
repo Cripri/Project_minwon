@@ -26,10 +26,8 @@ public class FrameTest extends JFrame {
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
-		SinmungoDetailPanel pppp = new SinmungoDetailPanel(1, "마이페이지");
 		GuestLoginPanel guestLogin = new GuestLoginPanel();
 
-		//AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
 		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
 		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
@@ -37,6 +35,7 @@ public class FrameTest extends JFrame {
 		RrnApplicationPanel rrnApplicationPanel = new RrnApplicationPanel();
 		WriteContent writeContent = new WriteContent();
 		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel();
+		SinmungoinfoPanel sinmungoinfoPanel = new SinmungoinfoPanel();
 		MainFrameState.employeeMainPanel = employeeMain;
 
 		FrameTop ft = new FrameTop();
@@ -54,8 +53,8 @@ public class FrameTest extends JFrame {
 		cardPage.add("userInfoEdit", userInfoEdit);
 		cardPage.add("guestLogin", guestLogin);
 
+		cardPage.add("sinmungoinfoPanel",sinmungoinfoPanel);
 		cardPage.add("civilComplaintDetailPanel", civilComplaintDetailPanel);
-//		cardPage.add("afterLoginPanel", afterLoginPanel);
 		cardPage.add("complaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함
 		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel); // 완성 창 제목 넣어주면 좋음
 		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); // 주민번호 지워야함

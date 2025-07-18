@@ -38,7 +38,8 @@ public class addressComboBoxPanel {
         );
         
         List<District> dis = sidoreq.getResultList();
-        
+
+		sidoComboBox.addItem(null);
         for(District d : dis) {
         	sidoComboBox.addItem(d.getSd_name());
         }
@@ -49,7 +50,8 @@ public class addressComboBoxPanel {
             sido = (String) sidoComboBox.getSelectedItem();
             sggimport(sggComboBox,sido);
         });
-        
+
+		sggComboBox.addItem(null);
         sggComboBox.addActionListener((e) -> {
         	sigungu = (String) sggComboBox.getSelectedItem();
         });
