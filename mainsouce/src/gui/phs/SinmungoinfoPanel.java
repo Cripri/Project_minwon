@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import function.connector.Sinmungo;
+import function.isfield.FieldCheck;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.addressComboBoxPanel;
 
@@ -62,8 +63,8 @@ public class SinmungoinfoPanel extends JPanel {
 
         // 생년월일 + 성별
         rows[4].add(new JLabel("생년월일"));
-        JPanel birth = new BirthDateSelector().getBirthDatePanel();
-        rows[4].add(birth);
+        BirthDateSelector birth = new BirthDateSelector();
+        rows[4].add(birth.getBirthDatePanel());
 
         rows[4].add(new JLabel("성별:"));
         JComboBox<String> genderBox = new JComboBox<>(new String[]{"남성", "여성"});
@@ -99,7 +100,9 @@ public class SinmungoinfoPanel extends JPanel {
 
         // 주소 라벨과 주소 패널
         JLabel addressLabel = new JLabel("주소");
-        JPanel addressPanel = new addressComboBoxPanel().addressComboBoxPanel();
+        JPanel addressPanel = new JPanel();
+        addressComboBoxPanel hideaddress = new addressComboBoxPanel();
+        addressPanel.add(hideaddress.addressComboBoxPanel());
         rows[6].add(addressLabel);
         rows[6].add(addressPanel);
 
@@ -132,6 +135,17 @@ public class SinmungoinfoPanel extends JPanel {
         JButton completeButton = new JButton("완료");
 
         completeButton.addActionListener(e -> {
+            if(FieldCheck.validateFields(this,nameField,phoneField)){
+                return;
+            }
+            if(FieldCheck.validateComboBox(this,address.getsidocombo(),address.getsigungucombo(),birth.getYearbox(),birth.getMonthbox(),birth.getDaybox())){
+                return;
+            }
+
+            if(differentBtn.isSelected()){
+                FieldCheck.validateComboBox(this,hideaddress.getsigungucombo(),hideaddress.getsigungucombo());
+            }
+
             Sinmungo nsin = new Sinmungo();
             nsin.setMember_code(member.getMember_code());
             nsin.setMember_birthday(member.getMember_birthday());
@@ -140,6 +154,7 @@ public class SinmungoinfoPanel extends JPanel {
             nsin.setMember_name(nameField.getText());
             nsin.setMember_name(nameField.getText());
             nsin.setComplaint_area(address.findDistrictCode(address.getSido(),address.getSigungu()));
+
 
         });
 

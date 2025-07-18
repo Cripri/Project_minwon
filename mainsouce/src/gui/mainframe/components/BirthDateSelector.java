@@ -9,13 +9,17 @@ public class BirthDateSelector {
 	Integer month;
 	Integer day;
 
+    JComboBox<String> yearComboBox = new JComboBox<>();
+    JComboBox<String> monthComboBox = new JComboBox<>();
+    JComboBox<String> dayComboBox = new JComboBox<>();
+
     public JPanel getBirthDatePanel() {
         JPanel panel = new JPanel();
         panel.setBackground(new Color(217, 217, 217));
         panel.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 0));
 
         // 년도 콤보박스
-        JComboBox<String> yearComboBox = new JComboBox<>();
+
         yearComboBox.setBackground(Color.WHITE);
         for (int year = 2025; year >= 1926; year--) {
             yearComboBox.addItem(year + "년");
@@ -30,7 +34,7 @@ public class BirthDateSelector {
         });
 
         // 월 콤보박스
-        JComboBox<String> monthComboBox = new JComboBox<>();
+
         monthComboBox.setBackground(Color.WHITE);
         for (int month = 1; month <= 12; month++) {
             monthComboBox.addItem(month + "월");
@@ -45,7 +49,7 @@ public class BirthDateSelector {
         });
 
         // 일 콤보박스
-        JComboBox<String> dayComboBox = new JComboBox<>();
+
         dayComboBox.setBackground(Color.WHITE);
         for (int day = 1; day <= 31; day++) {
             dayComboBox.addItem(day + "일");
@@ -64,6 +68,18 @@ public class BirthDateSelector {
         panel.add(dayComboBox);
 
         return panel;
+    }
+
+    public JComboBox getYearbox(){
+        return yearComboBox;
+    }
+
+    public JComboBox getMonthbox(){
+        return monthComboBox;
+    }
+
+    public JComboBox getDaybox(){
+        return dayComboBox;
     }
 
 	public Integer getYear() {

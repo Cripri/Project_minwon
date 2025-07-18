@@ -5,13 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import gui.phs.WriteContent;
-import gui.phs.CivilComplaintDetailPanel;
-import gui.phs.ComplaintAnswerListPanel;
-import gui.phs.DepartmentChangeRequestDetailPanel;
-import gui.phs.DepartmentChangeRequestPanel;
-import gui.phs.FirstPage;
-import gui.phs.RrnApplicationPanel;
+import gui.phs.*;
 import gui.phs.ManagerMenu.ManagerMenuPanel;
 
 public class FrameTest extends JFrame {
@@ -41,14 +35,15 @@ public class FrameTest extends JFrame {
 		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();
 		RrnApplicationPanel rrnApplicationPanel = new RrnApplicationPanel();
 		WriteContent writeContent = new WriteContent();
-		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel(); 
+		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel();
+		SinmungoinfoPanel sinmungoinfoPanel = new SinmungoinfoPanel();
 
 		FrameTop ft = new FrameTop();
 		add(ft, BorderLayout.NORTH);
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
+		cardPage.add("sinmungoInfoPanel",sinmungoinfoPanel);
 		cardPage.add("userInfoEdit", userInfoEdit);
-		
 //		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
 //		cardPage.add("AfterLoginPanel", afterLoginPanel);
 //		cardPage.add("ComplaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함 
