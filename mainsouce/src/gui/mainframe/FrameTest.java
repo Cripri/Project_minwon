@@ -49,11 +49,11 @@ public class FrameTest extends JFrame {
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
 		
-//		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
+		cardPage.add("CivilComplaintDetailPanel", civilComplaintDetailPanel);
 //		cardPage.add("AfterLoginPanel", afterLoginPanel);
 //		cardPage.add("ComplaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함 
 //		cardPage.add("DepartmentChangeRequestPanel", departmentChangeRequestPanel); // 완성 창 제목 넣어주면 좋음
-		cardPage.add("DepartmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); //주민번호 지워야함
+//		cardPage.add("DepartmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); 주민번호 지워야함
 //		cardPage.add("RrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
 //		cardPage.add("WriteContent", writeContent); // 작성완료 버튼 지우기 
 //		cardPage.add("ManagerMenuPanel", managerMenuPanel); // 위에 제목 만드

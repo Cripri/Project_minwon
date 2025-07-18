@@ -116,6 +116,4 @@ import javax.swing.border.LineBorder;
 			return input_texts.keySet();
 		}
 		
-		
-
 }

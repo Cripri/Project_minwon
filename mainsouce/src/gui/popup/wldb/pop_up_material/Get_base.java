@@ -626,10 +626,9 @@ public class Get_base {
 		String content = new String("권한이 부족합니다");
 		
 		return get_word_center(content);
+		
 	}
 	
-	
-
 	
 }
 

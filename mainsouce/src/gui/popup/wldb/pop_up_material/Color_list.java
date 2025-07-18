@@ -56,6 +56,5 @@ public class Color_list {
 	
 	protected static void color_list_add(Color col) {
 		color_list.add(col);
-	}
-	
+	}	
 }
