@@ -52,6 +52,7 @@ public class FrameTest extends JFrame {
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
 		
+		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
 		cardPage.add("firstPage", firstPage);
 		cardPage.add("login", login);
 		cardPage.add("myPage", myPage);
@@ -66,7 +67,6 @@ public class FrameTest extends JFrame {
 		cardPage.add("complaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함
 		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel); // 완성 창 제목 넣어주면 좋음
 		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); // 주민번호 지워야함
-		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
 		cardPage.add("writeContent", writeContent); // 작성완료 버튼 지우기
 		cardPage.add("managerMenuPanel", managerMenuPanel); // 위에 제목 만드
 		

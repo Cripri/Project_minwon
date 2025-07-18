@@ -7,6 +7,9 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -19,9 +22,15 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import function.connector.Simple_doc;
 import gui.mainframe.components.addressComboBoxPanel;
 
+import static gui.mainframe.MainFrameState.member;
+
 public class RrnApplicationPanel extends JPanel {
+
+    Map<String,JCheckBox> simcheck = new HashMap<>();
+    JLabel yearLabel;
 
     public RrnApplicationPanel() {
         setLayout(new BorderLayout());
@@ -167,6 +176,75 @@ public class RrnApplicationPanel extends JPanel {
         btnPanel.add(submitBtn);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerPanel.add(btnPanel);
+        submitBtn.addActionListener(e ->{
+            Simple_doc ndoc = new Simple_doc();
+            ndoc.setDistrict_code(addressCombo.findDistrictCode(addressCombo.getSido(),addressCombo.getSido()));
+            ndoc.setCreate_date(new Date());
+            ndoc.setMember_code(member.getMember_code());
+            ndoc.setDoc_count(1);
+            if(option1.isSelected()){
+                ndoc.setComplaint_category_code("AA001");
+
+                if (allIssue.isSelected()) {
+                    ndoc.setAll_Included("T");
+                } else {
+                    ndoc.setAll_Included("F");
+                    for (Map.Entry<String, JCheckBox> entry : simcheck.entrySet()) {
+                        String label = entry.getKey();
+                        JCheckBox cb = entry.getValue();
+                        if (cb.isSelected()) {
+                            switch (label) {
+                                case "1. 과거의 주소 변동 사항":
+                                    ndoc.setaddress_history("T");
+                                    if(simcheck.get("직접 입력: 최근").isSelected()){
+                                        if(yearLabel.getText() != null) {
+                                            ndoc.setAddress_history_years(Integer.valueOf(yearLabel.getText()));
+                                        }else{
+                                            ndoc.setAddress_history_years(1);
+                                        }
+                                    }
+                                    break;
+                                case "2. 세대 구성 사유":
+                                    ndoc.sethousehold_reason("T");
+                                    break;
+                                case "3. 세대 구성 일자":
+                                    ndoc.sethousehold_date("T");
+                                    break;
+                                case "4. 발생일 / 신고일":
+                                    ndoc.setoccurrence_date("T");
+                                    break;
+                                case "5. 세대주의 성명과 세대주와의 관계":
+
+                                    break;
+                                case "6. 교부 대상자 외 세대주·세대원·외국인등록 이름":
+                                    ndoc.sethead_name("T");
+                                    break;
+                                case "8. 세대원의 세대주와의 관계":
+                                    ndoc.sethead_relationship("T");
+                                    break;
+                                case "9. 동거인":
+                                    ndoc.setRoommate("T");
+                                    break;
+                                case "10. 개인 인적 사항 변경 내용":
+                                    ndoc.setpersonal_change_details("T");
+                                    break;
+                            }
+                        }
+                    }
+
+
+
+                }
+            }else{
+                ndoc.setComplaint_category_code("AB001");
+
+                if(allIssue.isSelected()){
+                    ndoc.setAll_Included("T");
+                }else{
+
+                }
+            }
+        });
 
         allIssue.addActionListener(e -> detailPanel.setVisible(false));
         partialIssue.addActionListener(e -> {
@@ -192,6 +270,7 @@ public class RrnApplicationPanel extends JPanel {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 5));
         p.setOpaque(false);
         p.add(cb);
+        simcheck.put(text,cb);
         return p;
     }
 
@@ -218,7 +297,7 @@ public class RrnApplicationPanel extends JPanel {
                 JCheckBox totalInclude = new JCheckBox("전체 포함");
                 JCheckBox directInput = new JCheckBox("직접 입력: 최근");
                 JTextField yearField = new JTextField(3);
-                JLabel yearLabel = new JLabel("년 포함");
+                yearLabel = new JLabel("년 포함");
                 totalInclude.setOpaque(false);
                 directInput.setOpaque(false);
                 yearField.setMaximumSize(new Dimension(40, 20));
@@ -226,6 +305,12 @@ public class RrnApplicationPanel extends JPanel {
                 subOptionPanel.add(directInput);
                 subOptionPanel.add(yearField);
                 subOptionPanel.add(yearLabel);
+                ButtonGroup ahgroup = new ButtonGroup();
+                ahgroup.add(totalInclude);
+                ahgroup.add(directInput);
+                simcheck.put("전체 포함",totalInclude);
+                simcheck.put("직접 입력: 최근",directInput);
+                totalInclude.setSelected(true);
                 break;
             case "changeReason":
             case "rrnBack":
@@ -235,6 +320,9 @@ public class RrnApplicationPanel extends JPanel {
                 cb2.setOpaque(false);
                 subOptionPanel.add(cb1);
                 subOptionPanel.add(cb2);
+                cb1.setSelected(true);
+                simcheck.put("본인",cb1);
+                simcheck.put("세대원",cb2);
                 break;
             case "military":
                 JCheckBox basic = new JCheckBox("기본(입영/전역일자)");
@@ -243,6 +331,9 @@ public class RrnApplicationPanel extends JPanel {
                 all.setOpaque(false);
                 subOptionPanel.add(basic);
                 subOptionPanel.add(all);
+                basic.setSelected(true);
+                simcheck.put("기본(입영/전역일자)",basic);
+                simcheck.put("전체",all);
                 break;
         }
 
