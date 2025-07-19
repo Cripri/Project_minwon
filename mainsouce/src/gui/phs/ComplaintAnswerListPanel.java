@@ -52,8 +52,24 @@ public class ComplaintAnswerListPanel extends JPanel {
         this.employeeCode = employeeCode;
         initUI();
     }
+    
+    public String getSearchKeyword() {
+			return searchKeyword;
+		}
 
-    private void initUI() {
+		public void setSearchKeyword(String searchKeyword) {
+			this.searchKeyword = searchKeyword;
+		}
+
+		public Integer getEmployeeCode() {
+			return employeeCode;
+		}
+
+		public void setEmployeeCode(Integer employeeCode) {
+			this.employeeCode = employeeCode;
+		}
+
+		private void initUI() {
     	setLayout(new BorderLayout());
         setBackground(new Color(217, 217, 217));
 
@@ -64,10 +80,10 @@ public class ComplaintAnswerListPanel extends JPanel {
 
         JLabel title = new JLabel("민원신청내역");
         title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
-        JLabel subtitle = new JLabel("클릭한 민원에 대한 내용 또는 검색결과 / 할당된 민원");
-        subtitle.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
+//        JLabel subtitle = new JLabel("클릭한 민원에 대한 내용 또는 검색결과 / 할당된 민원");
+//        subtitle.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
         titlePanel.add(title);
-        titlePanel.add(subtitle);
+//        titlePanel.add(subtitle);
 
         add(titlePanel, BorderLayout.NORTH);
 

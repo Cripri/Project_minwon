@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -17,7 +18,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import function.complaintkeyword.ComplaintClassifier;
+import function.connector.Department;
+import function.connector.Employees;
 import function.connector.Members;
+import function.connector.QueryRequest;
 import function.connector.Sinmungo;
 import gui.mainframe.MainFrameState;
 
@@ -92,6 +97,28 @@ public class WriteContent extends JPanel {
         	
         	s.setSinmungo_title(titleField.getText());
         	s.setSinmungo_content(contentArea.getText());
+        	
+        	// 부서이름 or "판별 불가"
+        	String dep = ComplaintClassifier.classify(contentArea.getText());
+        	QueryRequest<Department> request = new QueryRequest<Department>(
+        			"select * from department where department_name like ?", 
+        			dep,
+        			Department.class,
+        			MainFrameState.civil
+        			);
+        			
+        	Department d = request.getSingleResult();
+        	
+        	QueryRequest<Employees> request1 = new QueryRequest<Employees>(
+        			"select * from employees where position_code = 1 and department_code like ?", 
+        			d.getDepartment_code(),
+        			Employees.class,
+        			MainFrameState.civil
+        			);
+        	List<Employees> eList = request1.getResultList();
+        	// 주무관만 들어감
+        	s.setEmployee_code((int)(Math.random() * eList.size()));
+        	
         	if (pwdField.getText() != null) {
         		s.setSecurity_set("t");
         		s.setSecurity_password(pwdField.getText());
