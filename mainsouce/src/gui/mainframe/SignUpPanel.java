@@ -25,7 +25,7 @@ import javax.swing.border.EmptyBorder;
 import function.connector.Members;
 import function.connector.QueryRequest;
 import function.encryption.Encryptor;
-import function.isfield.FieldCheck;
+//import function.isfield.FieldCheck;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
 import gui.mainframe.components.RoundedButton;
@@ -190,7 +190,8 @@ public class SignUpPanel extends JPanel {
 			} else {
 				
 				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
-				Get_pop_up_frames.get_wrong_frame("생년월일");
+				Get_pop_up_frames.get_public_alarm_frame("생년월일을 확인해주세요.");
+//				Get_pop_up_frames.get_wrong_frame("생년월일");
 				return;
 			}
 
@@ -200,21 +201,22 @@ public class SignUpPanel extends JPanel {
 //			    System.out.println("선택된 지역 코드: " + districtCode);
 
 				if (districtCode == -1) {
-					System.err.println("해당 지역에 대한 코드가 없습니다.");
+					Get_pop_up_frames.get_public_alarm_frame("해당 지역에 대한 코드가 없습니다.");
 				}
 			} else {
-				Get_pop_up_frames.get_wrong_frame("주소");
+				Get_pop_up_frames.get_public_alarm_frame("주소를 확인해주세요.");
+//				Get_pop_up_frames.get_wrong_frame("주소");
 				return;
 			}
 
 			if (addressDetailField.getText().trim().length() == 0) {
-				Get_pop_up_frames.get_wrong_frame("상세주소");
+				Get_pop_up_frames.get_public_alarm_frame("상세주소를 확인해주세요.");
 				return;
 			}
 
 			if (isDuplication) {
 				// 팝업
-				System.out.println("아이디 중복확인을 해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("아이디 중복확인을 해주세요.");
 				return;
 			}
             
@@ -223,11 +225,11 @@ public class SignUpPanel extends JPanel {
 			if (pwCheckField.getPassword() != null) {
 				pwCheck = new String(pwCheckField.getPassword());
 				if (!pw.equals(pwCheck)) {
-					System.out.println("비밀번호가 일치하지않습니다.");
+					Get_pop_up_frames.get_public_alarm_frame("비밀번호가 일치하지않습니다.");
 					return;
 				}
 			} else {
-				System.out.println("비밀번호 확인란을 확인해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("비밀번호 확인란을 확인해주세요.");
 				return;
 			}
             
@@ -245,6 +247,22 @@ public class SignUpPanel extends JPanel {
 
 			// 완성되면 주석 풀기
 			// MainFrameState.civil.insert(m);
+			
+			// insert 후 확인: ID 기준으로 존재하는지 확인
+			QueryRequest<Members> checkRequest = new QueryRequest<>(
+			    "SELECT * FROM members WHERE member_id = ?",
+			    m.getMember_id(),
+			    Members.class,
+			    MainFrameState.civil
+			);
+
+			Members inserted = checkRequest.getSingleResult();
+			if (inserted != null) {
+			    Get_pop_up_frames.get_public_alarm_frame("회원가입이 완료되었습니다");
+			    MainFrameState.card.show("login");
+			} else {
+			    Get_pop_up_frames.get_public_alarm_frame("회원가입에 실패했습니다. 다시 시도해주세요.");
+			}
         });
         
         submitBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
