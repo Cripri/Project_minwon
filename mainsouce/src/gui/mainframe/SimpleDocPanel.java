@@ -10,6 +10,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import com.sun.tools.javac.Main;
 import gui.mainframe.components.RoundedButton;
 
 // 효승님이 한거 버튼 크기 수정본
@@ -32,6 +33,15 @@ public class SimpleDocPanel extends JPanel {
         
         leftButton.setFont(new Font("맑은 고딕", Font.BOLD, 20));
         rightButton.setFont(new Font("맑은 고딕", Font.BOLD, 20));
+
+        rightButton.addActionListener(e ->{
+            if(MainFrameState.member != null){
+                MainFrameState.card.show("sinmungoinfoPanel");
+            }else{
+                MainFrameState.card.show("login");
+            }
+
+        });
 
         Dimension buttonSize = new Dimension(300, 300);
         leftButton.setPreferredSize(buttonSize);

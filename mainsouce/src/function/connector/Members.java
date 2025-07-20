@@ -14,13 +14,15 @@ public class Members {
 	String member_ad_detail;
 	String member_phonenum;
 	String member_email;
+	String member_password_encrypted;
 
 	public Members() {
 	}
 
-	public Members(Integer member_code, String member_id, String member_password,
-				   String member_name, Date member_birthday, String member_gender, Integer district_code,
-				   String member_ad_detail, String member_phonenum, String member_email) {
+	public Members(Integer member_code, String member_id, String member_password, String member_name,
+			Date member_birthday, String member_gender, Integer district_code, String member_ad_detail,
+			String member_phonenum, String member_email, String member_password_encrypted) {
+		super();
 		this.member_code = member_code;
 		this.member_id = member_id;
 		this.member_password = member_password;
@@ -31,6 +33,7 @@ public class Members {
 		this.member_ad_detail = member_ad_detail;
 		this.member_phonenum = member_phonenum;
 		this.member_email = member_email;
+		this.member_password_encrypted = member_password_encrypted;
 	}
 
 	@Override
@@ -38,7 +41,8 @@ public class Members {
 		return "Members [member_code=" + member_code + ", member_id=" + member_id + ", member_password="
 				+ member_password + ", member_name=" + member_name + ", member_birthday=" + member_birthday
 				+ ", member_gender=" + member_gender + ", district_code=" + district_code + ", member_ad_detail="
-				+ member_ad_detail + ", member_phonenum=" + member_phonenum + ", member_email=" + member_email + "]";
+				+ member_ad_detail + ", member_phonenum=" + member_phonenum + ", member_email=" + member_email
+				+ ", member_password_encrypted=" + member_password_encrypted + "]";
 	}
 
 	public Integer getMember_code() {
@@ -119,6 +123,14 @@ public class Members {
 
 	public void setMember_email(String member_email) {
 		this.member_email = member_email;
+	}
+
+	public String getMember_password_encrypted() {
+		return member_password_encrypted;
+	}
+
+	public void setMember_password_encrypted(String member_password_encrypted) {
+		this.member_password_encrypted = member_password_encrypted;
 	}
 	
 	

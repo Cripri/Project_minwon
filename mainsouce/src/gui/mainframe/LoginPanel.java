@@ -10,14 +10,22 @@ import java.awt.Insets;
 import javax.swing.ButtonGroup;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import gui.mainframe.components.RoundButton;
+import function.connector.Employees;
+import function.connector.Members;
+import function.connector.QueryRequest;
+import function.encryption.Encryptor;
 import gui.mainframe.components.RoundedButton;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
+	
+	private JRadioButton radio1;
+	private JRadioButton radio2;
 
 	public LoginPanel() {
         setLayout(new GridBagLayout());
@@ -27,9 +35,9 @@ class LoginPanel extends JPanel {
         // 라디오 버튼
         JPanel radioPanel = new JPanel(new GridLayout(1, 2, 30, 0));
         radioPanel.setBackground(new Color(217, 217, 217));
-        JRadioButton radio1 = new JRadioButton("개인용");
+        radio1 = new JRadioButton("개인용");
         radio1.setBackground(new Color(217, 217, 217));
-        JRadioButton radio2 = new JRadioButton("직원용");
+        radio2 = new JRadioButton("직원용");
         radio2.setBackground(new Color(217, 217, 217));
         radio1.setSelected(true);
         ButtonGroup group = new ButtonGroup();
@@ -41,7 +49,7 @@ class LoginPanel extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 0;
         add(radioPanel, gbc);
-
+        
         // 아이디 라벨 + 텍스트필드
         JLabel idLabel = new JLabel("아이디");
         gbc.gridx = 0;
@@ -64,7 +72,7 @@ class LoginPanel extends JPanel {
         gbc.ipady = 0;
         add(pwLabel, gbc);
 
-        JTextField pwField = new JTextField();
+        JPasswordField pwField = new JPasswordField();
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.ipadx = 200;
@@ -76,7 +84,85 @@ class LoginPanel extends JPanel {
         signUpBtn.addActionListener((e) -> {
         	MainFrameState.card.show("signUp");
         });
-        RoundedButton loginBtn = new RoundedButton("로그인");
+        
+		RoundedButton loginBtn = new RoundedButton("로그인");
+		
+		idField.addActionListener(e -> loginBtn.doClick());
+        pwField.addActionListener(e -> loginBtn.doClick());
+        
+		loginBtn.addActionListener((e) -> {
+
+			if (radio2.isSelected()) {
+				QueryRequest<Employees> request = new QueryRequest<Employees>(
+						"SELECT * FROM employees WHERE employee_id like ?", 
+						idField.getText(), 
+						Employees.class,
+						MainFrameState.civil
+						);
+				Employees employee = request.getSingleResult();
+	
+				if (employee == null) {
+					// 팝업 -> 아이디 틀림
+					Get_pop_up_frames.get_wrong_frame("아이디");
+				} else {
+					String pw = new String(pwField.getPassword());
+					String enPw = employee.getEmployee_password();
+
+					if (pw.matches(enPw)) {
+						MainFrameState.employee = employee;
+						MainFrameState.frameTop.refreshButtons();
+						idField.setText("");
+						pwField.setText("");
+						
+						if (MainFrameState.employeeMainPanel != null) {
+		                    MainFrameState.employeeMainPanel.refreshPanel();
+		                }
+						Get_pop_up_frames.get_log_in_out_frame(employee.getEmployee_name());
+						MainFrameState.card.show("employeeMain");
+					} else {
+						// 팝업 -> 비밀번호 틀림
+						Get_pop_up_frames.get_wrong_frame("비밀번호");
+					}
+				}
+			} else {
+				QueryRequest<Members> request = new QueryRequest<>(
+						"SELECT * FROM members WHERE MEMBER_ID like ?",
+						idField.getText(),
+						Members.class,
+						MainFrameState.civil
+						);
+				Members mem = request.getSingleResult();
+				if (mem == null) {
+					// 팝업 -> 아이디 틀림
+					Get_pop_up_frames.get_wrong_frame("아이디");
+				} else {
+					String pw = new String(pwField.getPassword());
+					String enPw = mem.getMember_password_encrypted();
+
+					if (Encryptor.matches(pw, enPw)) {
+						MainFrameState.member = mem;
+						MainFrameState.frameTop.refreshButtons();
+						idField.setText("");
+						pwField.setText("");
+						
+						String next = MainFrameState.postLoginTarget;
+						if (next != null) {
+					        MainFrameState.card.show(next);
+					        MainFrameState.postLoginTarget = null;  // 한 번 쓰고 비워줌
+						} else {
+							// 카드 넘겨주기 mypage로
+							Get_pop_up_frames.get_log_in_out_frame(mem.getMember_name());
+							MyPage myPage = new MyPage();
+							MainFrameState.card.add("myPage", myPage);
+							MainFrameState.card.show("firstPage");
+						}
+					} else {
+						// 팝업 -> 비밀번호 틀림
+						Get_pop_up_frames.get_wrong_frame("비밀번호");
+					}
+				}
+			}
+		});
 
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 20, 0));
         buttonPanel.setBackground(new Color(217, 217, 217));
@@ -90,29 +176,14 @@ class LoginPanel extends JPanel {
         add(buttonPanel, gbc);
 
         // 원형 버튼
-        RoundButton kakaoBtn = new RoundButton("K");
-        kakaoBtn.setBackground(new Color(254, 229, 0));
-        kakaoBtn.setForeground(Color.BLACK);
-        kakaoBtn.setPreferredSize(new Dimension(50, 50));
-
-        RoundButton naverBtn = new RoundButton("N");
-        naverBtn.setBackground(new Color(3, 199, 90));
-        naverBtn.setForeground(Color.WHITE);
-        naverBtn.setPreferredSize(new Dimension(50, 50));
-
-        RoundButton passBtn = new RoundButton("P");
-        passBtn.setBackground(new Color(255, 59, 75));
-        passBtn.setForeground(Color.WHITE);
-        passBtn.setPreferredSize(new Dimension(50, 50));
-
-        JPanel roundPanel = new JPanel(new GridLayout(1, 3, 20, 0));
-        roundPanel.setBackground(new Color(217, 217, 217));
-        roundPanel.add(kakaoBtn);
-        roundPanel.add(naverBtn);
-        roundPanel.add(passBtn);
+        RoundedButton guestLogin = new RoundedButton("비회원 로그인");
+        guestLogin.setPreferredSize(new Dimension(190, 35));
+        guestLogin.addActionListener((e) -> {
+        	MainFrameState.card.show("guestLogin");
+        });
 
         gbc.gridx = 1;
         gbc.gridy = 4;
-        add(roundPanel, gbc);
+        add(guestLogin, gbc);
     }
 }

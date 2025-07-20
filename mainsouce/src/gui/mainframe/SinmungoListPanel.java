@@ -1,12 +1,32 @@
 package gui.mainframe;
 
-import gui.mainframe.components.*;
-import gui.mainframe.model.Petition;
+import static gui.mainframe.MainFrameState.civil;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
+import function.connector.Department;
+import function.connector.Sinmungo;
+import gui.mainframe.components.PaginationPanel;
+import gui.mainframe.components.RoundedButton;
+import gui.mainframe.components.SearchBarPanel;
+import gui.mainframe.components.TableCardPanel;
+import gui.mainframe.model.Petition;
+import gui.phs.CivilComplaintDetailPanel;
+import gui.phs.SinmungoinfoPanel;
 
 public class SinmungoListPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -14,15 +34,10 @@ public class SinmungoListPanel extends JPanel {
     private TableCardPanel tableCardPanel;
     private PaginationPanel paginationPanel;
 
-    private final List<Petition> petitions = List.of(
-        new Petition("51", "노원구 어쩌구 아스팔트 파임", "도로 교통공사", "2025-07-03"),
-        new Petition("50", "노원구 어쩌구 아스팔트 파임", "도로 교통공사", "2025-07-03"),
-        new Petition("49", "노원구 어쩌구 아스팔트 파임", "도로 교통공사", "2025-07-03"),
-        new Petition("48", "노원구 어쩌구 아스팔트 파임 🔒", "도로 교통공사", "2025-07-03"),
-        new Petition("47", "등본 발급 관련 문의", "행정복지센터", "2025-07-02"),
-        new Petition("46", "횡단보도 신호 개선 요청", "교통안전센터", "2025-07-01"),
-        new Petition("45", "가로등 고장 신고", "시설관리공단", "2025-07-01")
-    );
+    List<Sinmungo> sin = civil.selectAll(Sinmungo.class);
+    List<Petition> petitions = new ArrayList<>();
+    List<Department> dp = civil.selectAll(Department.class);
+
 
     private int currentPage = 0;
     private final int itemsPerPage = 5;
@@ -31,6 +46,7 @@ public class SinmungoListPanel extends JPanel {
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(20, 20, 20, 20));
         setBackground(new Color(217, 217, 217));
+        petitions = buildPetitionList(sin);
 
         // 제목
         JLabel title = new JLabel("민원 게시판");
@@ -53,6 +69,10 @@ public class SinmungoListPanel extends JPanel {
         centerPanel.add(tableCardPanel);
 
         add(centerPanel, BorderLayout.CENTER);
+        
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setOpaque(false);
+        bottomPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
 
         // 페이지네이션
         int totalPages = (int) Math.ceil((double) petitions.size() / itemsPerPage);
@@ -61,24 +81,84 @@ public class SinmungoListPanel extends JPanel {
             tableCardPanel.showPage(newPage);
         });
 
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.setOpaque(false);
-        bottomPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
-        bottomPanel.add(paginationPanel, BorderLayout.CENTER);
+        RoundedButton writeBtn = new RoundedButton("새 민원 작성");
+        writeBtn.setPreferredSize(new Dimension(160, 40));
+        writeBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+        writeBtn.setBorderPainted(false);
+        writeBtn.setFocusPainted(false);
+        writeBtn.addActionListener((e) -> {
+        	if (MainFrameState.member == null) {
+        		MainFrameState.postLoginTarget = "sinmungoinfoPanel";
+        		MainFrameState.card.show("login");        		
+        	} else {
+        		Component[] components = MainFrameState.card.getComponents();
+            	for (Component comp : components) {
+            	    if (comp instanceof SinmungoinfoPanel) {
+            	    	// 신문고인포패널 있었다면 제거
+            	        MainFrameState.card.remove(comp);
+            	        break;
+            	    }
+            	}
+            	SinmungoinfoPanel infoPanel = new SinmungoinfoPanel();
+            	MainFrameState.card.add("sinmungoinfoPanel", infoPanel);
+        		MainFrameState.card.show("sinmungoinfoPanel");
+        	}
+        });
         
-        // 새 글 작성 버튼
-		RoundedButton writeBtn = new RoundedButton("새 민원 작성");
-		writeBtn.setPreferredSize(new Dimension(160, 40));
-		writeBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		writeBtn.setBorderPainted(false);
-		writeBtn.setFocusPainted(false);
-		
-		// 민원 작성 페이지로 이동 설정해야 함 
-//		writeBtn.addActionListener((e) ->{
-//			MainFrameState.card.show("민원작성페이지");
-//		});
-
+		bottomPanel.add(writeBtn, BorderLayout.EAST);
+		bottomPanel.add(paginationPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
-        bottomPanel.add(writeBtn, BorderLayout.EAST);
+        
+        searchBar.addSearchListener(e -> {
+			String keyword = searchBar.getSearchText().trim();
+			List<Petition> filtered = buildPetitionList(filterSinmungos(keyword));
+			tableCardPanel.updatePetitions(filtered);
+			paginationPanel.updatePages((int) Math.ceil((double) filtered.size() / itemsPerPage));
+			paginationPanel.setCurrentPage(0);
+			currentPage = 0;
+			tableCardPanel.showPage(0);
+		});
     }
+    
+    // 전체 Sinmungo를 Petition 리스트로 변환
+ 	private List<Petition> buildPetitionList(List<Sinmungo> sinmungos) {
+ 		List<Petition> result = new ArrayList<>();
+ 		for (int i = sinmungos.size() - 1; i >= 0; i--) {
+ 			Sinmungo s = sinmungos.get(i);
+ 			if (s.getStatus().equals("C")) {
+ 				String dename = dp.stream()
+ 						.filter(d -> Objects.equals(d.getDepartment_code(), s.getEmployee_code()))
+ 						.map(Department::getDepartment_name)
+ 						.findFirst().orElse("");
+ 				result.add(new Petition(
+ 						String.valueOf(s.getSinmungo_code()),
+ 						s.getSinmungo_title(),
+ 						dename,
+ 						s.getAnswer_date()));
+ 			}
+ 		}
+ 		return result;
+ 	}
+
+ 	// 검색어에 맞는 Sinmungo 필터링
+ 	private List<Sinmungo> filterSinmungos(String keyword) {
+ 		if (keyword.isEmpty()) return sin;
+ 		return sin.stream()
+ 				.filter(s -> s.getSinmungo_title().contains(keyword) || s.getSinmungo_content().contains(keyword))
+ 				.toList();
+ 	}
+ 	
+//    private void inputlist(List<Sinmungo> sin) {
+//        for (int i = sin.size()-1; i >= 0; i--) {
+//            if(sin.get(i).getStatus().equals("C")) {
+//                String dename = "";
+//                for (Department d : dp) {
+//                    if (Objects.equals(d.getDepartment_code(), sin.get(i).getEmployee_code())) {
+//                        dename = d.getDepartment_name();
+//                    }
+//                }
+//                petitions.add(new Petition(String.valueOf(sin.get(i).getSinmungo_code()), sin.get(i).getSinmungo_title(), dename, sin.get(i).getAnswer_date()));
+//            }
+//        }
+//    }
 }

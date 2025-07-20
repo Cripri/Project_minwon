@@ -1,4 +1,4 @@
 /bin/
-.project
+/out/
 .classpath
-.DS_Store
+.project

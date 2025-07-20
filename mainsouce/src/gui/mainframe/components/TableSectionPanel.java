@@ -5,7 +5,11 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.List;
+
+import gui.mainframe.SinmungoDetailPanel;
 import gui.mainframe.model.Petition;
+
+import static gui.mainframe.MainFrameState.card;
 
 public class TableSectionPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -60,7 +64,10 @@ public class TableSectionPanel extends JPanel {
 
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            JOptionPane.showMessageDialog(null, "상세 페이지 이동: " + p.getTitle());
+                            //JOptionPane.showMessageDialog(null, "상세 페이지 이동: " + p.getTitle());
+
+                            card.add(new SinmungoDetailPanel(p.getNumber(), "마이페이지 아님"), "detailPanel_" + p.getNumber());
+                            card.show("detailPanel_" + p.getNumber());
                         }
                     });
                 }
