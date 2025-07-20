@@ -100,24 +100,31 @@ public class WriteContent extends JPanel {
         	
         	// 부서이름 or "판별 불가"
         	String dep = ComplaintClassifier.classify(contentArea.getText());
-        	QueryRequest<Department> request = new QueryRequest<Department>(
-        			"select * from department where department_name like ?", 
-        			dep,
-        			Department.class,
-        			MainFrameState.civil
-        			);
-        			
-        	Department d = request.getSingleResult();
-        	
-        	QueryRequest<Employees> request1 = new QueryRequest<Employees>(
-        			"select * from employees where position_code = 1 and department_code like ?", 
-        			d.getDepartment_code(),
-        			Employees.class,
-        			MainFrameState.civil
-        			);
-        	List<Employees> eList = request1.getResultList();
-        	// 주무관만 들어감
-        	s.setEmployee_code((int)(Math.random() * eList.size()));
+        	if (dep.equals("판별 불가")) {
+        		// 부서변경해야하는 상태로
+        		s.setEmployee_code(null);
+        		s.setStatus("I");
+        	} else {
+	        	QueryRequest<Department> request = new QueryRequest<Department>(
+	        			"select * from department where department_name like ?", 
+	        			dep,
+	        			Department.class,
+	        			MainFrameState.civil
+	        			);
+	        			
+	        	Department d = request.getSingleResult();
+	        	
+	        	QueryRequest<Employees> request1 = new QueryRequest<Employees>(
+	        			"select * from employees where position_code = 1 and department_code like ?", 
+	        			d.getDepartment_code(),
+	        			Employees.class,
+	        			MainFrameState.civil
+	        			);
+	        	List<Employees> eList = request1.getResultList();
+	        	// 주무관만 들어감
+	        	s.setEmployee_code((int)(Math.random() * eList.size()));
+	        	s.setStatus("P");
+        	}
         	
         	if (pwdField.getText() != null) {
         		s.setSecurity_set("t");
@@ -127,7 +134,6 @@ public class WriteContent extends JPanel {
         		s.setSecurity_password(null);
         	}
         	s.setCreate_date(new Date());
-        	s.setStatus("P");
         	// TODO 팝업 
         	
         	// 팝업 완료되면 주석 풀기
