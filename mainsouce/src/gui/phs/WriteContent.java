@@ -103,7 +103,7 @@ public class WriteContent extends JPanel {
         	if (dep.equals("판별 불가")) {
         		// 부서변경해야하는 상태로
         		s.setEmployee_code(null);
-        		s.setStatus("I");
+        		s.setStatus("X");
         	} else {
 	        	QueryRequest<Department> request = new QueryRequest<Department>(
 	        			"select * from department where department_name like ?", 
