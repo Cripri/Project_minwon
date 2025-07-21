@@ -62,7 +62,7 @@ public class EmployeeMainPanel extends JPanel {
         List<Sinmungo> 접수중리스트 = fetchComplaintsByStatus("P");
         List<Sinmungo> 할당된민원 = fetchComplaintsByStatusAndEmployee("P", employeeCode);
         List<Sinmungo> 처리중민원 = fetchComplaintsByStatus("I");
-        List<Sinmungo> 부서변경요청 = fetchComplaintsByStatus("X");
+        List<Sinmungo> 부서변경요청 = fetchComplaintsByStatus("Q");
         List<Sinmungo> 처리완료 = fetchComplaintsByStatus("C");
         // TODO 처리불가는 어떻게 처리?
         List<Sinmungo> 처리불가 = new ArrayList<>();

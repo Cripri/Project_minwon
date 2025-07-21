@@ -42,6 +42,8 @@ public class Simple_doc {
 	String previous_address_self;
 	String previous_address_member;
 
+
+
 	public Simple_doc() {
 	}
 
