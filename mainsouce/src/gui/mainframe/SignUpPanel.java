@@ -246,7 +246,7 @@ public class SignUpPanel extends JPanel {
 			m.setMember_password_encrypted(Encryptor.encode(new String(pwField.getPassword())));
 
 			// 완성되면 주석 풀기
-			// MainFrameState.civil.insert(m);
+			MainFrameState.civil.insert(m);
 			
 			// insert 후 확인: ID 기준으로 존재하는지 확인
 			QueryRequest<Members> checkRequest = new QueryRequest<>(
