@@ -1,6 +1,7 @@
 package gui.phs.ManagerMenu;
 
 import gui.mainframe.FrameTop;
+import gui.mainframe.MainFrameState;
 import gui.phs.common.ImageUtil;
 
 import javax.swing.*;
@@ -99,6 +100,9 @@ public class ManagerMenuPanel extends JPanel {
             Window parentWindow = SwingUtilities.getWindowAncestor(this);
             AccountCreateDialog dialog = new AccountCreateDialog(parentWindow, userData -> model.addRow(userData));
             dialog.setVisible(true);
+            ManagerMenuPanel managerMenu = new ManagerMenuPanel();
+            MainFrameState.card.add("managerMenu", managerMenu);
+            MainFrameState.card.show("managerMenu");
         });
     }
 
