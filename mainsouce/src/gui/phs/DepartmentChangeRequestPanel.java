@@ -112,7 +112,8 @@ public class DepartmentChangeRequestPanel extends JPanel {
         List<Sinmungo> all = civil.selectAll(Sinmungo.class);
         List<Sinmungo> pending = new ArrayList<>();
         for (Sinmungo s : all) {
-            if ("W".equals(s.getStatus())) {
+            String status = s.getStatus();
+            if ("Q".equals(status) ) {
                 pending.add(s);
             }
         }
