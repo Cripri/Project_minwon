@@ -11,6 +11,7 @@ import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -22,6 +23,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import function.connector.Members;
+import function.connector.QueryRequest;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
 import gui.mainframe.components.RoundedButton;
@@ -150,11 +152,35 @@ public class GuestLoginPanel extends JPanel {
 			m.setMember_phonenum(phoneNumberField.getText());
 			//m.setDistrict_code(null);
 			
-			System.out.println(m);
-			// 완성되면 주석 풀기
-			MainFrameState.civil.insert(m);
-			// 다 만들어 두시고 가시면 나는 어찌하라는것인가
-			
+			// 중복 여부 확인
+		    String query = "SELECT * FROM members WHERE member_name = ? AND member_birthday = ? AND member_phonenum = ?";
+		    QueryRequest<Members> checkRequest = new QueryRequest<>(
+		        query,
+		        List.of(m.getMember_name(), m.getMember_birthday(), m.getMember_phonenum()),
+		        Members.class,
+		        MainFrameState.civil
+		    );
+
+		    Members existing = checkRequest.getSingleResult();
+
+		    if (existing != null) {
+		        // 기존 회원 → 정보 저장 후 마이페이지로 이동
+		        MainFrameState.member = existing;
+		        MyPage myPage = new MyPage();
+		        MainFrameState.card.add("myPage", myPage);
+		        MainFrameState.card.show("myPage");
+		        Get_pop_up_frames.get_log_in_out_frame(existing.getMember_name());
+		    } else {
+		        // 신규 회원 → DB에 추가
+//		    	System.out.println(m);
+		        MainFrameState.civil.insert(m);
+		        MainFrameState.member = m;
+		        Get_pop_up_frames.get_public_alarm_frame("회원 등록이 완료되었습니다.");
+		        // 완료되면 근데 어디로 보내줘야 되지...? 일단 마이페이지로 보내 
+		        MyPage myPage = new MyPage();
+		        MainFrameState.card.add("myPage", myPage);
+		        MainFrameState.card.show("myPage");
+		    }
 		});
 
 		submitBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
