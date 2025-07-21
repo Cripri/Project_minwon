@@ -28,12 +28,14 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import function.connector.Civil_Connector;
 import function.connector.Complaint_category_info;
 import function.connector.Department;
 import function.connector.Employees;
 import function.connector.QueryRequest;
 import function.connector.Simple_doc;
 import function.connector.Sinmungo;
+import function.pdfwriter.PDFWriter;
 import gui.mainframe.components.RoundedButton;
 
 public class MyPage extends JPanel {
@@ -417,6 +419,13 @@ public class MyPage extends JPanel {
                     btn.setFocusPainted(false);
                     btn.setBorderPainted(false);
                     btn.addActionListener(e -> {
+                        
+                    	String rrn = JOptionPane.showInputDialog("주민등록번호를 입력하세요:");
+                        if (rrn == null || rrn.trim().isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "주민등록번호가 입력되지 않았습니다.");
+                            return;
+                        }
+                    	
                     	JFileChooser fileChooser = new JFileChooser();
                     	fileChooser.setDialogTitle("파일 저장 위치 선택");
                     	
@@ -451,10 +460,15 @@ public class MyPage extends JPanel {
                                     return;
                                 }
                             }
-
+                            
                     	    try {
-                    	    	// PDFWriter 여따가 넣기
-
+                    	    	Civil_Connector connector = new Civil_Connector();
+                    	    	new PDFWriter(
+                    	                doc.getSimple_doc_code(),
+                    	                rrn,
+                    	                connector,
+                    	                file.getAbsolutePath()  // 추가된 저장 경로
+                    	            );
                     	        JOptionPane.showMessageDialog(null, "파일이 성공적으로 저장되었습니다.");
                     	    } catch (Exception ex) {
                     	        ex.printStackTrace();
