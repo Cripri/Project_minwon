@@ -5,6 +5,7 @@ import java.util.Stack;
 import function.connector.Civil_Connector;
 import function.connector.Employees;
 import function.connector.Members;
+import function.connector.Simple_doc;
 
 public class MainFrameState {
 	public static CardLayoutPanel card;
