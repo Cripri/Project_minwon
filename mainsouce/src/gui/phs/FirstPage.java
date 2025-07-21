@@ -16,6 +16,7 @@ import javax.swing.SwingUtilities;
 
 import gui.mainframe.MainFrameState;
 import gui.mainframe.SimpleDocPanel;
+import gui.mainframe.SinmungoListPanel;
 import gui.mainframe.components.RoundedButton; 
 
 public class FirstPage extends SimpleDocPanel {
@@ -48,6 +49,8 @@ public class FirstPage extends SimpleDocPanel {
         });
         
         rightButton.addActionListener((e) -> {
+        	SinmungoListPanel sinmungoList = new SinmungoListPanel();
+        	MainFrameState.card.add("sinmungoList", sinmungoList);
             MainFrameState.card.show("sinmungoList");
        
         });

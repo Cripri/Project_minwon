@@ -3,18 +3,14 @@ package gui.mainframe;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JPanel;
 
-import gui.mainframe.components.UpdatablePanel;
 
 public class CardLayoutPanel extends JPanel {
 
    private static final long serialVersionUID = 1L;
    private CardLayout c = new CardLayout();
-   private Map<String, JPanel> panelMap = new HashMap<>();
 
    public CardLayoutPanel() {
       setLayout(c);
@@ -32,12 +28,6 @@ public class CardLayoutPanel extends JPanel {
          // 새로운 이동이 발생하면 future 초기화
          MainFrameState.future.clear();
          MainFrameState.currentCard = value;
-
-         // 전환 전 updateData 호출
-         JPanel panel = panelMap.get(value);
-         if (panel instanceof UpdatablePanel updatable) {
-             updatable.updateData();
-         }
 
          c.show(this, value);
      }

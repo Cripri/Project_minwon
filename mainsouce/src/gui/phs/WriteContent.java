@@ -25,6 +25,7 @@ import function.connector.Members;
 import function.connector.QueryRequest;
 import function.connector.Sinmungo;
 import gui.mainframe.MainFrameState;
+import gui.mainframe.MyPage;
 
 public class WriteContent extends JPanel {
 
@@ -137,6 +138,8 @@ public class WriteContent extends JPanel {
         	
         	// 팝업 완료되면 주석 풀기
         	 MainFrameState.civil.insert(s);
+        	 MyPage myPage = new MyPage();
+			 MainFrameState.card.add("myPage", myPage);
         	 MainFrameState.card.show("myPage");
         });
         
