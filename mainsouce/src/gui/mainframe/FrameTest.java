@@ -52,14 +52,14 @@ public class FrameTest extends JFrame {
 
 		CardLayoutPanel cardPage = new CardLayoutPanel();
 		
-//		cardPage.add("firstPage", firstPage);
-//		cardPage.add("login", login);
-////		cardPage.add("myPage", myPage);
-//		cardPage.add("simpleDoc", simpleDoc);
-//		cardPage.add("sinmungoList", sinmungoList);
-//		cardPage.add("employeeMain", employeeMain);
-//		cardPage.add("signUp", signUp);
-//		cardPage.add("userInfoEdit", userInfoEdit);
+		cardPage.add("firstPage", firstPage);
+		cardPage.add("login", login);
+		//cardPage.add("myPage", myPage);
+		cardPage.add("simpleDoc", simpleDoc);
+		cardPage.add("sinmungoList", sinmungoList);
+		cardPage.add("employeeMain", employeeMain);
+		cardPage.add("signUp", signUp);
+		cardPage.add("userInfoEdit", userInfoEdit);
 		cardPage.add("guestLogin", guestLogin);
 
 		cardPage.add("sinmungoinfoPanel",sinmungoinfoPanel);
