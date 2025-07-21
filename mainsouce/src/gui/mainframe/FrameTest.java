@@ -66,7 +66,6 @@ public class FrameTest extends JFrame {
 		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
 		cardPage.add("writeContent", writeContent); 
 		cardPage.add("managerMenuPanel", managerMenuPanel); 
-//		
 
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();

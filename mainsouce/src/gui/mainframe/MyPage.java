@@ -39,8 +39,9 @@ import function.connector.Sinmungo;
 import function.drawingsign.DrawingSign;
 import function.pdfwriter.PDFWriter;
 import gui.mainframe.components.RoundedButton;
+import gui.mainframe.components.UpdatablePanel;
 
-public class MyPage extends JPanel {
+public class MyPage extends JPanel implements UpdatablePanel{
 
 	private static final long serialVersionUID = 1L;
 	private final int PAGE_SIZE = 5;
@@ -514,6 +515,10 @@ public class MyPage extends JPanel {
         issueTableContainer.repaint();
     }
 
-
-    
+	@Override
+	public void updateData() {
+		// 마이페이지 정보 새로 불러오기
+		updateRequestTable();
+		updateIssueTable();
+	}
 }
