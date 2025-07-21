@@ -85,6 +85,7 @@ public class FrameTop extends JPanel {
 			if (emplogin) {
 				loginBtn.addActionListener((e) -> {
 					MainFrameState.card.remove(MainFrameState.employeeMainPanel);
+					MainFrameState.employeeMainPanel = null;
 					MainFrameState.employee = null; // 로그아웃 처리
 					Get_pop_up_frames.get_log_in_out_frame(null);
 					refreshButtons(); // 버튼 갱신

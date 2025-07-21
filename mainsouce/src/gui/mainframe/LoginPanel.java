@@ -116,10 +116,9 @@ class LoginPanel extends JPanel {
 						
 						if (MainFrameState.employeeMainPanel != null) {
 		                    MainFrameState.employeeMainPanel.refreshPanel();
-		                }
+		                } 
 						Get_pop_up_frames.get_log_in_out_frame(employee.getEmployee_name());
-						EmployeeMainPanel employeeMain = new EmployeeMainPanel();
-						MainFrameState.card.add("employeeMain", employeeMain);
+						MainFrameState.employeeMainPanel = new EmployeeMainPanel();
 						MainFrameState.card.show("employeeMain");
 					} else {
 						// 팝업 -> 비밀번호 틀림
