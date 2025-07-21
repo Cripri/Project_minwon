@@ -10,9 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -27,11 +25,12 @@ import javax.swing.border.EmptyBorder;
 import function.connector.Members;
 import function.connector.QueryRequest;
 import function.encryption.Encryptor;
-import function.isfield.FieldCheck;
+//import function.isfield.FieldCheck;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
 import gui.mainframe.components.RoundedButton;
 import gui.mainframe.components.addressComboBoxPanel;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 public class SignUpPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -79,11 +78,11 @@ public class SignUpPanel extends JPanel {
                Members mem = request.getSingleResult();
                if (mem == null) {
                   // 팝업 사용가능한 아이디입니다.
-                  System.out.println("사용가능한 아이디");
+            	  Get_pop_up_frames.get_pop_up_duplicate_id_frame(true);
                   isDuplication = false;
                } else {
                   // 팝업 이미 사용중인 아이디입니다.
-                  System.out.println("사용불가능한 아이디");
+            	   Get_pop_up_frames.get_pop_up_duplicate_id_frame(false);
                   isDuplication = true;
                }
         });
@@ -132,16 +131,10 @@ public class SignUpPanel extends JPanel {
         row++;
         
         PlaceholderTextField phoneNumberField = new PlaceholderTextField("010-1234-5678", 15);
-        RoundedButton certificationButton = new RoundedButton("본인인증");
-        
-        certificationButton.addActionListener((e) -> {
-           // 본인인증 만들어지면 수정
-           isCertification = true;
-        });
         
         PlaceholderTextField emailField = new PlaceholderTextField("example@email.com", 15);
 
-        addRow(formPanel, gbc, row++, "핸드폰번호", phoneNumberField, certificationButton, labelFont, inputFont);
+        addRow(formPanel, gbc, row++, "핸드폰번호", phoneNumberField, null, labelFont, inputFont);
         addRow(formPanel, gbc, row++, "이메일", emailField, null, labelFont, inputFont);
 
         // 주소
@@ -176,15 +169,15 @@ public class SignUpPanel extends JPanel {
 				gender = "f";
 			}
             
-            if(!FieldCheck.validateFields(this,addressDetailField,nameField,phoneNumberField,pwField)){
-                System.out.println("암튼머걸림");
-                return;
-            }
-
-            if(!FieldCheck.validateComboBox(bds.getYearbox(),bds.getMonthbox(),bds.getDaybox(),address.getsidocombo(),address.getsigungucombo())){
-                System.out.println("콤보박스걸림");
-                return;
-            }
+//            if(!FieldCheck.validateFields(this,addressDetailField,nameField,phoneNumberField,pwField)){
+//            	System.out.println("암튼머걸림");
+//            	return;
+//            }
+//
+//            if(!FieldCheck.validateComboBox(bds.getYearbox(),bds.getMonthbox(),bds.getDaybox(),address.getsidocombo(),address.getsigungucombo())){
+//            	System.out.println("콤보박스걸림");
+//                return;
+//            }
             
 			Date bDate = new Date();
 			if (bds.getYear() != null && bds.getMonth() != null && bds.getDay() != null) {
@@ -196,9 +189,9 @@ public class SignUpPanel extends JPanel {
 				bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 			} else {
 				
-				// TODO 팝업
 				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
-				System.out.println("생년, 월, 일을 모두 선택해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("생년월일을 확인해주세요.");
+//				Get_pop_up_frames.get_wrong_frame("생년월일");
 				return;
 			}
 
@@ -208,52 +201,38 @@ public class SignUpPanel extends JPanel {
 //			    System.out.println("선택된 지역 코드: " + districtCode);
 
 				if (districtCode == -1) {
-					System.err.println("해당 지역에 대한 코드가 없습니다.");
+					Get_pop_up_frames.get_public_alarm_frame("해당 지역에 대한 코드가 없습니다.");
 				}
 			} else {
-				System.out.println("시도와 시군구를 모두 선택해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("주소를 확인해주세요.");
+//				Get_pop_up_frames.get_wrong_frame("주소");
 				return;
 			}
 
 			if (addressDetailField.getText().trim().length() == 0) {
-				System.out.println("상세주소를 입력해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("상세주소를 확인해주세요.");
 				return;
 			}
 
 			if (isDuplication) {
 				// 팝업
-				System.out.println("아이디 중복확인을 해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("아이디 중복확인을 해주세요.");
 				return;
 			}
-            
-			if (!isCertification) {
-				// 팝업
-				System.out.println("본인인증을 진행해주세요.");
-				return;
-			}
-            
             
 			String pw = new String(pwField.getPassword());
 			String pwCheck;
 			if (pwCheckField.getPassword() != null) {
 				pwCheck = new String(pwCheckField.getPassword());
 				if (!pw.equals(pwCheck)) {
-					System.out.println("비밀번호가 일치하지않습니다.");
+					Get_pop_up_frames.get_public_alarm_frame("비밀번호가 일치하지않습니다.");
 					return;
 				}
 			} else {
-				System.out.println("비밀번호 확인란을 확인해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("비밀번호 확인란을 확인해주세요.");
 				return;
 			}
             
-            //생년월일
-            int year = bds.getYear();
-            int month = bds.getMonth();
-            int day = bds.getDay();
-//            Date bDate = new Date();
-            LocalDate bLocalDate = LocalDate.of(year, month, day);
-            bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-
 			Members m = new Members();
 			m.setMember_id(idField.getText());
 			m.setMember_password(new String(pwField.getPassword()));
@@ -268,6 +247,22 @@ public class SignUpPanel extends JPanel {
 
 			// 완성되면 주석 풀기
 			// MainFrameState.civil.insert(m);
+			
+			// insert 후 확인: ID 기준으로 존재하는지 확인
+			QueryRequest<Members> checkRequest = new QueryRequest<>(
+			    "SELECT * FROM members WHERE member_id = ?",
+			    m.getMember_id(),
+			    Members.class,
+			    MainFrameState.civil
+			);
+
+			Members inserted = checkRequest.getSingleResult();
+			if (inserted != null) {
+			    Get_pop_up_frames.get_public_alarm_frame("회원가입이 완료되었습니다");
+			    MainFrameState.card.show("login");
+			} else {
+			    Get_pop_up_frames.get_public_alarm_frame("회원가입에 실패했습니다. 다시 시도해주세요.");
+			}
         });
         
         submitBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));

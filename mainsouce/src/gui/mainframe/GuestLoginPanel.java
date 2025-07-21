@@ -154,9 +154,7 @@ public class GuestLoginPanel extends JPanel {
 			// 완성되면 주석 풀기
 			MainFrameState.civil.insert(m);
 			// 다 만들어 두시고 가시면 나는 어찌하라는것인가
-			// 뭐하지... 이거 다음건 조장한테 하는법 배워야하는데...
-			// 그 조장님이 지금 바쁘고... 그 오류를 찾은건 나고...
-			// 팝업 제작 의뢰라도 왔으면...
+			
 		});
 
 		submitBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));

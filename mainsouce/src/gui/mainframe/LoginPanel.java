@@ -19,6 +19,7 @@ import function.connector.Members;
 import function.connector.QueryRequest;
 import function.encryption.Encryptor;
 import gui.mainframe.components.RoundedButton;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 class LoginPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -102,7 +103,7 @@ class LoginPanel extends JPanel {
 	
 				if (employee == null) {
 					// 팝업 -> 아이디 틀림
-					System.out.println("아이디가 틀림");
+					Get_pop_up_frames.get_wrong_frame("아이디");
 				} else {
 					String pw = new String(pwField.getPassword());
 					String enPw = employee.getEmployee_password();
@@ -116,11 +117,11 @@ class LoginPanel extends JPanel {
 						if (MainFrameState.employeeMainPanel != null) {
 		                    MainFrameState.employeeMainPanel.refreshPanel();
 		                }
-
+						Get_pop_up_frames.get_log_in_out_frame(employee.getEmployee_name());
 						MainFrameState.card.show("employeeMain");
 					} else {
 						// 팝업 -> 비밀번호 틀림
-						System.out.println("비밀번호 틀림");
+						Get_pop_up_frames.get_wrong_frame("비밀번호");
 					}
 				}
 			} else {
@@ -133,7 +134,7 @@ class LoginPanel extends JPanel {
 				Members mem = request.getSingleResult();
 				if (mem == null) {
 					// 팝업 -> 아이디 틀림
-					System.out.println("아이디가 틀림");
+					Get_pop_up_frames.get_wrong_frame("아이디");
 				} else {
 					String pw = new String(pwField.getPassword());
 					String enPw = mem.getMember_password_encrypted();
@@ -150,11 +151,14 @@ class LoginPanel extends JPanel {
 					        MainFrameState.postLoginTarget = null;  // 한 번 쓰고 비워줌
 						} else {
 							// 카드 넘겨주기 mypage로
-							MainFrameState.card.show("myPage");
+							Get_pop_up_frames.get_log_in_out_frame(mem.getMember_name());
+							MyPage myPage = new MyPage();
+							MainFrameState.card.add("myPage", myPage);
+							MainFrameState.card.show("firstPage");
 						}
 					} else {
 						// 팝업 -> 비밀번호 틀림
-						System.out.println("비밀번호 틀림");
+						Get_pop_up_frames.get_wrong_frame("비밀번호");
 					}
 				}
 			}

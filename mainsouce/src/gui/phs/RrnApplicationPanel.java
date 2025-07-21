@@ -194,7 +194,7 @@ public class RrnApplicationPanel extends JPanel {
                         JCheckBox cb = entry.getValue();
                         if (cb.isSelected()) {
                             switch (label) {
-                                case "1. 과거의 주소 변동 사항":
+                                case "1. 과거의 주소 변동 사항", "2. 과거의 주소 변동 사항":
                                     ndoc.setaddress_history("T");
                                     if(simcheck.get("직접 입력: 최근").isSelected()){
                                         if(yearLabel.getText() != null) {
@@ -210,23 +210,49 @@ public class RrnApplicationPanel extends JPanel {
                                 case "3. 세대 구성 일자":
                                     ndoc.sethousehold_date("T");
                                     break;
-                                case "4. 발생일 / 신고일":
+                                case "4. 발생일 / 신고일","6. 발생일 / 신고일":
                                     ndoc.setoccurrence_date("T");
                                     break;
-                                case "5. 세대주의 성명과 세대주와의 관계":
-
+                                case "5. 변동 사유","7. 변동 사유":
+                                    ndoc.setprevious_address("T");
+                                    if(simcheck.get("세대").isSelected()){
+                                        ndoc.setprevious_address_self("T");
+                                    }
+                                    if(simcheck.get("세대원").isSelected()){
+                                        ndoc.setprevious_address_member("T");
+                                    }
+                                    break;
+                                case "5. 세대주의 성명과 세대주와의 관계", "8. 세대원의 세대주와의 관계","3. 과거의 주소 변동 중 세대주/세대주와의 관계":
+                                    ndoc.sethead_relationship("T");
                                     break;
                                 case "6. 교부 대상자 외 세대주·세대원·외국인등록 이름":
                                     ndoc.sethead_name("T");
                                     break;
-                                case "8. 세대원의 세대주와의 관계":
-                                    ndoc.sethead_relationship("T");
+                                case "7. 주민등록번호 뒷자리":
+                                    ndoc.setrrn_last7("T");
+                                    if(simcheck.get("본인").isSelected()){
+                                        ndoc.setrrn_last7_self("T");
+                                    }
+                                    if(simcheck.get("세대원").isSelected()){
+                                        ndoc.setrrn_last7_member("T");
+                                    }
                                     break;
                                 case "9. 동거인":
                                     ndoc.setRoommate("T");
                                     break;
-                                case "10. 개인 인적 사항 변경 내용":
+                                case "1. 개인 인적 사항 변경 내용":
                                     ndoc.setpersonal_change_details("T");
+                                    break;
+                                case "8. 병역 사항":
+                                    ndoc.setmilitary_service("T");
+                                    if(simcheck.get("전체").isSelected()){
+                                        ndoc.setMilitary_service_full("T");
+                                    }else{
+                                        ndoc.setMilitary_service_basic_only("T");
+                                    }
+                                    break;
+                                case "9. 국내거소신고번호 / 외국인등록번호":
+                                    ndoc.setid_number("T");
                                     break;
                             }
                         }
@@ -313,6 +339,8 @@ public class RrnApplicationPanel extends JPanel {
                 totalInclude.setSelected(true);
                 break;
             case "changeReason":
+
+
             case "rrnBack":
                 JCheckBox cb1 = new JCheckBox("본인");
                 JCheckBox cb2 = new JCheckBox("세대원");
