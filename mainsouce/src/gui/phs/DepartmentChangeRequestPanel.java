@@ -106,6 +106,7 @@ public class DepartmentChangeRequestPanel extends JPanel {
         });
 
         loadDataAndUpdateTable(currentPage);
+        
     }
 
     private List<Sinmungo> fetchPendingRequestsFromDB() {
@@ -113,7 +114,7 @@ public class DepartmentChangeRequestPanel extends JPanel {
         List<Sinmungo> pending = new ArrayList<>();
         for (Sinmungo s : all) {
             String status = s.getStatus();
-            if ("Q".equals(status) ) {
+            if ("Q".equals(status)) {
                 pending.add(s);
             }
         }
@@ -141,8 +142,10 @@ public class DepartmentChangeRequestPanel extends JPanel {
         totalDataCount = dataList.size();
         currentPage = page;
         updatePaginationButtons();
+        
     }
 
+    
     private void updatePaginationButtons() {
         paginationPanel.removeAll();
         int totalPage = (int) Math.ceil((double) totalDataCount / rowsPerPage);
@@ -166,4 +169,6 @@ public class DepartmentChangeRequestPanel extends JPanel {
         paginationPanel.revalidate();
         paginationPanel.repaint();
     }
+    
+    
 }

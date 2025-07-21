@@ -62,7 +62,7 @@ public class EmployeeMainPanel extends JPanel {
         List<Sinmungo> 접수중리스트 = fetchComplaintsByStatus("P");
         List<Sinmungo> 할당된민원 = fetchComplaintsByStatusAndEmployee("P", employeeCode);
         List<Sinmungo> 처리중민원 = fetchComplaintsByStatus("I");
-        List<Sinmungo> 부서변경요청 = fetchComplaintsByStatus("X");
+        List<Sinmungo> 부서변경요청 = fetchComplaintsByStatus("Q");
         List<Sinmungo> 처리완료 = fetchComplaintsByStatus("C");
         // TODO 처리불가는 어떻게 처리?
         List<Sinmungo> 처리불가 = new ArrayList<>();
@@ -232,7 +232,7 @@ public class EmployeeMainPanel extends JPanel {
                 panel = new ComplaintAnswerListPanel("처리중", empCode);
                 panelName = "processingPanel_" + empCode;
             }
-            case "reassign" -> { // ✅ 부서 변경 요청 처리 추가
+            case "reassign" -> {
                 panelName = "departmentChangeRequest";
                 boolean exists = Arrays.stream(MainFrameState.card.getComponents())
                         .anyMatch(c -> panelName.equals(c.getName()));
@@ -242,7 +242,7 @@ public class EmployeeMainPanel extends JPanel {
                     MainFrameState.card.add(panelName, deptPanel);
                 }
                 MainFrameState.card.show(panelName);
-                return; // ✅ 다른 패널 show 호출 방지
+                return; 
             }
             default -> {
                 panel = new ComplaintAnswerListPanel(); // fallback

@@ -146,7 +146,8 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         listButton.setPreferredSize(new Dimension(90, 30));
         listButton.setFont(defaultFont);
 
-        listButton.addActionListener(e -> MainFrameState.card.show("DepartmentChangeRequestPanel"));
+        
+        listButton.addActionListener(e -> MainFrameState.card.show("departmentChangeRequestPanel"));
 
         buttonRow.add(rejectButton);
         buttonRow.add(changeDeptButton);
