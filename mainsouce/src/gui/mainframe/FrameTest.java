@@ -39,7 +39,7 @@ public class FrameTest extends JFrame {
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
 //		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();
 		RrnApplicationPanel rrnApplicationPanel = new RrnApplicationPanel();
-		WriteContent writeContent = new WriteContent();
+		//WriteContent writeContent = new WriteContent();
 		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel();
 		MainFrameState.employeeMainPanel = employeeMain;
 
@@ -64,7 +64,7 @@ public class FrameTest extends JFrame {
 		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel);
 //		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); 
 		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
-		cardPage.add("writeContent", writeContent); 
+		//cardPage.add("writeContent", writeContent);
 		cardPage.add("managerMenuPanel", managerMenuPanel); 
 //		
 

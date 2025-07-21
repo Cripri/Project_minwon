@@ -23,19 +23,16 @@ import function.connector.QueryRequest;
 import function.connector.Sinmungo;
 import gui.mainframe.MainFrameState;
 
+import static gui.mainframe.MainFrameState.civil;
+
 public class CivilComplaintDetailPanel extends JPanel {
 
     public CivilComplaintDetailPanel(Integer pk) {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(220, 220, 220));
         
-        QueryRequest<Sinmungo> request = new QueryRequest<>(
-        		"SELECT * FROM Sinmungo WHERE sinmungo_code = ?",
-        		pk,
-        		Sinmungo.class,
-        		MainFrameState.civil
-        		);
-        Sinmungo sinmungo_info = request.getSingleResult();
+
+        Sinmungo sinmungo_info = civil.find(Sinmungo.class,pk);
 
 //        FrameTop topPanel = new FrameTop();
 //        add(topPanel, BorderLayout.NORTH);
@@ -151,17 +148,12 @@ public class CivilComplaintDetailPanel extends JPanel {
         }
 
         confirmButton.addActionListener(e ->{
-            Object[] sets = {answerArea.getText(), pk};
-            List<Object> list = new ArrayList<Object>(Arrays.asList(sets));
+            Sinmungo sin = new Sinmungo();
+            sin.setSinmungo_code(pk);
+            sin.setEmployees_answer(answerArea.getText());
+            sin.setStatus("C");
 
-            QueryRequest<Sinmungo> query_request = new QueryRequest<>(
-                    "UPDATE Sinmungo"	
-                            + " SET employees_answer = ?"
-                            + " WHERE sinmungo_code like ?",
-                    Arrays.asList(sets),
-                    Sinmungo.class,
-                    MainFrameState.civil
-            );
+            civil.update(sin);
         });
 
         bottomPanel.add(buttonRow);
