@@ -2,11 +2,26 @@ package gui.phs;
 
 import static gui.mainframe.MainFrameState.civil;
 
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 import function.connector.Department;
 import function.connector.Employees;
@@ -91,12 +106,7 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonRow.setBackground(new Color(220, 220, 220));
 
-        JButton rejectButton = new JButton("반려");
-        rejectButton.setBackground(new Color(178, 34, 34));
-        rejectButton.setForeground(Color.WHITE);
-        rejectButton.setFocusPainted(false);
-        rejectButton.setPreferredSize(new Dimension(70, 30));
-        rejectButton.setFont(defaultFont);
+ 
 
         JButton changeDeptButton = new JButton("부서변경");
         changeDeptButton.setBackground(new Color(30, 144, 255));
@@ -120,22 +130,40 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
 
         changeDeptButton.addActionListener(e -> {
             int select = deptComboBox.getSelectedIndex();
-
             if (select != -1) {
+                int selectedDeptCode = d_cord[select];
+
                 QueryRequest<Employees> request = new QueryRequest<>(
-                        "SELECT * FROM Employees WHERE department_code = ?",
-                        d_cord[select],
-                        Employees.class,
-                        MainFrameState.civil
+                    "SELECT * FROM Employees WHERE department_code = ?",
+                    selectedDeptCode,
+                    Employees.class,
+                    MainFrameState.civil
                 );
 
                 emp_list = new ArrayList<>(request.getResultList());
-                Collections.shuffle(emp_list);
+                if (emp_list.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "선택한 부서에 직원이 없습니다.", "오류", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
-                Get_pop_up_frames.get_yn_frame(
-                        "정말로 " + deptComboBox.getSelectedItem() + "(으)로 변경하시겠습니까?",
-                        this
+                int result = JOptionPane.showConfirmDialog(
+                    this,
+                    "정말로 '" + deptComboBox.getSelectedItem() + "' 부서로 변경하시겠습니까?",
+                    "부서 변경 확인",
+                    JOptionPane.YES_NO_OPTION
                 );
+
+                if (result == JOptionPane.YES_OPTION) {
+                    sinmungo_info.setStatus("P");
+                    sinmungo_info.setEmployee_code(emp_list.get(0).getEmployee_code());
+                    civil.update(sinmungo_info);
+
+                    // 🔄 테이블 갱신
+                    DepartmentChangeRequestPanel.refresh();
+
+                    JOptionPane.showMessageDialog(this, "부서가 성공적으로 변경되었습니다.");
+                    MainFrameState.card.show("departmentChangeRequestPanel");
+                }
             }
         });
 
@@ -148,8 +176,7 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
 
         
         listButton.addActionListener(e -> MainFrameState.card.show("departmentChangeRequestPanel"));
-
-        buttonRow.add(rejectButton);
+        
         buttonRow.add(changeDeptButton);
         buttonRow.add(deptComboBox);
         buttonRow.add(listButton);

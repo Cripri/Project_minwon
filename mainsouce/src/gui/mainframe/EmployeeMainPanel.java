@@ -2,6 +2,7 @@ package gui.mainframe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -64,8 +65,6 @@ public class EmployeeMainPanel extends JPanel {
         List<Sinmungo> 처리중민원 = fetchComplaintsByStatus("I");
         List<Sinmungo> 부서변경요청 = fetchComplaintsByStatus("Q");
         List<Sinmungo> 처리완료 = fetchComplaintsByStatus("C");
-        // TODO 처리불가는 어떻게 처리?
-        List<Sinmungo> 처리불가 = new ArrayList<>();
 
         Employees e = MainFrameState.employee;
         if (e != null) {
@@ -155,8 +154,8 @@ public class EmployeeMainPanel extends JPanel {
         )));
 
         whiteWrapper.add(createSection(List.of(
-            new Item("처리완료", String.valueOf(처리완료.size()), "done"),
-            new Item("처리불가", "1건", "rejected")
+            new Item("처리완료", String.valueOf(처리완료.size()), "done")
+            
         )));
 
         centerPanel.add(whiteWrapper);
@@ -244,6 +243,21 @@ public class EmployeeMainPanel extends JPanel {
                 MainFrameState.card.show(panelName);
                 return; 
             }
+            case "done" -> {
+                panelName = "donePanel";
+                for (Component comp : MainFrameState.card.getComponents()) {
+                    if (panelName.equals(comp.getName())) {
+                        MainFrameState.card.remove(comp);
+                        break;
+                    }
+                }
+                panel = new ComplaintAnswerListPanel("처리완료", "처리완료된 민원");
+                panel.setName(panelName);
+                MainFrameState.card.add(panelName, panel);
+                MainFrameState.card.show(panelName);
+                return;
+            }
+            
             default -> {
                 panel = new ComplaintAnswerListPanel(); // fallback
                 panelName = "defaultPanel";

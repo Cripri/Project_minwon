@@ -5,18 +5,21 @@ import static gui.mainframe.MainFrameState.civil;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
+import javax.swing.table.*;
 
+import function.connector.Department;
+import function.connector.Employees;
 import function.connector.Sinmungo;
 import gui.mainframe.MainFrameState;
 
 public class DepartmentChangeRequestPanel extends JPanel {
+
+    private static DepartmentChangeRequestPanel instance;
 
     private DefaultTableModel model;
     private JTable table;
@@ -27,6 +30,8 @@ public class DepartmentChangeRequestPanel extends JPanel {
     private int totalDataCount = 0;
 
     public DepartmentChangeRequestPanel() {
+        instance = this;
+
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
 
@@ -35,14 +40,11 @@ public class DepartmentChangeRequestPanel extends JPanel {
         centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         add(centerPanel, BorderLayout.CENTER);
 
-        // 제목
         JLabel titleLabel = new JLabel("민원 부서변경 요청 목록", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("\uB9D1\uC740 \uACE0\uB515", Font.BOLD, 22));
+        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 22));
         centerPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // 테이블 컬럼
         String[] columns = {"접수 번호", "내용", "처리 상태", "현재 배정부서", "접수 날짜"};
-
         model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -53,13 +55,14 @@ public class DepartmentChangeRequestPanel extends JPanel {
         table = new JTable(model);
         table.setRowHeight(35);
         table.setFillsViewportHeight(true);
+        table.getTableHeader().setReorderingAllowed(false); // 열 이동 방지
 
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable tbl, Object val, boolean isSelected,
                                                            boolean hasFocus, int row, int col) {
                 Component comp = super.getTableCellRendererComponent(tbl, val, isSelected, hasFocus, row, col);
-                comp.setFont(new Font("\uB9D1\uC740 \uACE0\uB515", Font.PLAIN, 13));
+                comp.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
                 if (!isSelected) {
                     comp.setBackground(row % 2 == 0 ? Color.WHITE : new Color(240, 240, 240));
                 }
@@ -88,9 +91,8 @@ public class DepartmentChangeRequestPanel extends JPanel {
                 int column = table.getSelectedColumn();
 
                 if (column == 1) {
-                    String codeStr = (String) table.getValueAt(row, 0); // "REQ-5"
                     try {
-                        Integer code = Integer.parseInt(codeStr.replace("REQ-", ""));
+                        int code = (int) table.getValueAt(row, 0);
                         String cardName = "DepartmentChangeDetail_" + code;
 
                         if (!MainFrameState.card.contains(cardName)) {
@@ -106,7 +108,12 @@ public class DepartmentChangeRequestPanel extends JPanel {
         });
 
         loadDataAndUpdateTable(currentPage);
-        
+    }
+
+    public static void refresh() {
+        if (instance != null) {
+            instance.loadDataAndUpdateTable(instance.currentPage);
+        }
     }
 
     private List<Sinmungo> fetchPendingRequestsFromDB() {
@@ -114,7 +121,7 @@ public class DepartmentChangeRequestPanel extends JPanel {
         List<Sinmungo> pending = new ArrayList<>();
         for (Sinmungo s : all) {
             String status = s.getStatus();
-            if ("Q".equals(status)) {
+            if ("Q".equals(status) || "C".equals(status)) {
                 pending.add(s);
             }
         }
@@ -127,32 +134,32 @@ public class DepartmentChangeRequestPanel extends JPanel {
         int start = (page - 1) * rowsPerPage;
         int end = Math.min(start + rowsPerPage, dataList.size());
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
         model.setRowCount(0);
         for (int i = start; i < end; i++) {
             Sinmungo s = dataList.get(i);
             model.addRow(new Object[]{
-                "REQ-" + s.getSinmungo_code(),
+                s.getSinmungo_code(),
                 s.getSinmungo_title(),
-                s.getStatus().equals("W") ? "처리중" : "완료",
-                "-",  // 부서명은 별도 매핑 필요 시 확장
-                s.getCreate_date() != null ? s.getCreate_date().toString().substring(0, 10) : ""
+                s.getStatus().equals("Q") ? "처리중" : "완료",
+                getDepartmentName(s.getEmployee_code()),
+                s.getCreate_date() != null ? formatter.format(s.getCreate_date()) : ""
             });
         }
 
         totalDataCount = dataList.size();
         currentPage = page;
         updatePaginationButtons();
-        
     }
 
-    
     private void updatePaginationButtons() {
         paginationPanel.removeAll();
         int totalPage = (int) Math.ceil((double) totalDataCount / rowsPerPage);
 
         for (int i = 1; i <= totalPage; i++) {
             JButton btn = new JButton(String.valueOf(i));
-            btn.setPreferredSize(new Dimension(40, 30));
+            btn.setPreferredSize(new Dimension(50, 40));
 
             if (i == currentPage) {
                 btn.setEnabled(false);
@@ -169,6 +176,12 @@ public class DepartmentChangeRequestPanel extends JPanel {
         paginationPanel.revalidate();
         paginationPanel.repaint();
     }
-    
-    
+
+    private String getDepartmentName(Integer empCode) {
+        if (empCode == null) return "-";
+        Employees emp = civil.find(Employees.class, empCode);
+        if (emp == null) return "-";
+        Department dept = civil.find(Department.class, emp.getDepartment_code());
+        return dept != null ? dept.getDepartment_name() : "-";
+    }
 }

@@ -42,6 +42,16 @@ public class SimpleDocPanel extends JPanel {
             }
 
         });
+        
+        leftButton.addActionListener(e ->{
+            if(MainFrameState.member != null){
+                MainFrameState.card.show("rrnApplicationPanel");
+            }else{
+                MainFrameState.card.show("login");
+            }
+
+        });
+        
 
         Dimension buttonSize = new Dimension(300, 300);
         leftButton.setPreferredSize(buttonSize);
