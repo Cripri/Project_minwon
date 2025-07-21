@@ -108,14 +108,16 @@ public class ComplaintAnswerListPanel extends JPanel {
     private JTable createFilteredTable() {
         String[] columnNames = {"접수 번호", "제목", "처리상태", "처리기관", "등록일"};
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        StringBuilder sql;
-        if (searchKeyword.equals("처리중")) {
-        	sql = new StringBuilder("SELECT * FROM sinmungo WHERE status = 'I'");
-        } else {
-        	sql = new StringBuilder("SELECT * FROM sinmungo WHERE status = 'P'");
+        StringBuilder sql = null;
+
+        if(searchKeyword == null){
+            sql = new StringBuilder("SELECT * FROM sinmungo WHERE status = 'P'");
+        }else{
+            if (searchKeyword.equals("처리중")) {
+                sql = new StringBuilder("SELECT * FROM sinmungo WHERE status = 'I'");
+            }
         }
         List<Object> params = new ArrayList<>();
-
         if (employeeCode != null) {
             sql.append(" AND employee_code = ?");
             params.add(employeeCode);

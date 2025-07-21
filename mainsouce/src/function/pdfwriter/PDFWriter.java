@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PDFWriter {
-    public PDFWriter(int simple_doc_pk,String rrn,Civil_Connector con) {
+    public PDFWriter(int simple_doc_pk,String rrn,Civil_Connector con, String outputPath) {
         QueryRequest<Simple_doc> target = new QueryRequest<>(
                 "select * from simple_doc where simple_doc_code like ?",
                 simple_doc_pk,
@@ -44,13 +44,13 @@ public class PDFWriter {
 
 
         if(data.getComplaint_category_code().contains("AA")){
-            resident_registration(data,rrn,mem,dis);
+            resident_registration(data, rrn, mem, dis, outputPath);
         }else if(data.getComplaint_category_code().equals("AB")){
-            resident_registration_card(data,rrn,mem,dis);
+            resident_registration_card(data, rrn, mem, dis, outputPath);
         }
     }
 
-    private void resident_registration(Simple_doc data,String rrn,Members user,District dis){
+    private void resident_registration(Simple_doc data,String rrn,Members user,District dis, String outputPath){
         String filePath = "resources/pdf/주민등록표 열람 또는 등ㆍ초본 교부 신청서.pdf";  // 기존 PDF 경로
         String ROOT_FONT_PATH = "resources/font/NotoSansKR-VariableFont_wght.ttf";
         String check = "○";
@@ -193,14 +193,14 @@ public class PDFWriter {
             }
 
             // 새 파일로 저장
-            document.save("resources/pdf/주민등록표 열람 또는 등ㆍ초본 교부 신청서" + user.getMember_name() + ".pdf");
+            document.save(outputPath);
             System.out.println("텍스트 추가 완료!");
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private void resident_registration_card(Simple_doc data, String rrn, Members user, District dis){
+    private void resident_registration_card(Simple_doc data, String rrn, Members user, District dis, String outputPath){
 
 
 

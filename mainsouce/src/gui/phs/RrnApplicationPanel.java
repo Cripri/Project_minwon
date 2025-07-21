@@ -243,7 +243,7 @@ public class RrnApplicationPanel extends JPanel {
                                 case "9. 동거인":
                                     ndoc.setRoommate("T");
                                     break;
-                                case "10. 개인 인적 사항 변경 내용":
+                                case "1. 개인 인적 사항 변경 내용":
                                     ndoc.setpersonal_change_details("T");
                                     break;
                             }
