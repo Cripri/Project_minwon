@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import function.connector.Members;
+import function.connector.QueryRequest;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
 import gui.mainframe.components.RoundedButton;
@@ -150,10 +151,25 @@ public class GuestLoginPanel extends JPanel {
 			m.setMember_phonenum(phoneNumberField.getText());
 			//m.setDistrict_code(null);
 			
+			// 중복 여부 확인
+			// 전체 확인해서 동일한거 있으면 안만들고 MainFrameState에 있는 member로 값 넣어주고
+			// 동일한거 없으면 insert해주기. 이따 집가서해 쒸빨
+		    QueryRequest<Members> checkRequest = new QueryRequest<>(
+		        "SELECT * FROM members WHERE member_name = ? ",
+		        m.getMember_name(),
+		        Members.class,
+		        MainFrameState.civil
+		    );
+
+		    Members existing = checkRequest.getSingleResult();
+		    if (existing != null) {
+		        Get_pop_up_frames.get_public_alarm_frame("이미 등록된 비회원 정보입니다.");
+		        return;
+		    } else {
+		    	MainFrameState.civil.insert(m);
+		    }
+			
 			System.out.println(m);
-			// 완성되면 주석 풀기
-			MainFrameState.civil.insert(m);
-			// 다 만들어 두시고 가시면 나는 어찌하라는것인가
 			
 		});
 
