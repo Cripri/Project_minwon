@@ -1,22 +1,27 @@
 package gui.mainframe;
 
+import static gui.mainframe.MainFrameState.card;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
@@ -26,6 +31,7 @@ import javax.swing.border.LineBorder;
 import function.connector.Complaint_category_info;
 import function.connector.Department;
 import function.connector.Employees;
+import function.connector.QueryRequest;
 import function.connector.Simple_doc;
 import function.connector.Sinmungo;
 import gui.mainframe.components.RoundedButton;
@@ -96,7 +102,13 @@ public class MyPage extends JPanel {
         requestTableContainer.setLayout(new BoxLayout(requestTableContainer, BoxLayout.Y_AXIS));
         container.add(requestTableContainer, BorderLayout.CENTER);
 
-        List<Sinmungo> list = MainFrameState.civil.selectAll(Sinmungo.class);
+        QueryRequest<Sinmungo> request = new QueryRequest<>(
+        		"SELECT * FROM sinmungo WHERE member_code = ?",
+        		MainFrameState.member.getMember_code(),
+        		Sinmungo.class,
+        		MainFrameState.civil
+        		);
+        List<Sinmungo> list = request.getResultList();
         
         // 페이지네이션
         JPanel navPanel = new JPanel();
@@ -123,7 +135,7 @@ public class MyPage extends JPanel {
         navPanel.add(prev);
 
         // 페이지 번호 버튼 생성
-        int totalRows = list.size();
+        int totalRows = list == null ? 0 : list.size();
         int totalPages = (int) Math.ceil((double) totalRows / PAGE_SIZE);
 
         for (int i = 0; i < totalPages; i++) {
@@ -153,8 +165,16 @@ public class MyPage extends JPanel {
 
         String[] headers = {"번호", "제목", "처리기관", "등록일", "답변일"};
         int[] columnWidths = {80, 920, 200, 150, 150};
-
-        List<Sinmungo> list = MainFrameState.civil.selectAll(Sinmungo.class);
+        
+        QueryRequest<Sinmungo> request = new QueryRequest<>(
+        		"SELECT * FROM sinmungo WHERE member_code like ?",
+        		MainFrameState.member.getMember_code(),
+        		Sinmungo.class,
+        		MainFrameState.civil
+        		);
+        
+        List<Sinmungo> list = request.getResultList();
+           
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         Font font = new Font("맑은 고딕", Font.PLAIN, 13);
@@ -182,12 +202,17 @@ public class MyPage extends JPanel {
 
         // 현재 페이지 데이터
         int start = requestCurrentPage * PAGE_SIZE;
-        int end = Math.min(start + PAGE_SIZE, list.size());
+        int end = Math.min(start + PAGE_SIZE, list == null ? 0 : list.size());
 
         for (int i = start; i < end; i++) {
             Sinmungo sinmungo = list.get(i);
             Employees emp = MainFrameState.civil.find(Employees.class, sinmungo.getEmployee_code());
-            Department dept = MainFrameState.civil.find(Department.class, emp.getDepartment_code());
+            Department dept;
+            if (emp != null) {
+            	dept = MainFrameState.civil.find(Department.class, emp.getDepartment_code());
+            } else {
+            	dept = null;
+            }
 
             JPanel rowPanel = new JPanel();
             rowPanel.setLayout(new BoxLayout(rowPanel, BoxLayout.X_AXIS));
@@ -199,7 +224,7 @@ public class MyPage extends JPanel {
             String[] data = {
                 String.valueOf(sinmungo.getSinmungo_code()),
                 sinmungo.getSinmungo_title(),
-                dept.getDepartment_name(),
+                dept != null ? dept.getDepartment_name() : "판별 불가",
                 formatter.format(sinmungo.getCreate_date()),
                 sinmungo.getAnswer_date() == null ? "답변 없음" : formatter.format(sinmungo.getAnswer_date())
             };
@@ -216,8 +241,15 @@ public class MyPage extends JPanel {
             rowPanel.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
-                    System.out.println("신청내역 클릭: " + sinmungo.getSinmungo_code());
-
+                	String panelName = "detailPanel_" + sinmungo.getSinmungo_code();
+                	boolean exists = Arrays.stream(card.getComponents())
+                	    .anyMatch(c -> panelName.equals(c.getName()));
+                	if (!exists) {
+                	    SinmungoDetailPanel panel = new SinmungoDetailPanel(sinmungo.getSinmungo_code(), "마이페이지");
+                	    panel.setName(panelName);
+                	    card.add(panel, panelName);
+                	}
+                	card.show(panelName);
                 }
                 @Override
                 public void mouseEntered(MouseEvent e) {
@@ -248,7 +280,13 @@ public class MyPage extends JPanel {
         issueTableContainer.setLayout(new BoxLayout(issueTableContainer, BoxLayout.Y_AXIS));
         container.add(issueTableContainer, BorderLayout.CENTER);
 
-        List<Simple_doc> list = MainFrameState.civil.selectAll(Simple_doc.class);
+        QueryRequest<Simple_doc> request = new QueryRequest<>(
+        		"SELECT * FROM simple_doc WHERE member_code like ?",
+        		MainFrameState.member.getMember_code(),
+        		Simple_doc.class,
+        		MainFrameState.civil
+        		);
+        List<Simple_doc> list = request.getResultList();
         
         // 페이지네이션 버튼
         JPanel navPanel = new JPanel();
@@ -265,7 +303,7 @@ public class MyPage extends JPanel {
         });
 
         next.addActionListener(e -> {
-            int totalRows = list.size();
+            int totalRows = list == null ? 0 : list.size();
             if ((issueCurrentPage + 1) * PAGE_SIZE < totalRows) {
                 issueCurrentPage++;
                 updateIssueTable();
@@ -275,7 +313,7 @@ public class MyPage extends JPanel {
         navPanel.add(prev);
 
         // 페이지 번호 버튼
-        int totalRows = list.size();
+        int totalRows = list == null ? 0 : list.size();
         int totalPages = (int) Math.ceil((double) totalRows / PAGE_SIZE);
 
         for (int i = 0; i < totalPages; i++) {
@@ -303,10 +341,18 @@ public class MyPage extends JPanel {
     private void updateIssueTable() {
         issueTableContainer.removeAll();
 
-        String[] headers = {"번호", "신청문서", "출력", "등록일", "처리일"};
+        String[] headers = {"번호", "신청문서", "저장", "등록일", "처리일"};
         int[] columnWidths = {80, 920, 200, 150, 150};
 
-        List<Simple_doc> list = MainFrameState.civil.selectAll(Simple_doc.class);
+        QueryRequest<Simple_doc> request = new QueryRequest<>(
+        		"SELECT * FROM simple_doc WHERE member_code like ?",
+        		MainFrameState.member.getMember_code(),
+        		Simple_doc.class,
+        		MainFrameState.civil
+        		);
+        List<Simple_doc> list = request.getResultList();
+        
+//        List<Simple_doc> list = MainFrameState.civil.selectAll(Simple_doc.class);
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         Font font = new Font("맑은 고딕", Font.PLAIN, 13);
@@ -334,7 +380,7 @@ public class MyPage extends JPanel {
 
         // 현재 페이지 데이터
         int start = issueCurrentPage * PAGE_SIZE;
-        int end = Math.min(start + PAGE_SIZE, list.size());
+        int end = Math.min(start + PAGE_SIZE, list == null ? 0 : list.size());
 
         for (int i = start; i < end; i++) {
             Simple_doc doc = list.get(i);
@@ -345,12 +391,12 @@ public class MyPage extends JPanel {
             rowPanel.setBackground(Color.WHITE);
             rowPanel.setPreferredSize(new Dimension(0, rowHeight));
             rowPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, rowHeight));
-            rowPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+//            rowPanel.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
             String[] data = {
                 String.valueOf(doc.getSimple_doc_code()),
                 category.getComplaint_category_name(),
-                "출력", // 출력 버튼 대신 텍스트 자리
+                "저장", // 출력 버튼 대신 텍스트 자리
                 formatter.format(doc.getCreate_date()),
                 doc.getComplete_date() == null ? "처리중" : formatter.format(doc.getComplete_date())
             };
@@ -364,14 +410,58 @@ public class MyPage extends JPanel {
                     btnWrapper.setMinimumSize(new Dimension(columnWidths[j], rowHeight));
                     btnWrapper.setLayout(new GridBagLayout());
 
-                    RoundedButton btn = new RoundedButton("출력");
+                    RoundedButton btn = new RoundedButton("저장");
                     btn.setPreferredSize(new Dimension(70, 30));
                     btn.setFont(font);
                     btn.setForeground(Color.WHITE);
                     btn.setFocusPainted(false);
                     btn.setBorderPainted(false);
                     btn.addActionListener(e -> {
-                        System.out.println("출력 클릭: " + doc.getSimple_doc_code());
+                    	JFileChooser fileChooser = new JFileChooser();
+                    	fileChooser.setDialogTitle("파일 저장 위치 선택");
+                    	
+                    	// 타임스탬프 생성
+//                        String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+                        String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+                        // 기본 파일 이름 설정
+                        String defaultFileName = "발급_서류_" + timestamp + ".pdf";
+                        fileChooser.setSelectedFile(new File(defaultFileName));
+
+                        int result = fileChooser.showSaveDialog(null);
+
+                        if (result == JFileChooser.APPROVE_OPTION) {
+                            File file = fileChooser.getSelectedFile();
+
+                            // .pdf 확장자 자동 추가
+                            if (!file.getName().toLowerCase().endsWith(".pdf")) {
+                                file = new File(file.getAbsolutePath() + ".pdf");
+                            }
+
+                            // 덮어쓰기 확인
+                            if (file.exists()) {
+                                int overwrite = JOptionPane.showConfirmDialog(
+                                    null,
+                                    "이미 같은 이름의 파일이 존재합니다.\n덮어쓰시겠습니까?",
+                                    "파일 덮어쓰기 확인",
+                                    JOptionPane.YES_NO_OPTION,
+                                    JOptionPane.WARNING_MESSAGE
+                                );
+                                if (overwrite != JOptionPane.YES_OPTION) {
+                                    return;
+                                }
+                            }
+
+                    	    try {
+                    	    	// PDFWriter 여따가 넣기
+
+                    	        JOptionPane.showMessageDialog(null, "파일이 성공적으로 저장되었습니다.");
+                    	    } catch (Exception ex) {
+                    	        ex.printStackTrace();
+                    	        JOptionPane.showMessageDialog(null, "파일 저장 중 오류가 발생했습니다.");
+                    	    }
+                    	}
+//                        System.out.println("출력 클릭: " + doc.getSimple_doc_code());
                     });
 
                     btnWrapper.add(btn);
@@ -386,20 +476,20 @@ public class MyPage extends JPanel {
                 }
             }
 
-            rowPanel.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    System.out.println("행 클릭: " + doc.getSimple_doc_code());
-                }
-                @Override
-                public void mouseEntered(MouseEvent e) {
-                    rowPanel.setBackground(new Color(230, 230, 250));
-                }
-                @Override
-                public void mouseExited(MouseEvent e) {
-                    rowPanel.setBackground(Color.WHITE);
-                }
-            });
+//            rowPanel.addMouseListener(new MouseAdapter() {
+//                @Override
+//                public void mouseClicked(MouseEvent e) {
+//                    System.out.println("행 클릭: " + doc.getSimple_doc_code());
+//                }
+//                @Override
+//                public void mouseEntered(MouseEvent e) {
+//                    rowPanel.setBackground(new Color(230, 230, 250));
+//                }
+//                @Override
+//                public void mouseExited(MouseEvent e) {
+//                    rowPanel.setBackground(Color.WHITE);
+//                }
+//            });
             issueTableContainer.add(rowPanel);
         }
         issueTableContainer.revalidate();

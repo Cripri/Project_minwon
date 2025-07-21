@@ -213,11 +213,29 @@ public class RrnApplicationPanel extends JPanel {
                                 case "4. 발생일 / 신고일":
                                     ndoc.setoccurrence_date("T");
                                     break;
+                                case "5. 변동 사유":
+                                    ndoc.setprevious_address("T");
+                                    if(simcheck.get("세대").isSelected()){
+                                        ndoc.setprevious_address_self("T");
+                                    }
+                                    if(simcheck.get("세대원").isSelected()){
+                                        ndoc.setprevious_address_member("T");
+                                    }
+                                    break;
                                 case "5. 세대주의 성명과 세대주와의 관계":
-
+                                    ndoc.sethead_relationship("T");
                                     break;
                                 case "6. 교부 대상자 외 세대주·세대원·외국인등록 이름":
                                     ndoc.sethead_name("T");
+                                    break;
+                                case "7. 주민등록번호 뒷자리":
+                                    ndoc.setrrn_last7("T");
+                                    if(simcheck.get("본인").isSelected()){
+                                        ndoc.setrrn_last7_self("T");
+                                    }
+                                    if(simcheck.get("세대원").isSelected()){
+                                        ndoc.setrrn_last7_member("T");
+                                    }
                                     break;
                                 case "8. 세대원의 세대주와의 관계":
                                     ndoc.sethead_relationship("T");

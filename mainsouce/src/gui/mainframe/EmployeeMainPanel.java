@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -31,55 +32,38 @@ import gui.phs.ComplaintAnswerListPanel;
 public class EmployeeMainPanel extends JPanel {
     private static final long serialVersionUID = 1L;
 
-    // 클릭 이벤트 전달을 위한 인터페이스
-    public interface OnItemClickListener {
-        void onClick(String itemTitle);
-    }
-
-    private OnItemClickListener itemClickListener;
-
-    // 아이템 데이터 클래스
     public static class Item {
         private final String title;
-        private final String count; // null 가능
+        private final String count;
+        private final String type;
 
-        public Item(String title, String count) {
+        public Item(String title, String count, String type) {
             this.title = title;
             this.count = count;
+            this.type = type;
         }
 
-        public String getTitle() {
-            return title;
-        }
-
-        public String getCount() {
-            return count;
-        }
+        public String getTitle() { return title; }
+        public String getCount() { return count; }
+        public String getType() { return type; }
     }
 
-    public EmployeeMainPanel() {
-        
-    }
+    public EmployeeMainPanel() {}
 
-    // 로그인 후 호출되는 메서드
     public void refreshPanel() {
-        this.removeAll(); // 기존 컴포넌트 제거
+        this.removeAll();
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(217, 217, 217));
         this.setBorder(new EmptyBorder(40, 40, 40, 40));
 
-        // 민원 데이터 조회
-        QueryRequest<Sinmungo> request = new QueryRequest<>(
-            "SELECT * FROM sinmungo WHERE status like ?", 
-            "P",
-            Sinmungo.class,
-            MainFrameState.civil
-        );
-        List<Sinmungo> 접수중리스트 = request.getResultList();
-        List<Sinmungo> 할당된민원 = new ArrayList<>();
-        List<Sinmungo> 처리중민원 = new ArrayList<>();
-        List<Sinmungo> 부서변경요청 = new ArrayList<>();
-        List<Sinmungo> 처리완료 = new ArrayList<>();
+        int employeeCode = MainFrameState.employee.getEmployee_code();
+
+        List<Sinmungo> 접수중리스트 = fetchComplaintsByStatus("P");
+        List<Sinmungo> 할당된민원 = fetchComplaintsByStatusAndEmployee("P", employeeCode);
+        List<Sinmungo> 처리중민원 = fetchComplaintsByStatus("I");
+        List<Sinmungo> 부서변경요청 = fetchComplaintsByStatus("X");
+        List<Sinmungo> 처리완료 = fetchComplaintsByStatus("C");
+        // TODO 처리불가는 어떻게 처리?
         List<Sinmungo> 처리불가 = new ArrayList<>();
 
         Employees e = MainFrameState.employee;
@@ -87,7 +71,6 @@ public class EmployeeMainPanel extends JPanel {
             Position p = MainFrameState.civil.find(Position.class, e.getPosition_code());
             Department d = MainFrameState.civil.find(Department.class, e.getDepartment_code());
 
-            // 상단 패널 (유저 정보 + 검색바)
             JPanel employeeTopPanel = new JPanel(new BorderLayout());
             employeeTopPanel.setBackground(new Color(217, 217, 217));
             JPanel searchBarPanel = new JPanel(new GridLayout(0, 1));
@@ -98,14 +81,13 @@ public class EmployeeMainPanel extends JPanel {
             
             SearchBarPanel searchBar = new SearchBarPanel();
             searchBarPanel.add(searchBar);
-            
             searchBar.addSearchListener(event -> {
                 String query = searchBar.getSearchText();
                 ComplaintAnswerListPanel searchedPanel = new ComplaintAnswerListPanel(query);
                 MainFrameState.card.add(query + "_searchedPanel", searchedPanel);
                 MainFrameState.card.show(query + "_searchedPanel");
             });
-            
+
             employeeTopPanel.add(searchBarPanel, BorderLayout.CENTER);
 
             JLabel rankTitleLabel = new JLabel("직급");
@@ -131,12 +113,10 @@ public class EmployeeMainPanel extends JPanel {
             add(employeeTopPanel, BorderLayout.NORTH);
         }
 
-        // 중앙 본문 구성
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(new Color(217, 217, 217));
 
-        // 라벨 3개 행
         JPanel labelPanel = new JPanel(new GridLayout(0, 3, 20, 0));
         labelPanel.setBackground(new Color(217, 217, 217));
 
@@ -155,28 +135,27 @@ public class EmployeeMainPanel extends JPanel {
         labelPanel.add(label3);
         centerPanel.add(labelPanel);
 
-        // 흰색 박스 패널 안에 민원 요약 배치
         JPanel whiteWrapper = new JPanel(new GridLayout(0, 3, 20, 0));
         whiteWrapper.setBackground(Color.WHITE);
         whiteWrapper.setBorder(new EmptyBorder(10, 30, 30, 30));
 
         whiteWrapper.add(createSection(List.of(
-                new Item("대기중인 민원", String.valueOf(접수중리스트.size())),
-                new Item("할당된 민원", String.valueOf(할당된민원.size())),
-                new Item("처리중 민원", String.valueOf(처리중민원.size())),
-                new Item("부서 변경 요청", String.valueOf(부서변경요청.size()))
+            new Item("대기중인 민원", String.valueOf(접수중리스트.size()), "waiting"),
+            new Item("할당된 민원", String.valueOf(할당된민원.size()), "assigned"),
+            new Item("처리중 민원", String.valueOf(처리중민원.size()), "processing"),
+            new Item("부서 변경 요청", String.valueOf(부서변경요청.size()), "reassign")
         )));
 
         whiteWrapper.add(createSection(List.of(
-                new Item("확인 대기중(결재) 민원", null),
-                new Item("결재대기중", "3건"),
-                new Item("결재중", "3건"),
-                new Item("요청 승인 대기", "3건")
+            new Item("확인 대기중(결재) 민원", null, "approval_wait"),
+            new Item("결재대기중", "3건", "approval_pending"),
+            new Item("결재중", "3건", "approving"),
+            new Item("요청 승인 대기", "3건", "approval_requested")
         )));
 
         whiteWrapper.add(createSection(List.of(
-                new Item("처리완료", String.valueOf(처리완료.size())),
-                new Item("처리불가", "1건")
+            new Item("처리완료", String.valueOf(처리완료.size()), "done"),
+            new Item("처리불가", "1건", "rejected")
         )));
 
         centerPanel.add(whiteWrapper);
@@ -191,8 +170,8 @@ public class EmployeeMainPanel extends JPanel {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(new Color(217, 217, 217));
         panel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY),
-                new EmptyBorder(10, 15, 10, 15)));
+            BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+            new EmptyBorder(10, 15, 10, 15)));
 
         for (Item item : items) {
             JPanel row = new JPanel(new BorderLayout());
@@ -205,9 +184,7 @@ public class EmployeeMainPanel extends JPanel {
                 label.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(MouseEvent e) {
-                        if (itemClickListener != null) {
-                            itemClickListener.onClick(item.getTitle());
-                        }
+                        openComplaintPanel(item);
                     }
                 });
             } else {
@@ -224,12 +201,7 @@ public class EmployeeMainPanel extends JPanel {
                 countBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 countBtn.setOpaque(false);
 
-                countBtn.addActionListener(e -> {
-                    if (itemClickListener != null) {
-                        itemClickListener.onClick(item.getTitle());
-                    }
-                });
-
+                countBtn.addActionListener(e -> openComplaintPanel(item));
                 row.add(countBtn, BorderLayout.EAST);
             }
 
@@ -240,8 +212,52 @@ public class EmployeeMainPanel extends JPanel {
         return panel;
     }
 
-    // 외부에서 클릭 이벤트 리스너 등록하는 메서드
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.itemClickListener = listener;
+    private void openComplaintPanel(Item item) {
+        ComplaintAnswerListPanel panel;
+        String panelName;
+
+        switch (item.getType()) {
+            case "waiting" -> {
+                panel = new ComplaintAnswerListPanel();
+                panelName = "waitingPanel";
+            }
+            case "assigned" -> {
+                int empCode = MainFrameState.employee.getEmployee_code();
+                panel = new ComplaintAnswerListPanel(empCode);
+                panelName = "assignedPanel_" + empCode;
+            }
+            case "processing" -> {
+                int empCode = MainFrameState.employee.getEmployee_code();
+                panel = new ComplaintAnswerListPanel("처리중", empCode);
+                panelName = "processingPanel_" + empCode;
+            }
+            default -> {
+                panel = new ComplaintAnswerListPanel(); // fallback
+                panelName = "defaultPanel";
+            }
+        }
+
+        MainFrameState.card.add(panelName, panel);
+        MainFrameState.card.show(panelName);
     }
+    
+    private List<Sinmungo> fetchComplaintsByStatus(String status) {
+      QueryRequest<Sinmungo> request = new QueryRequest<>(
+          "SELECT * FROM sinmungo WHERE status LIKE ?",
+          status,
+          Sinmungo.class,
+          MainFrameState.civil
+      );
+      return request.getResultList();
+  }
+
+  private List<Sinmungo> fetchComplaintsByStatusAndEmployee(String status, int employeeCode) {
+      QueryRequest<Sinmungo> request = new QueryRequest<>(
+          "SELECT * FROM sinmungo WHERE status LIKE ? AND employee_code = ?",
+          Arrays.asList(status, employeeCode),
+          Sinmungo.class,
+          MainFrameState.civil
+      );
+      return request.getResultList();
+  }
 }

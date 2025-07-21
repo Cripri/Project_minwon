@@ -2,12 +2,15 @@ package gui.mainframe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import gui.mainframe.components.IconButton;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
+import gui.phs.CivilComplaintDetailPanel;
 
 // 버튼들은 나중에 픽토그램 이미지로 변경 예정
 public class FrameTop extends JPanel {
@@ -81,13 +84,24 @@ public class FrameTop extends JPanel {
 			loginBtn = new IconButton("로그아웃", "resources/IconImage/로그아웃.png");
 			if (emplogin) {
 				loginBtn.addActionListener((e) -> {
+					MainFrameState.card.remove(MainFrameState.employeeMainPanel);
 					MainFrameState.employee = null; // 로그아웃 처리
+					Get_pop_up_frames.get_log_in_out_frame(null);
 					refreshButtons(); // 버튼 갱신
 					MainFrameState.card.show("login");
 				});
 			} else if (login) {
 				loginBtn.addActionListener((e) -> {
+					Component[] components = MainFrameState.card.getComponents();
+                	for (Component comp : components) {
+                	    if (comp instanceof MyPage) {
+                	    	// 마이페이지가 존재한다면
+                	        MainFrameState.card.remove(comp);
+                	        break;
+                	    }
+                	}
 					MainFrameState.member = null; // 로그아웃 처리
+					Get_pop_up_frames.get_log_in_out_frame(null);
 					refreshButtons(); // 버튼 갱신
 					MainFrameState.card.show("login");
 				});

@@ -10,6 +10,7 @@ import gui.popup.wldb.pop_up_material.Botton_input_state;
 import gui.popup.wldb.pop_up_material.Color_list;
 import gui.popup.wldb.pop_up_material.Get_base;
 import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
+//import gui.popup.wldb.pop_up_material.Get_pop_up_buttons;
 
 public class Button_test {
 	
@@ -19,6 +20,7 @@ public class Button_test {
 	static Botton_input_state sinmungo_state = new Botton_input_state();
 	
 	static Get_pop_up_frames get_pop = new Get_pop_up_frames();
+//	static Get_pop_up_buttons get_pop = new Get_pop_up_buttons();
 	
 	
 	public static void main(String[] args) {
@@ -26,16 +28,16 @@ public class Button_test {
 		Get_base set = new Get_base();
 		
 		
-		
-		JButton employees_creation = get_pop.get_account_makes_button();
-		
-		JButton employees_fix = get_pop.get_account_fix_button();
-		
-		JButton employees_delet = get_pop.get_account_delet_button();
-		
-		JButton sinmungo_reply = get_pop.get_sinmungo_reply_button();
-		
-		JButton pop_ups = get_pop.get_alarm_button();
+//		
+//		JButton employees_creation = get_pop.get_account_makes_button();
+//		
+//		JButton employees_fix = get_pop.get_account_fix_button();
+//		
+//		JButton employees_delet = get_pop.get_account_delet_button();
+//		
+//		JButton sinmungo_reply = get_pop.get_sinmungo_reply_button();
+//		
+//		JButton pop_ups = get_pop.get_alarm_button();
 		
 		
 		JFrame test = set.get_base("시험용");
@@ -45,11 +47,11 @@ public class Button_test {
 		// 확인 결과 버퍼링 문제인듯...
 		
 		
-		test.add(employees_creation);
-		test.add(employees_fix);
-		test.add(employees_delet);
-		test.add(sinmungo_reply);
-		test.add(pop_ups);
+//		test.add(employees_creation);
+//		test.add(employees_fix);
+//		test.add(employees_delet);
+//		test.add(sinmungo_reply);
+//		test.add(pop_ups);
 		
 	}
 

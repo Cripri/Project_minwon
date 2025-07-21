@@ -52,8 +52,24 @@ public class ComplaintAnswerListPanel extends JPanel {
         this.employeeCode = employeeCode;
         initUI();
     }
+    
+    public String getSearchKeyword() {
+			return searchKeyword;
+		}
 
-    private void initUI() {
+		public void setSearchKeyword(String searchKeyword) {
+			this.searchKeyword = searchKeyword;
+		}
+
+		public Integer getEmployeeCode() {
+			return employeeCode;
+		}
+
+		public void setEmployeeCode(Integer employeeCode) {
+			this.employeeCode = employeeCode;
+		}
+
+		private void initUI() {
     	setLayout(new BorderLayout());
         setBackground(new Color(217, 217, 217));
 
@@ -64,10 +80,10 @@ public class ComplaintAnswerListPanel extends JPanel {
 
         JLabel title = new JLabel("민원신청내역");
         title.setFont(new Font("맑은 고딕", Font.BOLD, 30));
-        JLabel subtitle = new JLabel("클릭한 민원에 대한 내용 또는 검색결과 / 할당된 민원");
-        subtitle.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
+//        JLabel subtitle = new JLabel("클릭한 민원에 대한 내용 또는 검색결과 / 할당된 민원");
+//        subtitle.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
         titlePanel.add(title);
-        titlePanel.add(subtitle);
+//        titlePanel.add(subtitle);
 
         add(titlePanel, BorderLayout.NORTH);
 
@@ -92,8 +108,12 @@ public class ComplaintAnswerListPanel extends JPanel {
     private JTable createFilteredTable() {
         String[] columnNames = {"접수 번호", "제목", "처리상태", "처리기관", "등록일"};
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        
-        StringBuilder sql = new StringBuilder("SELECT * FROM sinmungo WHERE status = 'P'");
+        StringBuilder sql;
+        if (searchKeyword.equals("처리중")) {
+        	sql = new StringBuilder("SELECT * FROM sinmungo WHERE status = 'I'");
+        } else {
+        	sql = new StringBuilder("SELECT * FROM sinmungo WHERE status = 'P'");
+        }
         List<Object> params = new ArrayList<>();
 
         if (employeeCode != null) {
@@ -118,11 +138,16 @@ public class ComplaintAnswerListPanel extends JPanel {
         for (int i = 0; i < list.size(); i++) {
             Sinmungo sinmungo = list.get(i);
             Employees emp = MainFrameState.civil.find(Employees.class, sinmungo.getEmployee_code());
-            Department dept = MainFrameState.civil.find(Department.class, emp.getDepartment_code());
+            Department dept;
+            if (emp != null) {
+            	dept = MainFrameState.civil.find(Department.class, emp.getDepartment_code());
+            } else {
+            	dept = null;
+            }
 
             data[i][0] = sinmungo.getSinmungo_code();
             data[i][1] = sinmungo.getSinmungo_title();
-            data[i][2] = dept.getDepartment_name();
+            data[i][2] = dept != null ? dept.getDepartment_name() : "판별 불가";
             data[i][3] = sdf.format(sinmungo.getCreate_date());
             data[i][4] = sinmungo.getAnswer_date() != null ? sdf.format(sinmungo.getAnswer_date()) : "답변 없음";
         }
@@ -154,19 +179,19 @@ public class ComplaintAnswerListPanel extends JPanel {
                 if (row >= 0) {
                     Integer sinmungoCode = Integer.parseInt(table.getValueAt(row, 0).toString());
 
-                    Component[] components = MainFrameState.card.getComponents();
-                	for (Component comp : components) {
-                	    if (comp instanceof CivilComplaintDetailPanel) {
-                	    	// 디테일 패널이 원래 있었다면 제거
-                	        MainFrameState.card.remove(comp);
-                	        break;
-                	    }
-                	}
+//                    Component[] components = MainFrameState.card.getComponents();
+//                	for (Component comp : components) {
+//                	    if (comp instanceof CivilComplaintDetailPanel) {
+//                	    	// 디테일 패널이 원래 있었다면 제거
+//                	        MainFrameState.card.remove(comp);
+//                	        break;
+//                	    }
+//                	}
 
                 	// 새로운 상세 패널 생성 후 추가
                 	CivilComplaintDetailPanel detailPanel = new CivilComplaintDetailPanel(sinmungoCode);
-                	MainFrameState.card.add(detailPanel, "detail");
-                	MainFrameState.card.show("detail");
+                	MainFrameState.card.add(detailPanel, "detail_" + sinmungoCode);
+                	MainFrameState.card.show("detail_" + sinmungoCode);
                 }
             }
         });

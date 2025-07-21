@@ -88,7 +88,7 @@ public class SinmungoListPanel extends JPanel {
         writeBtn.setFocusPainted(false);
         writeBtn.addActionListener((e) -> {
         	if (MainFrameState.member == null) {
-        		MainFrameState.postLoginTarget = "sinmungoInfo";
+        		MainFrameState.postLoginTarget = "sinmungoinfoPanel";
         		MainFrameState.card.show("login");        		
         	} else {
         		Component[] components = MainFrameState.card.getComponents();
