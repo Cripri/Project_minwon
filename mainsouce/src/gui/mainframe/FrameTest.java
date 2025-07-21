@@ -37,7 +37,7 @@ public class FrameTest extends JFrame {
 		SinmungoinfoPanel sinmungoinfoPanel = new SinmungoinfoPanel();
 		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
-		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();
+//		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();
 		RrnApplicationPanel rrnApplicationPanel = new RrnApplicationPanel();
 		WriteContent writeContent = new WriteContent();
 		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel();
@@ -59,14 +59,14 @@ public class FrameTest extends JFrame {
 		cardPage.add("guestLogin", guestLogin);
 		
 		cardPage.add("sinmungoinfoPanel",sinmungoinfoPanel);
-		cardPage.add("complaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함
-		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
-		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel); // 완성 창 제목 넣어주면 좋음
-		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); // 주민번호 지워야함
-		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
-		cardPage.add("writeContent", writeContent); // 작성완료 버튼 지우기
-		cardPage.add("managerMenuPanel", managerMenuPanel); // 위에 제목 만드
-		
+		cardPage.add("complaintAnswerListPanel", complaintAnswerListPanel); 
+		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
+		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel);
+//		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); 
+		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
+		cardPage.add("writeContent", writeContent); 
+		cardPage.add("managerMenuPanel", managerMenuPanel); 
+//		
 
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();

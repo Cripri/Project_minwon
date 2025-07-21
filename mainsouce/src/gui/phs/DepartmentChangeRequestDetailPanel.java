@@ -2,27 +2,11 @@ package gui.phs;
 
 import static gui.mainframe.MainFrameState.civil;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import function.connector.Department;
 import function.connector.Employees;
@@ -33,38 +17,37 @@ import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 public class DepartmentChangeRequestDetailPanel extends JPanel {
 
-    private final Font defaultFont = new Font("맑은고딕", Font.PLAIN, 14);
-    private final Font boldFont = new Font("맑은고딕", Font.BOLD, 14);
-    private final Font titleFont = new Font("맑은고딕", Font.BOLD, 20);
+    private final Font defaultFont = new Font("\uB9D1\uC740\uACE0\uB515", Font.PLAIN, 14);
+    private final Font boldFont = new Font("\uB9D1\uC740\uACE0\uB515", Font.BOLD, 14);
+    private final Font titleFont = new Font("\uB9D1\uC740\uACE0\uB515", Font.BOLD, 20);
 
-    private static Integer pk = 1;
-    private static Sinmungo sinmungo_info = civil.find(Sinmungo.class, pk);
-    private static ArrayList<Employees> emp_list;
-    // 나중에 다른패널에서 더 받아올수있게되면 지워야할듯
-    
-    
-    public DepartmentChangeRequestDetailPanel() {
+    private final Sinmungo sinmungo_info;
+    private ArrayList<Employees> emp_list;
+
+    public DepartmentChangeRequestDetailPanel(Integer pk) {
+        this.sinmungo_info = civil.find(Sinmungo.class, pk);
+        setName("DepartmentChangeDetail_" + pk);
+        initUI();
+    }
+
+    private void initUI() {
         setLayout(new BorderLayout(10, 10));
         setBackground(new Color(200, 200, 200));
 
-        // 🔹 중앙 패널
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         centerPanel.setBackground(new Color(220, 220, 220));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 
-        // 제목
         JLabel headerLabel = new JLabel("부서 변경 요청 내역", SwingConstants.CENTER);
         headerLabel.setFont(titleFont);
         headerLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         headerLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
         centerPanel.add(headerLabel);
 
-        // 신청인 정보
         JPanel infoPanel = new JPanel(new GridLayout(2, 3, 10, 5));
         infoPanel.setBackground(new Color(220, 220, 220));
         infoPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
-        
 
         infoPanel.add(wrapLeftAlignedLabel("접수번호"));
         infoPanel.add(wrapLeftAlignedLabel("성명"));
@@ -77,7 +60,6 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         centerPanel.add(infoPanel);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // 제목 영역
         JTextArea titleArea = new JTextArea(sinmungo_info.getSinmungo_title());
         titleArea.setFont(boldFont);
         titleArea.setEditable(false);
@@ -89,7 +71,6 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         centerPanel.add(titleArea);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
-        // 민원내용
         JTextArea contentArea = new JTextArea(sinmungo_info.getSinmungo_content());
         contentArea.setFont(defaultFont);
         contentArea.setEditable(false);
@@ -102,7 +83,6 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
 
         add(centerPanel, BorderLayout.CENTER);
 
-        // 🔹 하단 패널
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BoxLayout(bottomPanel, BoxLayout.Y_AXIS));
         bottomPanel.setBackground(new Color(220, 220, 220));
@@ -125,47 +105,38 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         changeDeptButton.setPreferredSize(new Dimension(90, 30));
         changeDeptButton.setFont(defaultFont);
 
-       
-        ArrayList<Department> epartments = new ArrayList<>(civil.selectAll(Department.class));
-        String[] d_names = new String[epartments.size()];
-        Integer[] d_cord = new Integer[epartments.size()];
-        
-        for(int i = 0; i < epartments.size(); i++) {
-        	d_names[i] = epartments.get(i).getDepartment_name();
-        	d_cord[i] = epartments.get(i).getDepartment_code();
+        ArrayList<Department> departments = new ArrayList<>(civil.selectAll(Department.class));
+        String[] d_names = new String[departments.size()];
+        Integer[] d_cord = new Integer[departments.size()];
+
+        for (int i = 0; i < departments.size(); i++) {
+            d_names[i] = departments.get(i).getDepartment_name();
+            d_cord[i] = departments.get(i).getDepartment_code();
         }
-        
+
         JComboBox<String> deptComboBox = new JComboBox<>(d_names);
         deptComboBox.setPreferredSize(new Dimension(120, 30));
         deptComboBox.setFont(defaultFont);
-        
-        changeDeptButton.addActionListener(e ->{
-        	int select = deptComboBox.getSelectedIndex();
-        	
-        	if(select != -1) {
-		    	QueryRequest<Employees> request = new QueryRequest<>(
-		    			"SELECT * FROM Employees"
-		    			+ " WHERE department_code like ?",
-		    			d_cord[select],
-		    			Employees.class,
-						MainFrameState.civil        			
-		    		);
-		    	
-		    	emp_list = new ArrayList<>(request.getResultList());
-		    	Collections.shuffle(emp_list);
-		
-		    	System.out.println("작동 위치 확인1");
-		    	
-		    	boolean tf[] = {false, true};
-		    	
-				Get_pop_up_frames.get_yn_frame(
-						"정말로 " + deptComboBox.getSelectedItem() + "(으)로 변경하시겠습니까?"
-						, this
-				);
-	
-        	}
-        	
-        	
+
+        changeDeptButton.addActionListener(e -> {
+            int select = deptComboBox.getSelectedIndex();
+
+            if (select != -1) {
+                QueryRequest<Employees> request = new QueryRequest<>(
+                        "SELECT * FROM Employees WHERE department_code = ?",
+                        d_cord[select],
+                        Employees.class,
+                        MainFrameState.civil
+                );
+
+                emp_list = new ArrayList<>(request.getResultList());
+                Collections.shuffle(emp_list);
+
+                Get_pop_up_frames.get_yn_frame(
+                        "정말로 " + deptComboBox.getSelectedItem() + "(으)로 변경하시겠습니까?",
+                        this
+                );
+            }
         });
 
         JButton listButton = new JButton("목록으로");
@@ -175,9 +146,7 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         listButton.setPreferredSize(new Dimension(90, 30));
         listButton.setFont(defaultFont);
 
-        listButton.addActionListener(e -> {
-            MainFrameState.card.show("DepartmentChangeRequestPanel");
-        });
+        listButton.addActionListener(e -> MainFrameState.card.show("DepartmentChangeRequestPanel"));
 
         buttonRow.add(rejectButton);
         buttonRow.add(changeDeptButton);
@@ -208,12 +177,10 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
         label.setFont(defaultFont);
         return label;
     }
-    
-    public static void start_update() {
-    	System.out.println("작동 위치 확인2");
-    	sinmungo_info.setStatus("P");
-    	sinmungo_info.setEmployee_code(emp_list.get(0).getEmployee_code());
-    	
-    	civil.update(sinmungo_info);
-	}
+
+    public void startUpdate() {
+        sinmungo_info.setStatus("P");
+        sinmungo_info.setEmployee_code(emp_list.get(0).getEmployee_code());
+        civil.update(sinmungo_info);
+    }
 }

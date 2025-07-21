@@ -28,6 +28,7 @@ import function.connector.QueryRequest;
 import function.connector.Sinmungo;
 import gui.mainframe.components.SearchBarPanel;
 import gui.phs.ComplaintAnswerListPanel;
+import gui.phs.DepartmentChangeRequestPanel;
 
 public class EmployeeMainPanel extends JPanel {
     private static final long serialVersionUID = 1L;
@@ -230,6 +231,18 @@ public class EmployeeMainPanel extends JPanel {
                 int empCode = MainFrameState.employee.getEmployee_code();
                 panel = new ComplaintAnswerListPanel("처리중", empCode);
                 panelName = "processingPanel_" + empCode;
+            }
+            case "reassign" -> { // ✅ 부서 변경 요청 처리 추가
+                panelName = "departmentChangeRequest";
+                boolean exists = Arrays.stream(MainFrameState.card.getComponents())
+                        .anyMatch(c -> panelName.equals(c.getName()));
+                if (!exists) {
+                    DepartmentChangeRequestPanel deptPanel = new DepartmentChangeRequestPanel();
+                    deptPanel.setName(panelName);
+                    MainFrameState.card.add(panelName, deptPanel);
+                }
+                MainFrameState.card.show(panelName);
+                return; // ✅ 다른 패널 show 호출 방지
             }
             default -> {
                 panel = new ComplaintAnswerListPanel(); // fallback
