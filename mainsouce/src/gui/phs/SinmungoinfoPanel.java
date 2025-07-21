@@ -12,6 +12,7 @@ import function.isfield.FieldCheck;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.addressComboBoxPanel;
 
+import static gui.mainframe.MainFrameState.card;
 import static gui.mainframe.MainFrameState.member;
 
 public class SinmungoinfoPanel extends JPanel {
@@ -174,7 +175,8 @@ public class SinmungoinfoPanel extends JPanel {
             nsin.setMember_name(nameField.getText());
             nsin.setComplaint_area(address.findDistrictCode(address.getSido(),address.getSigungu()));
 
-
+            card.add("WriteContent",new WriteContent(nsin));
+            card.show("WriteContent");
         });
 
         completeButton.setPreferredSize(new Dimension(100, 35));

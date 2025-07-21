@@ -28,7 +28,7 @@ public class FrameTest extends JFrame {
 		LoginPanel login = new LoginPanel();
 		SimpleDocPanel simpleDoc = new SimpleDocPanel();
 //		MyPage myPage = new MyPage();
-		SinmungoListPanel sinmungoList = new SinmungoListPanel();
+//		SinmungoListPanel sinmungoList = new SinmungoListPanel();
 		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
 		SignUpPanel signUp = new SignUpPanel();
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
@@ -39,7 +39,7 @@ public class FrameTest extends JFrame {
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
 //		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();
 		RrnApplicationPanel rrnApplicationPanel = new RrnApplicationPanel();
-		WriteContent writeContent = new WriteContent();
+		//WriteContent writeContent = new WriteContent();
 		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel();
 		MainFrameState.employeeMainPanel = employeeMain;
 
@@ -50,9 +50,9 @@ public class FrameTest extends JFrame {
 		
 		cardPage.add("firstPage", firstPage);
 		cardPage.add("login", login);
-		//cardPage.add("myPage", myPage);
+//		cardPage.add("myPage", myPage);
 		cardPage.add("simpleDoc", simpleDoc);
-		cardPage.add("sinmungoList", sinmungoList);
+//		cardPage.add("sinmungoList", sinmungoList);
 		cardPage.add("employeeMain", employeeMain);
 		cardPage.add("signUp", signUp);
 		cardPage.add("userInfoEdit", userInfoEdit);
@@ -64,9 +64,8 @@ public class FrameTest extends JFrame {
 		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel);
 //		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); 
 		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
-		cardPage.add("writeContent", writeContent); 
+		//cardPage.add("writeContent", writeContent);
 		cardPage.add("managerMenuPanel", managerMenuPanel); 
-//		
 
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();

@@ -6,6 +6,7 @@ import java.awt.Component;
 
 import javax.swing.JPanel;
 
+
 public class CardLayoutPanel extends JPanel {
 
    private static final long serialVersionUID = 1L;
@@ -18,6 +19,7 @@ public class CardLayoutPanel extends JPanel {
    }
 
    public void show(String value) {
+	   
       if (!value.equals(MainFrameState.currentCard)) {
          if (MainFrameState.currentCard != null) {
             MainFrameState.history.push(MainFrameState.currentCard);
@@ -26,8 +28,9 @@ public class CardLayoutPanel extends JPanel {
          // 새로운 이동이 발생하면 future 초기화
          MainFrameState.future.clear();
          MainFrameState.currentCard = value;
+
          c.show(this, value);
-      }
+     }
    }
 
    public void prev() {

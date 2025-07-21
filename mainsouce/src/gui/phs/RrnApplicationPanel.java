@@ -7,24 +7,23 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
+import javax.swing.*;
 
+import function.connector.QueryRequest;
 import function.connector.Simple_doc;
+import function.drawingsign.DrawingSign;
+import function.pdfwriter.PDFViewerFromPath;
+import function.pdfwriter.PDFWriter;
+import gui.mainframe.MainFrameState;
 import gui.mainframe.components.addressComboBoxPanel;
 
+import static gui.mainframe.MainFrameState.civil;
 import static gui.mainframe.MainFrameState.member;
 
 public class RrnApplicationPanel extends JPanel {
@@ -178,24 +177,26 @@ public class RrnApplicationPanel extends JPanel {
         centerPanel.add(btnPanel);
         submitBtn.addActionListener(e ->{
             Simple_doc ndoc = new Simple_doc();
-            ndoc.setDistrict_code(addressCombo.findDistrictCode(addressCombo.getSido(),addressCombo.getSido()));
-            ndoc.setCreate_date(new Date());
+            ndoc.setDistrict_code(addressCombo.findDistrictCode(addressCombo.getSido(),addressCombo.getSigungu()));
+            LocalDate localDate = LocalDate.now();
+            Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            ndoc.setCreate_date(date);
             ndoc.setMember_code(member.getMember_code());
             ndoc.setDoc_count(1);
             if(option1.isSelected()){
                 ndoc.setComplaint_category_code("AA001");
 
                 if (allIssue.isSelected()) {
-                    ndoc.setAll_Included("T");
+                    ndoc.setAll_Included("Y");
                 } else {
-                    ndoc.setAll_Included("F");
+                    ndoc.setAll_Included("Y");
                     for (Map.Entry<String, JCheckBox> entry : simcheck.entrySet()) {
                         String label = entry.getKey();
                         JCheckBox cb = entry.getValue();
                         if (cb.isSelected()) {
                             switch (label) {
                                 case "1. 과거의 주소 변동 사항", "2. 과거의 주소 변동 사항":
-                                    ndoc.setaddress_history("T");
+                                    ndoc.setaddress_history("Y");
                                     if(simcheck.get("직접 입력: 최근").isSelected()){
                                         if(yearLabel.getText() != null) {
                                             ndoc.setAddress_history_years(Integer.valueOf(yearLabel.getText()));
@@ -205,71 +206,157 @@ public class RrnApplicationPanel extends JPanel {
                                     }
                                     break;
                                 case "2. 세대 구성 사유":
-                                    ndoc.sethousehold_reason("T");
+                                    ndoc.sethousehold_reason("Y");
                                     break;
                                 case "3. 세대 구성 일자":
-                                    ndoc.sethousehold_date("T");
+                                    ndoc.sethousehold_date("Y");
                                     break;
                                 case "4. 발생일 / 신고일","6. 발생일 / 신고일":
-                                    ndoc.setoccurrence_date("T");
+                                    ndoc.setoccurrence_date("Y");
                                     break;
                                 case "5. 변동 사유","7. 변동 사유":
-                                    ndoc.setprevious_address("T");
+                                    ndoc.setprevious_address("Y");
                                     if(simcheck.get("세대").isSelected()){
-                                        ndoc.setprevious_address_self("T");
+                                        ndoc.setprevious_address_self("Y");
                                     }
                                     if(simcheck.get("세대원").isSelected()){
-                                        ndoc.setprevious_address_member("T");
+                                        ndoc.setprevious_address_member("Y");
                                     }
                                     break;
                                 case "5. 세대주의 성명과 세대주와의 관계", "8. 세대원의 세대주와의 관계","3. 과거의 주소 변동 중 세대주/세대주와의 관계":
-                                    ndoc.sethead_relationship("T");
+                                    ndoc.sethead_relationship("Y");
                                     break;
                                 case "6. 교부 대상자 외 세대주·세대원·외국인등록 이름":
-                                    ndoc.sethead_name("T");
+                                    ndoc.sethead_name("Y");
                                     break;
                                 case "7. 주민등록번호 뒷자리":
-                                    ndoc.setrrn_last7("T");
+                                    ndoc.setrrn_last7("Y");
                                     if(simcheck.get("본인").isSelected()){
-                                        ndoc.setrrn_last7_self("T");
+                                        ndoc.setrrn_last7_self("Y");
                                     }
                                     if(simcheck.get("세대원").isSelected()){
-                                        ndoc.setrrn_last7_member("T");
+                                        ndoc.setrrn_last7_member("Y");
                                     }
                                     break;
                                 case "9. 동거인":
-                                    ndoc.setRoommate("T");
+                                    ndoc.setRoommate("Y");
                                     break;
                                 case "1. 개인 인적 사항 변경 내용":
-                                    ndoc.setpersonal_change_details("T");
+                                    ndoc.setpersonal_change_details("Y");
                                     break;
                                 case "8. 병역 사항":
-                                    ndoc.setmilitary_service("T");
+                                    ndoc.setmilitary_service("Y");
                                     if(simcheck.get("전체").isSelected()){
-                                        ndoc.setMilitary_service_full("T");
+                                        ndoc.setMilitary_service_full("Y");
                                     }else{
-                                        ndoc.setMilitary_service_basic_only("T");
+                                        ndoc.setMilitary_service_basic_only("Y");
                                     }
                                     break;
                                 case "9. 국내거소신고번호 / 외국인등록번호":
-                                    ndoc.setid_number("T");
+                                    ndoc.setid_number("Y");
                                     break;
                             }
                         }
                     }
-
-
-
                 }
+
             }else{
                 ndoc.setComplaint_category_code("AB001");
 
                 if(allIssue.isSelected()){
-                    ndoc.setAll_Included("T");
+                    ndoc.setAll_Included("Y");
                 }else{
-
+                    ndoc.setAll_Included("Y");
+                    for (Map.Entry<String, JCheckBox> entry : simcheck.entrySet()) {
+                        String label = entry.getKey();
+                        JCheckBox cb = entry.getValue();
+                        if (cb.isSelected()) {
+                            switch (label) {
+                                case "1. 과거의 주소 변동 사항", "2. 과거의 주소 변동 사항":
+                                    ndoc.setaddress_history("Y");
+                                    if(simcheck.get("직접 입력: 최근").isSelected()){
+                                        if(yearLabel.getText() != null) {
+                                            ndoc.setAddress_history_years(Integer.valueOf(yearLabel.getText()));
+                                        }else{
+                                            ndoc.setAddress_history_years(1);
+                                        }
+                                    }
+                                    break;
+                                case "2. 세대 구성 사유":
+                                    ndoc.sethousehold_reason("Y");
+                                    break;
+                                case "3. 세대 구성 일자":
+                                    ndoc.sethousehold_date("Y");
+                                    break;
+                                case "4. 발생일 / 신고일","6. 발생일 / 신고일":
+                                    ndoc.setoccurrence_date("Y");
+                                    break;
+                                case "5. 변동 사유","7. 변동 사유":
+                                    ndoc.setprevious_address("Y");
+                                    if(simcheck.get("세대").isSelected()){
+                                        ndoc.setprevious_address_self("Y");
+                                    }
+                                    if(simcheck.get("세대원").isSelected()){
+                                        ndoc.setprevious_address_member("Y");
+                                    }
+                                    break;
+                                case "5. 세대주의 성명과 세대주와의 관계", "8. 세대원의 세대주와의 관계","3. 과거의 주소 변동 중 세대주/세대주와의 관계":
+                                    ndoc.sethead_relationship("Y");
+                                    break;
+                                case "6. 교부 대상자 외 세대주·세대원·외국인등록 이름":
+                                    ndoc.sethead_name("Y");
+                                    break;
+                                case "7. 주민등록번호 뒷자리":
+                                    ndoc.setrrn_last7("Y");
+                                    if(simcheck.get("본인").isSelected()){
+                                        ndoc.setrrn_last7_self("Y");
+                                    }
+                                    if(simcheck.get("세대원").isSelected()){
+                                        ndoc.setrrn_last7_member("Y");
+                                    }
+                                    break;
+                                case "9. 동거인":
+                                    ndoc.setRoommate("Y");
+                                    break;
+                                case "1. 개인 인적 사항 변경 내용":
+                                    ndoc.setpersonal_change_details("Y");
+                                    break;
+                                case "8. 병역 사항":
+                                    ndoc.setmilitary_service("Y");
+                                    if(simcheck.get("전체").isSelected()){
+                                        ndoc.setMilitary_service_full("Y");
+                                    }else{
+                                        ndoc.setMilitary_service_basic_only("Y");
+                                    }
+                                    break;
+                                case "9. 국내거소신고번호 / 외국인등록번호":
+                                    ndoc.setid_number("Y");
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
+
+            System.out.println(ndoc);
+            int pk = civil.getNextSeqValue(Simple_doc.class);
+            ndoc.setSimple_doc_code(pk);
+            System.out.println(pk);
+            civil.insert(ndoc);
+
+            JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this); // this는 패널일 경우
+            DrawingSign signDialog = new DrawingSign(parent);
+            signDialog.setVisible(true);
+
+            String rrn = JOptionPane.showInputDialog("주민등록번호를 입력하세요:");
+            if (rrn == null || rrn.trim().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "주민등록번호가 입력되지 않았습니다.");
+                return;
+            }
+
+            new PDFWriter(pk, rrn, MainFrameState.civil);
+
+            new PDFViewerFromPath("resources/pdf/temp.pdf");
         });
 
         allIssue.addActionListener(e -> detailPanel.setVisible(false));

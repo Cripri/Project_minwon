@@ -118,6 +118,8 @@ class LoginPanel extends JPanel {
 		                    MainFrameState.employeeMainPanel.refreshPanel();
 		                }
 						Get_pop_up_frames.get_log_in_out_frame(employee.getEmployee_name());
+						EmployeeMainPanel employeeMain = new EmployeeMainPanel();
+						MainFrameState.card.add("employeeMain", employeeMain);
 						MainFrameState.card.show("employeeMain");
 					} else {
 						// 팝업 -> 비밀번호 틀림
@@ -154,7 +156,7 @@ class LoginPanel extends JPanel {
 							Get_pop_up_frames.get_log_in_out_frame(mem.getMember_name());
 							MyPage myPage = new MyPage();
 							MainFrameState.card.add("myPage", myPage);
-							MainFrameState.card.show("firstPage");
+							MainFrameState.card.show("myPage");
 						}
 					} else {
 						// 팝업 -> 비밀번호 틀림

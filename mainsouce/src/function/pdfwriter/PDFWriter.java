@@ -49,13 +49,51 @@ public class PDFWriter {
             resident_registration_card(data, rrn, mem, dis, outputPath);
         }
     }
+    public PDFWriter(int simple_doc_pk,String rrn,Civil_Connector con) {
+        QueryRequest<Simple_doc> target = new QueryRequest<>(
+                "select * from simple_doc where simple_doc_code like ?",
+                simple_doc_pk,
+                Simple_doc.class,
+                con
+        );
+        Simple_doc data = target.getSingleResult();
+
+        QueryRequest<Members> userdata = new QueryRequest<>(
+                "select * from Members where MEMBER_CODE like ?",
+                data.getMember_code(),
+                Members.class,
+                con
+        );
+        Members mem = userdata.getSingleResult();
+
+
+        QueryRequest<District> dist = new QueryRequest<>(
+                "select * from District where DISTRICT_CODE like ?",
+                data.getDistrict_code(),
+                District.class,
+                con
+        );
+        District dis = dist.getSingleResult();
+
+        String outputPath = "resources/pdf/temp.pdf";
+        if(data.getComplaint_category_code().contains("AA")){
+            resident_registration(data, rrn, mem, dis, outputPath);
+        }else if(data.getComplaint_category_code().equals("AB")){
+            resident_registration_card(data, rrn, mem, dis, outputPath);
+        }
+    }
 
     private void resident_registration(Simple_doc data,String rrn,Members user,District dis, String outputPath){
         String filePath = "resources/pdf/주민등록표 열람 또는 등ㆍ초본 교부 신청서.pdf";  // 기존 PDF 경로
         String ROOT_FONT_PATH = "resources/font/NotoSansKR-VariableFont_wght.ttf";
         String check = "○";
         String check2 = "Ｖ";
+
         Date today = data.getComplete_date();
+        if (today == null) {
+            today = new Date();  // null일 때 현재 날짜로 대체
+        }
+
         SimpleDateFormat toYear = new SimpleDateFormat("yyyy");
         SimpleDateFormat toMonth = new SimpleDateFormat("MM");
         SimpleDateFormat toDay = new SimpleDateFormat("dd");
@@ -202,6 +240,7 @@ public class PDFWriter {
             e.printStackTrace();
         }
     }
+
 
     private void resident_registration_card(Simple_doc data, String rrn, Members user, District dis, String outputPath){
 
