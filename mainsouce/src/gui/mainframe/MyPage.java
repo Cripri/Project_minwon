@@ -20,21 +20,23 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import function.connector.Civil_Connector;
 import function.connector.Complaint_category_info;
 import function.connector.Department;
 import function.connector.Employees;
 import function.connector.QueryRequest;
 import function.connector.Simple_doc;
 import function.connector.Sinmungo;
+import function.drawingsign.DrawingSign;
 import function.pdfwriter.PDFWriter;
 import gui.mainframe.components.RoundedButton;
 
@@ -419,6 +421,9 @@ public class MyPage extends JPanel {
                     btn.setFocusPainted(false);
                     btn.setBorderPainted(false);
                     btn.addActionListener(e -> {
+                    	JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this); // this는 패널일 경우
+                    	DrawingSign signDialog = new DrawingSign(parent);
+                    	signDialog.setVisible(true);  // 여기서 사인 다 끝날 때까지 기다림
                         
                     	String rrn = JOptionPane.showInputDialog("주민등록번호를 입력하세요:");
                         if (rrn == null || rrn.trim().isEmpty()) {
@@ -446,7 +451,7 @@ public class MyPage extends JPanel {
                             if (!file.getName().toLowerCase().endsWith(".pdf")) {
                                 file = new File(file.getAbsolutePath() + ".pdf");
                             }
-
+                            
                             // 덮어쓰기 확인
                             if (file.exists()) {
                                 int overwrite = JOptionPane.showConfirmDialog(
@@ -462,11 +467,10 @@ public class MyPage extends JPanel {
                             }
                             
                     	    try {
-                    	    	Civil_Connector connector = new Civil_Connector();
                     	    	new PDFWriter(
                     	                doc.getSimple_doc_code(),
                     	                rrn,
-                    	                connector,
+                    	                MainFrameState.civil,
                     	                file.getAbsolutePath()  // 추가된 저장 경로
                     	            );
                     	        JOptionPane.showMessageDialog(null, "파일이 성공적으로 저장되었습니다.");
