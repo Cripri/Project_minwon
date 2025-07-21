@@ -134,27 +134,25 @@ public class Civil_Connector extends Thread {
             Class<?> clazz = obj.getClass();
             Field[] fields = clazz.getDeclaredFields();
 
-            String tableName = clazz.getSimpleName().toLowerCase();
+            TableMeta meta = TableMeta.fromClass(clazz);
+            String tableName = meta.getTableName();
             String seqName = tableName + "_seq";
+            String pkName = meta.getPkColumn();
 
             List<String> columnNames = new ArrayList<>();
-            List<String> valueExprs = new ArrayList<>();  // 값 표현식: ? 또는 시퀀스 nextval
+            List<String> valueExprs = new ArrayList<>();
             List<Object> values = new ArrayList<>();
 
             for (Field f : fields) {
                 f.setAccessible(true);
                 Object value = f.get(obj);
-
                 String colName = f.getName().toLowerCase();
 
-                // PK 추정: 이름이 'code' 로 끝나는 컬럼
-                if (colName.endsWith("code")) {
+                if (colName.equals(pkName)) {
                     if (value == null) {
-                        // 값이 null 이면 시퀀스 nextval 사용
                         columnNames.add(colName);
                         valueExprs.add(seqName + ".nextval");
                     } else {
-                        // 값이 있으면 그대로 insert
                         columnNames.add(colName);
                         valueExprs.add("?");
                         values.add(value);
@@ -168,14 +166,9 @@ public class Civil_Connector extends Thread {
                 }
             }
 
-            String cols = String.join(", ", columnNames);
-            String vals = String.join(", ", valueExprs);
-
-            String sql = "INSERT INTO " + tableName + " (" + cols + ") VALUES (" + vals + ")";
-
+            String sql = "INSERT INTO " + tableName + " (" + String.join(", ", columnNames) + ") VALUES (" + String.join(", ", valueExprs) + ")";
             QueryRequest<Object> req = new QueryRequest<>(sql, values, Object.class, this);
             req.getLatch().await();
-
             System.out.println("Insert complete: " + sql);
 
         } catch (Exception e) {
@@ -183,41 +176,44 @@ public class Civil_Connector extends Thread {
         }
     }
 
+
     public <T> void update(T obj) {
         try {
             Class<?> clazz = obj.getClass();
             Field[] fields = clazz.getDeclaredFields();
 
-            String tableName = clazz.getSimpleName().toLowerCase();
+            TableMeta meta = TableMeta.fromClass(clazz);
+            String tableName = meta.getTableName();
+            String pkName = meta.getPkColumn();
+
             List<String> setClauses = new ArrayList<>();
             List<Object> values = new ArrayList<>();
-
-            String pkName = null;
             Object pkValue = null;
 
             for (Field f : fields) {
                 f.setAccessible(true);
                 Object value = f.get(obj);
-                if (f.getName().toLowerCase().endsWith("code")) {
-                    pkName = f.getName().toLowerCase();
+                String colName = f.getName().toLowerCase();
+
+                if (colName.equals(pkName)) {
                     pkValue = value;
                 } else if (value != null) {
-                    setClauses.add(f.getName().toLowerCase() + " = ?");
+                    setClauses.add(colName + " = ?");
                     values.add(value);
                 }
             }
 
-            if (pkName == null || pkValue == null) {
-                throw new IllegalArgumentException("PK 필드(xxx_code)가 필요합니다!");
+            if (pkValue == null) {
+                throw new IllegalArgumentException("PK 값이 null입니다: " + pkName);
             }
 
-            String setPart = String.join(", ", setClauses);
-            String sql = "UPDATE " + tableName + " SET " + setPart + " WHERE " + pkName + " = ?";
+            String sql = "UPDATE " + tableName + " SET " + String.join(", ", setClauses) + " WHERE " + pkName + " = ?";
             values.add(pkValue);
 
             QueryRequest<Object> req = new QueryRequest<>(sql, values, Object.class, this);
             req.getLatch().await();
             System.out.println("Update complete: " + sql);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

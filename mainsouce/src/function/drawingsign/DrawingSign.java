@@ -9,13 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
 
-public class DrawingSign extends JFrame {
+public class DrawingSign extends JDialog {
 
-    private final float strokeWidth = 14f;  // 원하는 펜 굵기
+    private final float strokeWidth = 14f;
 
-    public DrawingSign() {
-        setTitle("Sign");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public DrawingSign(JFrame parent) {
+        super(parent, "서명창", true);  // true는 모달 설정
         setResizable(false);
 
         DrawingPanel drawingPanel = new DrawingPanel(strokeWidth);
@@ -24,7 +23,10 @@ public class DrawingSign extends JFrame {
         clearButton.addActionListener(e -> drawingPanel.clearDrawing());
 
         JButton saveButton = new JButton("투명 배경 저장");
-        saveButton.addActionListener(e -> drawingPanel.saveDrawingWithTransparentBackground());
+        saveButton.addActionListener(e -> {
+            drawingPanel.saveDrawingWithTransparentBackground();
+            dispose(); // 다이얼로그 닫기
+        });
 
         JPanel controls = new JPanel();
         controls.add(clearButton);
@@ -35,7 +37,7 @@ public class DrawingSign extends JFrame {
         add(controls, BorderLayout.SOUTH);
 
         pack();
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(parent); // 부모 중앙에 띄우기
     }
 
     class DrawingPanel extends JPanel {
@@ -44,8 +46,8 @@ public class DrawingSign extends JFrame {
 
         public DrawingPanel(float strokeWidth) {
             this.strokeWidth = strokeWidth;
-            setOpaque(false); // 패널 자체를 투명하게
-            setBackground(new Color(0,0,0,0));
+            setOpaque(false);
+            setBackground(new Color(0, 0, 0, 0));
 
             MouseAdapter mouseAdapter = new MouseAdapter() {
                 @Override
@@ -76,7 +78,7 @@ public class DrawingSign extends JFrame {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            Graphics2D g2 = (Graphics2D) g.create(); // 안전하게 copy
+            Graphics2D g2 = (Graphics2D) g.create();
 
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(Color.BLACK);
@@ -102,11 +104,9 @@ public class DrawingSign extends JFrame {
                 BufferedImage image = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2d = image.createGraphics();
 
-                // 배경 투명하게 초기화
                 g2d.setComposite(AlphaComposite.Clear);
                 g2d.fillRect(0, 0, 800, 600);
 
-                // 그림 그리기
                 g2d.setComposite(AlphaComposite.SrcOver);
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 g2d.setColor(Color.BLACK);
@@ -132,8 +132,16 @@ public class DrawingSign extends JFrame {
         }
     }
 
-//    public static void main(String[] args) {
-//        불러올때 사용하는법
-//        SwingUtilities.invokeLater(() -> new DrawingSign().setVisible(true));
-//    }
+    // 테스트용 main
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            JFrame dummy = new JFrame();
+            dummy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            dummy.setSize(300, 200);
+            dummy.setVisible(true);
+
+            DrawingSign dialog = new DrawingSign(dummy);
+            dialog.setVisible(true);
+        });
+    }
 }

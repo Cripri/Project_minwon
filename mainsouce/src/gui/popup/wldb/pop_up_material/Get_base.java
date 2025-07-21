@@ -1,6 +1,7 @@
 package gui.popup.wldb.pop_up_material;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;

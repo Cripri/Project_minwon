@@ -50,7 +50,7 @@ public class FrameTest extends JFrame {
 		
 		cardPage.add("firstPage", firstPage);
 		cardPage.add("login", login);
-//		cardPage.add("myPage", myPage);
+		//cardPage.add("myPage", myPage);
 		cardPage.add("simpleDoc", simpleDoc);
 		cardPage.add("sinmungoList", sinmungoList);
 		cardPage.add("employeeMain", employeeMain);

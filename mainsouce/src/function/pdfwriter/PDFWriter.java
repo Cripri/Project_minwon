@@ -170,12 +170,15 @@ public class PDFWriter {
 
 
                         writeText(document,page,checkedOrEmpty(data.getprevious_address(),check),font,504 ,350); // 변동 사유
-
-                        writeText(document,page,check,font,325 ,332); //병역사항
-                        writeText(document,page,check2,font,375 ,332); //기본
-                        writeText(document,page,check2,font,501 ,332); //전체
-
-                        writeText(document,page,check,font,500 ,310); // 국내거소신고번호 / 외국인등록번호
+                        if(data.getmilitary_service().equals("Y")){
+                            writeText(document,page,check,font,325 ,332); //병역사항
+                            if(data.getMilitary_service_full().equals("Y")){
+                                writeText(document,page,check2,font,501 ,332); //전체
+                            }else{
+                                writeText(document,page,check2,font,375 ,332); //기본
+                            }
+                        }
+                        writeText(document,page,checkedOrEmpty(data.getid_number(),check),font,500 ,310); // 국내거소신고번호 / 외국인등록번호
                     }
                 }
 

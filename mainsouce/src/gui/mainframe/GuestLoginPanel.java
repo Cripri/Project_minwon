@@ -22,9 +22,11 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import function.connector.Members;
+import function.connector.QueryRequest;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
 import gui.mainframe.components.RoundedButton;
+import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
 public class GuestLoginPanel extends JPanel {
 
@@ -98,6 +100,7 @@ public class GuestLoginPanel extends JPanel {
 		certificationButton.addActionListener((e) -> {
 			// 본인인증 만들어지면 수정
 			isCertification = true;
+			Get_pop_up_frames.get_public_alarm_frame("본인인증이 완료되셨습니다");
 		});
 
 		addRow(formPanel, gbc, row++, "핸드폰번호", phoneNumberField, certificationButton, labelFont, inputFont);
@@ -145,9 +148,13 @@ public class GuestLoginPanel extends JPanel {
 			m.setMember_birthday(bDate);
 			m.setMember_gender(gender);
 			m.setMember_phonenum(phoneNumberField.getText());
-
+			//m.setDistrict_code(null);
+			
+			System.out.println(m);
 			// 완성되면 주석 풀기
-			// MainFrameState.civil.insert(m);
+			MainFrameState.civil.insert(m);
+			// 다 만들어 두시고 가시면 나는 어찌하라는것인가
+			
 		});
 
 		submitBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));
@@ -185,4 +192,5 @@ public class GuestLoginPanel extends JPanel {
 			panel.add(btn, gbc);
 		}
 	}
+	
 }
