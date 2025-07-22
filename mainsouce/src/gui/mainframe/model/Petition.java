@@ -8,7 +8,7 @@ public class Petition {
     private String title;
     private String organization;
     private String date;
-    private Date date2;
+    private Date date2 = new Date();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
     public Petition(String number, String title, String organization, String date) {

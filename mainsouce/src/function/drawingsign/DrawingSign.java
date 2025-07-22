@@ -132,16 +132,16 @@ public class DrawingSign extends JDialog {
         }
     }
 
-    // 테스트용 main
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            JFrame dummy = new JFrame();
-            dummy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            dummy.setSize(300, 200);
-            dummy.setVisible(true);
-
-            DrawingSign dialog = new DrawingSign(dummy);
-            dialog.setVisible(true);
-        });
-    }
+//    // 테스트용 main
+//    public static void main(String[] args) {
+//        SwingUtilities.invokeLater(() -> {
+//            JFrame dummy = new JFrame();
+//            dummy.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//            dummy.setSize(300, 200);
+//            dummy.setVisible(true);
+//
+//            DrawingSign dialog = new DrawingSign(dummy);
+//            dialog.setVisible(true);
+//        });
+//    }
 }

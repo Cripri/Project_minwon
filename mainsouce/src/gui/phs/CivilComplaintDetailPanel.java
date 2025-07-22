@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -25,6 +28,7 @@ import gui.mainframe.EmployeeMainPanel;
 import gui.mainframe.MainFrameState;
 
 import static gui.mainframe.MainFrameState.civil;
+import static gui.mainframe.MainFrameState.employee;
 
 public class CivilComplaintDetailPanel extends JPanel {
 
@@ -153,6 +157,11 @@ public class CivilComplaintDetailPanel extends JPanel {
             Sinmungo sin = civil.find(Sinmungo.class,pk);
             sin.setEmployees_answer(answerArea.getText());
             sin.setStatus("C");
+            Date bDate = new Date();
+            LocalDate bLocalDate = LocalDate.now();
+            bDate = Date.from(bLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            sin.setAnswer_date(bDate);
+            sin.setEmployee_code(employee.getEmployee_code());
 
             civil.update(sin);
             EmployeeMainPanel em = new EmployeeMainPanel();

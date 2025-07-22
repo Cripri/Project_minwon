@@ -180,9 +180,9 @@ public class RrnApplicationPanel extends JPanel {
         centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         centerPanel.add(btnPanel);
         submitBtn.addActionListener(e ->{
-            System.out.println("등본" + option1.isSelected());
-            System.out.println("초본" + option2.isSelected());
-            System.out.println("그뭐냐 시발 선택" + partialIssue.isSelected());
+//            System.out.println("등본" + option1.isSelected());
+//            System.out.println("초본" + option2.isSelected());
+//            System.out.println("그뭐냐 시발 선택" + partialIssue.isSelected());
             Simple_doc ndoc = new Simple_doc();
             ndoc.setDistrict_code(addressCombo.findDistrictCode(addressCombo.getSido(),addressCombo.getSigungu()));
             LocalDate localDate = LocalDate.now();
@@ -192,9 +192,9 @@ public class RrnApplicationPanel extends JPanel {
             ndoc.setDoc_count(1);
             if(option1.isSelected()){
                 ndoc.setComplaint_category_code("AA001");
-                for(String str : simcheck.keySet()){
-                    System.out.println(str);
-                }
+//                for(String str : simcheck.keySet()){
+//                    System.out.println(str);
+//                }
 
                 check = true;
                 String suffix = check ? "1" : "2";
@@ -216,7 +216,7 @@ public class RrnApplicationPanel extends JPanel {
                                             ndoc.setAddress_history_years(1);
                                         } else {
                                             ndoc.setAddress_history_years(Integer.valueOf(yearField1.getText()));
-                                            System.out.println(Integer.valueOf(yearField1.getText()));
+                                            //System.out.println(Integer.valueOf(yearField1.getText()));
                                         }
                                     }
                                     break;
@@ -289,7 +289,7 @@ public class RrnApplicationPanel extends JPanel {
                                             ndoc.setAddress_history_years(1);
                                         } else {
                                             ndoc.setAddress_history_years(Integer.valueOf(yearField2.getText()));
-                                            System.out.println(Integer.valueOf(yearField2.getText()));
+                                            //System.out.println(Integer.valueOf(yearField2.getText()));
                                         }
                                     }
                                     break;
@@ -331,10 +331,10 @@ public class RrnApplicationPanel extends JPanel {
                 }
             }
 
-            System.out.println(ndoc);
+            //System.out.println(ndoc);
             int pk = civil.getNextSeqValue(Simple_doc.class);
             ndoc.setSimple_doc_code(pk);
-            System.out.println(pk);
+            //System.out.println(pk);
             civil.insert(ndoc);
 
             JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this); // this는 패널일 경우
