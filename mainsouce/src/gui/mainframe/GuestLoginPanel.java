@@ -10,6 +10,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -152,11 +153,14 @@ public class GuestLoginPanel extends JPanel {
 			m.setMember_phonenum(phoneNumberField.getText());
 			//m.setDistrict_code(null);
 			
+			
+			Date utilDate = m.getMember_birthday();
+			java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
 			// 중복 여부 확인
-		    String query = "SELECT * FROM members WHERE member_name = ? AND member_birthday = ? AND member_phonenum = ?";
+		    String query = "SELECT * FROM members WHERE member_name = ? AND member_birthday = ? AND member_phonenum = ? AND member_gender = ?";
 		    QueryRequest<Members> checkRequest = new QueryRequest<>(
 		        query,
-		        List.of(m.getMember_name(), m.getMember_birthday(), m.getMember_phonenum()),
+		        List.of(m.getMember_name(), sqlDate, m.getMember_phonenum(), m.getMember_gender()),
 		        Members.class,
 		        MainFrameState.civil
 		    );
@@ -166,21 +170,33 @@ public class GuestLoginPanel extends JPanel {
 		    if (existing != null) {
 		        // 기존 회원 → 정보 저장 후 마이페이지로 이동
 		        MainFrameState.member = existing;
-		        MyPage myPage = new MyPage();
-		        MainFrameState.card.add("myPage", myPage);
-		        MainFrameState.card.show("myPage");
 		        Get_pop_up_frames.get_log_in_out_frame(existing.getMember_name());
 		    } else {
 		        // 신규 회원 → DB에 추가
-//		    	System.out.println(m);
 		        MainFrameState.civil.insert(m);
-		        MainFrameState.member = m;
+		        
+		        // insert 후 select로 member_code가 채워진 객체 재조회
+		        QueryRequest<Members> refresh = new QueryRequest<>(
+		            "SELECT * FROM members WHERE member_name = ? AND member_birthday = ? AND member_phonenum = ? AND member_gender = ?",
+		            List.of(m.getMember_name(), sqlDate, m.getMember_phonenum(), m.getMember_gender()),
+		            Members.class,
+		            MainFrameState.civil
+		        );
+		        MainFrameState.member = refresh.getSingleResult(); // member_code 있는 객체로 갱신
+		        
 		        Get_pop_up_frames.get_public_alarm_frame("회원 등록이 완료되었습니다.");
-		        // 완료되면 근데 어디로 보내줘야 되지...? 일단 마이페이지로 보내 
-		        MyPage myPage = new MyPage();
-		        MainFrameState.card.add("myPage", myPage);
-		        MainFrameState.card.show("myPage");
 		    }
+		    MainFrameState.frameTop.refreshButtons();
+		    MyPage myPage = new MyPage();
+		    MainFrameState.card.add("myPage", myPage);
+		    MainFrameState.card.show("myPage");
+		    
+		    // 입력 초기화
+		    nameField.setText("");
+		    bds.reset();  // 아래 reset 메서드 필요
+		    male.setSelected(true);
+		    phoneNumberField.setText("");
+		    isCertification = false;
 		});
 
 		submitBtn.setFont(new Font("맑은 고딕", Font.BOLD, 16));

@@ -96,7 +96,8 @@ public class FrameTop extends JPanel {
 					MainFrameState.card.add("login", new LoginPanel());
 					MainFrameState.card.show("login");
 				});
-			} else if (login) {
+			} 
+			if (login) {
 				loginBtn.addActionListener((e) -> {
 					Component[] components = MainFrameState.card.getComponents();
                 	for (Component comp : components) {
