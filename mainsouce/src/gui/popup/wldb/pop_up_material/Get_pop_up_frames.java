@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.swing.JButton;
@@ -330,10 +331,10 @@ public class Get_pop_up_frames{
 				100, 40);
 		
 		yes.addActionListener(e ->{		
-			try {
+			try {				
 				Class<?> clazz = obj.getClass();
 				Object instance = clazz.getDeclaredConstructor().newInstance();
-								
+				
 		        Method[] fields = clazz.getDeclaredMethods();
 		        Method update;
 		        
@@ -349,10 +350,9 @@ public class Get_pop_up_frames{
 		        	
 		        }
 			} catch (Exception e1) {
-				// TODO Auto-generated catch block
+				System.out.println("오류1번");
 				e1.printStackTrace();
 			}
-			
 			delets.dispose();			
 		});
 		

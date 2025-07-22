@@ -36,9 +36,13 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
     private final Font boldFont = new Font("\uB9D1\uC740\uACE0\uB515", Font.BOLD, 14);
     private final Font titleFont = new Font("\uB9D1\uC740\uACE0\uB515", Font.BOLD, 20);
 
-    private final Sinmungo sinmungo_info;
-    private ArrayList<Employees> emp_list;
+    private static Sinmungo sinmungo_info;
+    private static ArrayList<Employees> emp_list;
 
+    public DepartmentChangeRequestDetailPanel() {
+		// static 이랑 이거 지우면 오류남, final 함부러 넣어도 오류남
+	}
+    
     public DepartmentChangeRequestDetailPanel(Integer pk) {
         this.sinmungo_info = civil.find(Sinmungo.class, pk);
         setName("DepartmentChangeDetail_" + pk);
