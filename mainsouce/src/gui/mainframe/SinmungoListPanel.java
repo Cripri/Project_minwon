@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import com.sun.tools.javac.Main;
 import function.connector.Department;
 import function.connector.Sinmungo;
 import gui.mainframe.components.PaginationPanel;
@@ -89,6 +90,7 @@ public class SinmungoListPanel extends JPanel {
         writeBtn.addActionListener((e) -> {
         	if (MainFrameState.member == null) {
         		MainFrameState.postLoginTarget = "sinmungoinfoPanel";
+				MainFrameState.card.add("login",new LoginPanel());
         		MainFrameState.card.show("login");        		
         	} else {
         		Component[] components = MainFrameState.card.getComponents();

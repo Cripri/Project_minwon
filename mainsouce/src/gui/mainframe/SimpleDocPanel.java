@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import com.sun.tools.javac.Main;
 import gui.mainframe.components.RoundedButton;
+import gui.phs.RrnApplicationPanel;
 
 // 효승님이 한거 버튼 크기 수정본
 public class SimpleDocPanel extends JPanel {
@@ -36,8 +37,10 @@ public class SimpleDocPanel extends JPanel {
 
         rightButton.addActionListener(e ->{
             if(MainFrameState.member != null){
+                MainFrameState.card.add("rrnApplicationPanel", new RrnApplicationPanel());
                 MainFrameState.card.show("rrnApplicationPanel");
             }else{
+                MainFrameState.card.add("login",new LoginPanel());
                 MainFrameState.card.show("login");
             }
 
@@ -45,8 +48,9 @@ public class SimpleDocPanel extends JPanel {
         
         leftButton.addActionListener(e ->{
             if(MainFrameState.member != null){
-                MainFrameState.card.show("rrnApplicationPanel");
+
             }else{
+                MainFrameState.card.add("login",new LoginPanel());
                 MainFrameState.card.show("login");
             }
 

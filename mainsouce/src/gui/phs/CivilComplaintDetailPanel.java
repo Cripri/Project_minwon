@@ -21,6 +21,7 @@ import javax.swing.SwingConstants;
 
 import function.connector.QueryRequest;
 import function.connector.Sinmungo;
+import gui.mainframe.EmployeeMainPanel;
 import gui.mainframe.MainFrameState;
 
 import static gui.mainframe.MainFrameState.civil;
@@ -134,12 +135,13 @@ public class CivilComplaintDetailPanel extends JPanel {
 
         JButton confirmButton = new JButton("답변 확정");
         JButton listButton = new JButton("목록으로");
+        JButton requestButton = new JButton("부서 변경 요청");
         
         listButton.addActionListener(e -> {
             MainFrameState.card.prev();
         });
 
-        for (JButton btn : new JButton[]{confirmButton, listButton}) {
+        for (JButton btn : new JButton[]{confirmButton, listButton,requestButton}) {
             btn.setBackground(new Color(30, 144, 255));
             btn.setForeground(Color.WHITE);
             btn.setFocusPainted(false);
@@ -148,12 +150,26 @@ public class CivilComplaintDetailPanel extends JPanel {
         }
 
         confirmButton.addActionListener(e ->{
-            Sinmungo sin = new Sinmungo();
-            sin.setSinmungo_code(pk);
+            Sinmungo sin = civil.find(Sinmungo.class,pk);
             sin.setEmployees_answer(answerArea.getText());
             sin.setStatus("C");
 
             civil.update(sin);
+            EmployeeMainPanel em = new EmployeeMainPanel();
+            MainFrameState.card.add("employeeMain", em);
+            MainFrameState.employeeMainPanel =em;
+            MainFrameState.card.show("employeeMain");
+        });
+
+        requestButton.addActionListener(e -> {
+            Sinmungo sin = civil.find(Sinmungo.class,pk);
+            sin.setStatus("Q");
+
+            civil.update(sin);
+            EmployeeMainPanel em = new EmployeeMainPanel();
+            MainFrameState.card.add("employeeMain", em);
+            MainFrameState.employeeMainPanel =em;
+            MainFrameState.card.show("employeeMain");
         });
 
         bottomPanel.add(buttonRow);

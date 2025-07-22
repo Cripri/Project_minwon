@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.sun.tools.javac.Main;
 import function.connector.Members;
 import function.connector.QueryRequest;
 import function.encryption.Encryptor;
@@ -259,6 +260,7 @@ public class SignUpPanel extends JPanel {
 			Members inserted = checkRequest.getSingleResult();
 			if (inserted != null) {
 			    Get_pop_up_frames.get_public_alarm_frame("회원가입이 완료되었습니다");
+                MainFrameState.card.add("login", new LoginPanel());
 			    MainFrameState.card.show("login");
 			} else {
 			    Get_pop_up_frames.get_public_alarm_frame("회원가입에 실패했습니다. 다시 시도해주세요.");

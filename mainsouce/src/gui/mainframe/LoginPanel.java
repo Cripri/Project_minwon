@@ -82,6 +82,7 @@ class LoginPanel extends JPanel {
         // 직사각형 버튼
         RoundedButton signUpBtn = new RoundedButton("회원가입");
         signUpBtn.addActionListener((e) -> {
+			MainFrameState.card.add("signUp",new SignUpPanel());
         	MainFrameState.card.show("signUp");
         });
         
@@ -113,12 +114,11 @@ class LoginPanel extends JPanel {
 						MainFrameState.frameTop.refreshButtons();
 						idField.setText("");
 						pwField.setText("");
-						
-						if (MainFrameState.employeeMainPanel != null) {
-		                    MainFrameState.employeeMainPanel.refreshPanel();
-		                } 
+
 						Get_pop_up_frames.get_log_in_out_frame(employee.getEmployee_name());
-						MainFrameState.employeeMainPanel = new EmployeeMainPanel();
+						EmployeeMainPanel em = new EmployeeMainPanel();
+						MainFrameState.card.add("employeeMain", em);
+						MainFrameState.employeeMainPanel =em;
 						MainFrameState.card.show("employeeMain");
 					} else {
 						// 팝업 -> 비밀번호 틀림
@@ -150,13 +150,13 @@ class LoginPanel extends JPanel {
 						if (next != null) {
 					        MainFrameState.card.show(next);
 					        MainFrameState.postLoginTarget = null;  // 한 번 쓰고 비워줌
-						} else {
+						}
 							// 카드 넘겨주기 mypage로
 							Get_pop_up_frames.get_log_in_out_frame(mem.getMember_name());
 							MyPage myPage = new MyPage();
 							MainFrameState.card.add("myPage", myPage);
 							MainFrameState.card.show("myPage");
-						}
+
 					} else {
 						// 팝업 -> 비밀번호 틀림
 						Get_pop_up_frames.get_wrong_frame("비밀번호");
@@ -180,6 +180,7 @@ class LoginPanel extends JPanel {
         RoundedButton guestLogin = new RoundedButton("비회원 로그인");
         guestLogin.setPreferredSize(new Dimension(190, 35));
         guestLogin.addActionListener((e) -> {
+			MainFrameState.card.add("guestLogin", new GuestLoginPanel());
         	MainFrameState.card.show("guestLogin");
         });
 

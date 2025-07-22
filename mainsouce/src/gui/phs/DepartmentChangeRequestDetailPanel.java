@@ -27,6 +27,7 @@ import function.connector.Department;
 import function.connector.Employees;
 import function.connector.QueryRequest;
 import function.connector.Sinmungo;
+import gui.mainframe.EmployeeMainPanel;
 import gui.mainframe.MainFrameState;
 import gui.popup.wldb.pop_up_material.Get_pop_up_frames;
 
@@ -166,7 +167,10 @@ public class DepartmentChangeRequestDetailPanel extends JPanel {
                     DepartmentChangeRequestPanel.refresh();
 
                     JOptionPane.showMessageDialog(this, "부서가 성공적으로 변경되었습니다.");
-                    MainFrameState.card.show("departmentChangeRequestPanel");
+                    EmployeeMainPanel em = new EmployeeMainPanel();
+                    MainFrameState.card.add("employeeMain", em);
+                    MainFrameState.employeeMainPanel =em;
+                    MainFrameState.card.show("employeeMain");
                 }
             }
         });

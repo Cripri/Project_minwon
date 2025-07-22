@@ -45,6 +45,7 @@ public class FirstPage extends SimpleDocPanel {
         
         
         leftButton.addActionListener((e) -> {
+            MainFrameState.card.add("simpleDoc",new SimpleDocPanel());
         	MainFrameState.card.show("simpleDoc");
         });
         

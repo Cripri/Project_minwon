@@ -50,9 +50,7 @@ public class EmployeeMainPanel extends JPanel {
         public String getType() { return type; }
     }
 
-    public EmployeeMainPanel() {}
-
-    public void refreshPanel() {
+    public EmployeeMainPanel() {
         this.removeAll();
         this.setLayout(new BorderLayout());
         this.setBackground(new Color(217, 217, 217));
@@ -213,7 +211,7 @@ public class EmployeeMainPanel extends JPanel {
     }
 
     private void openComplaintPanel(Item item) {
-        ComplaintAnswerListPanel panel;
+        JPanel panel = null;
         String panelName;
 
         switch (item.getType()) {
@@ -233,29 +231,11 @@ public class EmployeeMainPanel extends JPanel {
             }
             case "reassign" -> {
                 panelName = "departmentChangeRequest";
-                boolean exists = Arrays.stream(MainFrameState.card.getComponents())
-                        .anyMatch(c -> panelName.equals(c.getName()));
-                if (!exists) {
-                    DepartmentChangeRequestPanel deptPanel = new DepartmentChangeRequestPanel();
-                    deptPanel.setName(panelName);
-                    MainFrameState.card.add(panelName, deptPanel);
-                }
-                MainFrameState.card.show(panelName);
-                return; 
+                panel = new DepartmentChangeRequestPanel();
             }
             case "done" -> {
                 panelName = "donePanel";
-                for (Component comp : MainFrameState.card.getComponents()) {
-                    if (panelName.equals(comp.getName())) {
-                        MainFrameState.card.remove(comp);
-                        break;
-                    }
-                }
                 panel = new ComplaintAnswerListPanel("처리완료", "처리완료된 민원");
-                panel.setName(panelName);
-                MainFrameState.card.add(panelName, panel);
-                MainFrameState.card.show(panelName);
-                return;
             }
             
             default -> {
@@ -263,7 +243,6 @@ public class EmployeeMainPanel extends JPanel {
                 panelName = "defaultPanel";
             }
         }
-
         MainFrameState.card.add(panelName, panel);
         MainFrameState.card.show(panelName);
     }

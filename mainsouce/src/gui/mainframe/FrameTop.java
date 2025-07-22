@@ -59,6 +59,7 @@ public class FrameTop extends JPanel {
 		mainPageBtn.setBorderPainted(false);
 		mainPageBtn.addActionListener((e) -> {
 			if (emplogin) {
+				MainFrameState.card.add("employeeMain", new EmployeeMainPanel());
 				MainFrameState.card.show("employeeMain");
 			} else {
 				MainFrameState.card.show("firstPage");
@@ -71,10 +72,13 @@ public class FrameTop extends JPanel {
 		myPageBtn.setBorderPainted(false);
 		myPageBtn.addActionListener((e) -> {
 			if (login) {
+				MainFrameState.card.add("myPage",new MyPage());
 				MainFrameState.card.show("myPage");
 			} else if (emplogin) {
+				MainFrameState.card.add("employeeMain", new EmployeeMainPanel());
 				MainFrameState.card.show("employeeMain");
 			} else {
+				MainFrameState.card.add("login", new LoginPanel());
 				MainFrameState.card.show("login");
 			}
 		});
@@ -89,6 +93,7 @@ public class FrameTop extends JPanel {
 					MainFrameState.employee = null; // 로그아웃 처리
 					Get_pop_up_frames.get_log_in_out_frame(null);
 					refreshButtons(); // 버튼 갱신
+					MainFrameState.card.add("login", new LoginPanel());
 					MainFrameState.card.show("login");
 				});
 			} else if (login) {
@@ -104,6 +109,7 @@ public class FrameTop extends JPanel {
 					MainFrameState.member = null; // 로그아웃 처리
 					Get_pop_up_frames.get_log_in_out_frame(null);
 					refreshButtons(); // 버튼 갱신
+					MainFrameState.card.add("login", new LoginPanel());
 					MainFrameState.card.show("login");
 				});
 			}
@@ -111,6 +117,7 @@ public class FrameTop extends JPanel {
 			loginBtn = new IconButton("로그인", "resources/IconImage/로그인.png");
 			loginBtn.addActionListener((e) -> {
 				// 로그인 창으로 이동 또는 로그인 처리
+				MainFrameState.card.add("login", new LoginPanel());
 				MainFrameState.card.show("login");
 			});
 		}

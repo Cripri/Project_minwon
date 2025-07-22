@@ -25,23 +25,6 @@ public class FrameTest extends JFrame {
 		setLayout(new BorderLayout());
 		
 		FirstPage firstPage = new FirstPage();
-		LoginPanel login = new LoginPanel();
-		SimpleDocPanel simpleDoc = new SimpleDocPanel();
-//		MyPage myPage = new MyPage();
-		SinmungoListPanel sinmungoList = new SinmungoListPanel();
-		EmployeeMainPanel employeeMain = new EmployeeMainPanel();
-		SignUpPanel signUp = new SignUpPanel();
-		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
-		GuestLoginPanel guestLogin = new GuestLoginPanel();
-		
-		SinmungoinfoPanel sinmungoinfoPanel = new SinmungoinfoPanel();
-		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
-		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
-//		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();
-		RrnApplicationPanel rrnApplicationPanel = new RrnApplicationPanel();
-		//WriteContent writeContent = new WriteContent();
-		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel();
-		MainFrameState.employeeMainPanel = employeeMain;
 
 		FrameTop ft = new FrameTop();
 		add(ft, BorderLayout.NORTH);
@@ -49,23 +32,6 @@ public class FrameTest extends JFrame {
 		CardLayoutPanel cardPage = new CardLayoutPanel();
 		
 		cardPage.add("firstPage", firstPage);
-		cardPage.add("login", login);
-//		cardPage.add("myPage", myPage);
-		cardPage.add("simpleDoc", simpleDoc);
-		cardPage.add("sinmungoList", sinmungoList);
-		cardPage.add("employeeMain", employeeMain);
-		cardPage.add("signUp", signUp);
-		cardPage.add("userInfoEdit", userInfoEdit);
-		cardPage.add("guestLogin", guestLogin);
-		
-		cardPage.add("sinmungoinfoPanel",sinmungoinfoPanel);
-		cardPage.add("complaintAnswerListPanel", complaintAnswerListPanel); 
-		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
-		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel);
-//		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); 
-		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
-		//cardPage.add("writeContent", writeContent);
-		cardPage.add("managerMenuPanel", managerMenuPanel); 
 
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();

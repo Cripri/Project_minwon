@@ -90,6 +90,11 @@ public class DepartmentChangeRequestPanel extends JPanel {
                 int row = table.getSelectedRow();
                 int column = table.getSelectedColumn();
 
+                if (row == -1 || column == -1) {
+                    // 선택된 셀이 없으면 무시
+                    return;
+                }
+
                 if (column == 1) {
                     try {
                         int code = (int) table.getValueAt(row, 0);
