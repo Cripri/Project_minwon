@@ -36,7 +36,7 @@ public class SimpleDocPanel extends JPanel {
 
         rightButton.addActionListener(e ->{
             if(MainFrameState.member != null){
-                MainFrameState.card.show("sinmungoinfoPanel");
+                MainFrameState.card.show("rrnApplicationPanel");
             }else{
                 MainFrameState.card.show("login");
             }

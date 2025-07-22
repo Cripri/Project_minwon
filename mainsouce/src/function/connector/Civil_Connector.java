@@ -3,6 +3,7 @@ package function.connector;
 import gui.mainframe.MainFrameState;
 
 import java.lang.reflect.Field;
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.*;
 import java.util.concurrent.BlockingQueue;
@@ -100,6 +101,29 @@ public class Civil_Connector extends Thread {
         ResultSetMetaData meta = rs.getMetaData();
         int columnCount = meta.getColumnCount();
 
+        // 단일 값 타입 처리
+        if (clazz == Integer.class || clazz == int.class
+                || clazz == Long.class || clazz == long.class
+                || clazz == String.class) {
+
+            while (rs.next()) {
+                Object val = rs.getObject(1);
+                if (val instanceof BigDecimal) {
+                    if (clazz == Integer.class || clazz == int.class) {
+                        list.add(clazz.cast(((BigDecimal) val).intValue()));
+                    } else if (clazz == Long.class || clazz == long.class) {
+                        list.add(clazz.cast(((BigDecimal) val).longValue()));
+                    } else {
+                        list.add(clazz.cast(val));
+                    }
+                } else {
+                    list.add(clazz.cast(val));
+                }
+            }
+            return list;
+        }
+
+        // 일반 객체 매핑 처리
         Map<String, Field> fieldMap = new HashMap<>();
         for (Field f : clazz.getDeclaredFields()) {
             f.setAccessible(true);
@@ -115,8 +139,14 @@ public class Civil_Connector extends Thread {
                 if (field != null) {
                     Object value = rs.getObject(i);
 
-                    if (value instanceof java.math.BigDecimal && field.getType() == Integer.class) {
-                        field.set(instance, ((java.math.BigDecimal) value).intValue());
+                    if (value instanceof BigDecimal) {
+                        if (field.getType() == Integer.class || field.getType() == int.class) {
+                            field.set(instance, ((BigDecimal) value).intValue());
+                        } else if (field.getType() == Long.class || field.getType() == long.class) {
+                            field.set(instance, ((BigDecimal) value).longValue());
+                        } else {
+                            field.set(instance, value);
+                        }
                     } else if (value instanceof Timestamp && field.getType() == java.util.Date.class) {
                         field.set(instance, new java.util.Date(((Timestamp) value).getTime()));
                     } else {
@@ -253,6 +283,24 @@ public class Civil_Connector extends Thread {
         }catch (Exception e){
             e.printStackTrace();
             return null;
+        }
+    }
+
+    public <T> int getNextSeqValue(Class<T> clazz) {
+        try {
+            TableMeta meta = TableMeta.fromClass(clazz);
+            String seqName = meta.getTableName() + "_seq";
+            String sql = "SELECT " + seqName + ".NEXTVAL FROM DUAL";
+
+            QueryRequest<Integer> req = new QueryRequest<>(sql, Collections.emptyList(), Integer.class, this);
+            req.getLatch().await();
+
+            Integer result = req.getSingleResult();
+            return result != null ? result : -1;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return -1;
         }
     }
 

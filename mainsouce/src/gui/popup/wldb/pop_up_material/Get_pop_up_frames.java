@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import javax.swing.JButton;
@@ -331,9 +332,12 @@ public class Get_pop_up_frames{
 		
 		yes.addActionListener(e ->{		
 			try {
+				System.out.println("문제 위치 가 여긴가");
 				Class<?> clazz = obj.getClass();
 				Object instance = clazz.getDeclaredConstructor().newInstance();
-								
+				
+				System.out.println("문제[ 위치가 아랜가?");			
+				
 		        Method[] fields = clazz.getDeclaredMethods();
 		        Method update;
 		        
@@ -348,8 +352,23 @@ public class Get_pop_up_frames{
 		        	}
 		        	
 		        }
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
+			} catch (InstantiationException e1) {
+				System.out.println("오류1번");
+				e1.printStackTrace();
+			} catch (IllegalAccessException e1) {
+				System.out.println("오류2번");
+				e1.printStackTrace();
+			} catch (IllegalArgumentException e1) {
+				System.out.println("오류3번");
+				e1.printStackTrace();
+			} catch (InvocationTargetException e1) {
+				System.out.println("오류4번");
+				e1.printStackTrace();
+			} catch (NoSuchMethodException e1) {
+				System.out.println("오류5번");
+				e1.printStackTrace();
+			} catch (SecurityException e1) {
+				System.out.println("오류6번");
 				e1.printStackTrace();
 			}
 			

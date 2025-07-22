@@ -22,7 +22,6 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import function.connector.Members;
-import function.connector.QueryRequest;
 import gui.mainframe.components.BirthDateSelector;
 import gui.mainframe.components.PlaceholderTextField;
 import gui.mainframe.components.RoundedButton;
@@ -114,6 +113,11 @@ public class GuestLoginPanel extends JPanel {
 				gender = "f";
 			}
 
+			if (nameField.getText().trim().length() == 0) {
+				Get_pop_up_frames.get_public_alarm_frame("이름을 입력해주세요.");
+				return;
+			}
+			
 			Date bDate = new Date();
 			if (bds.getYear() != null && bds.getMonth() != null && bds.getDay() != null) {
 				int year = bds.getYear();
@@ -125,21 +129,17 @@ public class GuestLoginPanel extends JPanel {
 			} else {
 				// TODO 팝업
 				// 생년월일이 모두 선택되지 않았다는 알림 등을 보여줄 수 있음
-				System.out.println("생년, 월, 일을 모두 선택해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("생년, 월, 일을 모두 선택해주세요.");
 				return;
 			}
 
-			if (nameField.getText().trim().length() == 0) {
-				System.out.println("이름을 입력해주세요.");
-				return;
-			}
 			if (phoneNumberField.getText().trim().length() == 0) {
-				System.out.println("핸드폰 번호를 입력해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("핸드폰 번호를 입력해주세요.");
 				return;
 			}
 			if (!isCertification) {
 				// 팝업
-				System.out.println("본인인증을 진행해주세요.");
+				Get_pop_up_frames.get_public_alarm_frame("본인인증을 진행해주세요.");
 				return;
 			}
 

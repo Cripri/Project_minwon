@@ -29,6 +29,10 @@ public enum TableMeta {
 
     public static TableMeta fromClass(Class<?> clazz) {
         String name = clazz.getSimpleName().toUpperCase();
-        return TableMeta.valueOf(name);
+        try {
+            return TableMeta.valueOf(name);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("TableMeta enum에 없는 이름: " + name);
+        }
     }
 }

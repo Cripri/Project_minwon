@@ -1,15 +1,20 @@
 package gui.phs;
 
-import gui.mainframe.FrameTop;
-import gui.phs.common.BasicFrame;
+import static gui.mainframe.MainFrameState.civil;
+
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
+import function.connector.Sinmungo;
+import gui.mainframe.MainFrameState;
 
 public class DepartmentChangeRequestPanel extends JPanel {
 
@@ -25,19 +30,14 @@ public class DepartmentChangeRequestPanel extends JPanel {
         setLayout(new BorderLayout());
         setBackground(new Color(245, 245, 245));
 
-//        FrameTop topPanel = new FrameTop();
-//        add(topPanel, BorderLayout.NORTH);
-
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBackground(new Color(245, 245, 245));
         centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         add(centerPanel, BorderLayout.CENTER);
 
-        // 제목 라벨 추가
-        JLabel titleLabel = new JLabel("민원 부서변경", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 22));
-        titleLabel.setPreferredSize(new Dimension(400, 40));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        // 제목
+        JLabel titleLabel = new JLabel("민원 부서변경 요청 목록", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("\uB9D1\uC740 \uACE0\uB515", Font.BOLD, 22));
         centerPanel.add(titleLabel, BorderLayout.NORTH);
 
         // 테이블 컬럼
@@ -46,25 +46,22 @@ public class DepartmentChangeRequestPanel extends JPanel {
         model = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 1 || column == 2 || column == 3;
+                return false;
             }
         };
 
         table = new JTable(model);
-        table.setRowHeight(40);
+        table.setRowHeight(35);
         table.setFillsViewportHeight(true);
-        table.setShowGrid(false);
-        table.setIntercellSpacing(new Dimension(0, 0));
-        table.setSelectionBackground(new Color(200, 220, 255));
-        table.setSelectionForeground(Color.BLACK);
 
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable tbl, Object val, boolean isSelected,
                                                            boolean hasFocus, int row, int col) {
                 Component comp = super.getTableCellRendererComponent(tbl, val, isSelected, hasFocus, row, col);
+                comp.setFont(new Font("\uB9D1\uC740 \uACE0\uB515", Font.PLAIN, 13));
                 if (!isSelected) {
-                    comp.setBackground(row % 2 == 0 ? Color.WHITE : new Color(245, 245, 245));
+                    comp.setBackground(row % 2 == 0 ? Color.WHITE : new Color(240, 240, 240));
                 }
                 setHorizontalAlignment(SwingConstants.CENTER);
                 return comp;
@@ -72,12 +69,10 @@ public class DepartmentChangeRequestPanel extends JPanel {
         });
 
         JTableHeader header = table.getTableHeader();
+        header.setFont(header.getFont().deriveFont(Font.BOLD, 13f));
         header.setBackground(new Color(70, 130, 180));
         header.setForeground(Color.WHITE);
-        header.setFont(header.getFont().deriveFont(Font.BOLD, 14f));
         ((DefaultTableCellRenderer) header.getDefaultRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
-
-        setComboBoxEditors();
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
@@ -86,78 +81,84 @@ public class DepartmentChangeRequestPanel extends JPanel {
         paginationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         centerPanel.add(paginationPanel, BorderLayout.SOUTH);
 
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int row = table.getSelectedRow();
+                int column = table.getSelectedColumn();
+
+                if (column == 1) {
+                    String codeStr = (String) table.getValueAt(row, 0); // "REQ-5"
+                    try {
+                        Integer code = Integer.parseInt(codeStr.replace("REQ-", ""));
+                        String cardName = "DepartmentChangeDetail_" + code;
+
+                        if (!MainFrameState.card.contains(cardName)) {
+                            DepartmentChangeRequestDetailPanel detailPanel = new DepartmentChangeRequestDetailPanel(code);
+                            MainFrameState.card.add(cardName, detailPanel);
+                        }
+                        MainFrameState.card.show(cardName);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        });
+
         loadDataAndUpdateTable(currentPage);
-        
     }
 
-    private void setComboBoxEditors() {
-        String[] contents = {"민원내용1", "민원내용2", "민원내용3"};
-        String[] statuses = {"처리중", "완료", "대기"};
-        String[] departments = {"행정부서", "마케팅부서", "지원부서"};
-
-        JComboBox<String> contentCombo = new JComboBox<>(contents);
-        table.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(contentCombo));
-
-        JComboBox<String> statusCombo = new JComboBox<>(statuses);
-        table.getColumnModel().getColumn(2).setCellEditor(new DefaultCellEditor(statusCombo));
-
-        JComboBox<String> departmentCombo = new JComboBox<>(departments);
-        table.getColumnModel().getColumn(3).setCellEditor(new DefaultCellEditor(departmentCombo));
-    }
-
-    private Object[][] fetchDataFromDB(int page, int pageSize) {
-        int totalExampleData = 50;
-        int start = (page - 1) * pageSize;
-        int end = Math.min(start + pageSize, totalExampleData);
-
-        Object[][] data = new Object[end - start][5];
-        for (int i = start; i < end; i++) {
-            data[i - start][0] = (i + 1) + "";  // 접수 번호
-            data[i - start][1] = "내용 " + (i + 1);
-            data[i - start][2] = i % 3 == 0 ? "완료" : "처리중";
-            data[i - start][3] = i % 2 == 0 ? "행정부서" : "마케팅부서";
-            data[i - start][4] = "2025-07-14";
+    private List<Sinmungo> fetchPendingRequestsFromDB() {
+        List<Sinmungo> all = civil.selectAll(Sinmungo.class);
+        List<Sinmungo> pending = new ArrayList<>();
+        for (Sinmungo s : all) {
+            String status = s.getStatus();
+            if ("Q".equals(status) ) {
+                pending.add(s);
+            }
         }
-
-        totalDataCount = totalExampleData;
-
-        return data;
+        return pending;
     }
 
     private void loadDataAndUpdateTable(int page) {
+        List<Sinmungo> dataList = fetchPendingRequestsFromDB();
+
+        int start = (page - 1) * rowsPerPage;
+        int end = Math.min(start + rowsPerPage, dataList.size());
+
         model.setRowCount(0);
-
-        Object[][] pageData = fetchDataFromDB(page, rowsPerPage);
-
-        for (Object[] row : pageData) {
-            model.addRow(row);
+        for (int i = start; i < end; i++) {
+            Sinmungo s = dataList.get(i);
+            model.addRow(new Object[]{
+                "REQ-" + s.getSinmungo_code(),
+                s.getSinmungo_title(),
+                s.getStatus().equals("W") ? "처리중" : "완료",
+                "-",  // 부서명은 별도 매핑 필요 시 확장
+                s.getCreate_date() != null ? s.getCreate_date().toString().substring(0, 10) : ""
+            });
         }
 
+        totalDataCount = dataList.size();
         currentPage = page;
-
         updatePaginationButtons();
     }
 
     private void updatePaginationButtons() {
         paginationPanel.removeAll();
-
         int totalPage = (int) Math.ceil((double) totalDataCount / rowsPerPage);
 
         for (int i = 1; i <= totalPage; i++) {
             JButton btn = new JButton(String.valueOf(i));
             btn.setPreferredSize(new Dimension(40, 30));
+
             if (i == currentPage) {
                 btn.setEnabled(false);
                 btn.setBackground(new Color(70, 130, 180));
                 btn.setForeground(Color.WHITE);
             }
 
-            btn.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    loadDataAndUpdateTable(Integer.parseInt(btn.getText()));
-                }
-            });
+            final int pageNum = i;
+            btn.addActionListener(e -> loadDataAndUpdateTable(pageNum));
 
             paginationPanel.add(btn);
         }

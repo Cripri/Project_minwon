@@ -2,57 +2,80 @@ package gui.mainframe;
 
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JPanel;
 
+import gui.mainframe.components.UpdatablePanel;
+
 public class CardLayoutPanel extends JPanel {
 
-	private static final long serialVersionUID = 1L;
-	private CardLayout c = new CardLayout();
+   private static final long serialVersionUID = 1L;
+   private CardLayout c = new CardLayout();
+   private Map<String, JPanel> panelMap = new HashMap<>();
 
-	public CardLayoutPanel() {
-		setLayout(c);
-		MainFrameState.card = this;
-		setBackground(new Color(217, 217, 217));
-	}
+   public CardLayoutPanel() {
+      setLayout(c);
+      MainFrameState.card = this;
+      setBackground(new Color(217, 217, 217));
+   }
 
-	public void show(String value) {
-		if (!value.equals(MainFrameState.currentCard)) {
-			if (MainFrameState.currentCard != null) {
-				MainFrameState.history.push(MainFrameState.currentCard);
-			}
+   public void show(String value) {
+	   
+      if (!value.equals(MainFrameState.currentCard)) {
+         if (MainFrameState.currentCard != null) {
+            MainFrameState.history.push(MainFrameState.currentCard);
+         }
 
-			// 새로운 이동이 발생하면 future 초기화
-			MainFrameState.future.clear();
-			MainFrameState.currentCard = value;
-			c.show(this, value);
-		}
-	}
+         // 새로운 이동이 발생하면 future 초기화
+         MainFrameState.future.clear();
+         MainFrameState.currentCard = value;
 
-	public void prev() {
-		if (!MainFrameState.history.isEmpty()) {
-			String previous = MainFrameState.history.pop();
+         // 전환 전 updateData 호출
+         JPanel panel = panelMap.get(value);
+         if (panel instanceof UpdatablePanel updatable) {
+             updatable.updateData();
+         }
 
-			if (MainFrameState.member != null && previous.equals("login")) {
-				previous = "myPage";
-			}
-			
-			if (MainFrameState.employee != null && previous.equals("login")) {
-				previous = "employeeMain";
-			}
+         c.show(this, value);
+     }
+   }
 
-			MainFrameState.future.push(MainFrameState.currentCard);
-			MainFrameState.currentCard = previous;
-			c.show(this, previous);
-		}
-	}
+   public void prev() {
+      if (!MainFrameState.history.isEmpty()) {
+         String previous = MainFrameState.history.pop();
 
-	public void next() {
-		if (!MainFrameState.future.isEmpty()) {
-			String next = MainFrameState.future.pop();
-			MainFrameState.history.push(MainFrameState.currentCard);
-			MainFrameState.currentCard = next;
-			c.show(this, next);
-		}
-	}
+         if (MainFrameState.member != null && previous.equals("login")) {
+            previous = "myPage";
+         }
+         
+         if (MainFrameState.employee != null && previous.equals("login")) {
+            previous = "employeeMain";
+         }
+
+         MainFrameState.future.push(MainFrameState.currentCard);
+         MainFrameState.currentCard = previous;
+         c.show(this, previous);
+      }
+   }
+
+   public void next() {
+      if (!MainFrameState.future.isEmpty()) {
+         String next = MainFrameState.future.pop();
+         MainFrameState.history.push(MainFrameState.currentCard);
+         MainFrameState.currentCard = next;
+         c.show(this, next);
+      }
+   }
+   
+   public boolean contains(String name) {
+       for (Component comp : getComponents()) {
+           if (name.equals(comp.getName())) {
+               return true;
+           }
+       }
+       return false;
+   }
 }

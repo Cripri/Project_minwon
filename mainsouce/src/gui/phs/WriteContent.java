@@ -28,7 +28,7 @@ import gui.mainframe.MainFrameState;
 
 public class WriteContent extends JPanel {
 
-    public WriteContent() {
+    public WriteContent(Sinmungo s) {
         setLayout(new BorderLayout());
 
         // 중앙 패널
@@ -92,7 +92,6 @@ public class WriteContent extends JPanel {
         
         completeButton.addActionListener((e) -> {
         	Members m =  MainFrameState.member;
-        	Sinmungo s = new Sinmungo();
         	s.setMember_code(m.getMember_code());
         	
         	s.setSinmungo_title(titleField.getText());

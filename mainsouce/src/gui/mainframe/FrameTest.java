@@ -5,8 +5,6 @@ import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-//import gui.phs.AfterLoginPanel;
-import gui.phs.CivilComplaintDetailPanel;
 import gui.phs.ComplaintAnswerListPanel;
 import gui.phs.DepartmentChangeRequestDetailPanel;
 import gui.phs.DepartmentChangeRequestPanel;
@@ -36,15 +34,13 @@ public class FrameTest extends JFrame {
 		UserInfoEditPanel userInfoEdit = new UserInfoEditPanel();
 		GuestLoginPanel guestLogin = new GuestLoginPanel();
 		
-//		AfterLoginPanel afterLoginPanel = new AfterLoginPanel();
-//		CivilComplaintDetailPanel civilComplaintDetailPanel = new CivilComplaintDetailPanel();
+		SinmungoinfoPanel sinmungoinfoPanel = new SinmungoinfoPanel();
 		ComplaintAnswerListPanel complaintAnswerListPanel = new ComplaintAnswerListPanel();
 		DepartmentChangeRequestPanel departmentChangeRequestPanel = new DepartmentChangeRequestPanel();
-		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();
+//		DepartmentChangeRequestDetailPanel departmentChangeRequestDetailPanel = new DepartmentChangeRequestDetailPanel();
 		RrnApplicationPanel rrnApplicationPanel = new RrnApplicationPanel();
-		WriteContent writeContent = new WriteContent();
+		//WriteContent writeContent = new WriteContent();
 		ManagerMenuPanel managerMenuPanel = new ManagerMenuPanel();
-		SinmungoinfoPanel sinmungoinfoPanel = new SinmungoinfoPanel();
 		MainFrameState.employeeMainPanel = employeeMain;
 
 		FrameTop ft = new FrameTop();
@@ -54,23 +50,22 @@ public class FrameTest extends JFrame {
 		
 		cardPage.add("firstPage", firstPage);
 		cardPage.add("login", login);
-//		cardPage.add("myPage", myPage);
+		//cardPage.add("myPage", myPage);
 		cardPage.add("simpleDoc", simpleDoc);
 		cardPage.add("sinmungoList", sinmungoList);
 		cardPage.add("employeeMain", employeeMain);
 		cardPage.add("signUp", signUp);
 		cardPage.add("userInfoEdit", userInfoEdit);
 		cardPage.add("guestLogin", guestLogin);
-
-		cardPage.add("sinmungoinfoPanel",sinmungoinfoPanel);
-		cardPage.add("complaintAnswerListPanel", complaintAnswerListPanel); // 주민번호 지워야함
-		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
-		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel); // 완성 창 제목 넣어주면 좋음
-		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); // 주민번호 지워야함
-		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); //선택창 더 만들어야 함
-		cardPage.add("writeContent", writeContent); // 작성완료 버튼 지우기
-		cardPage.add("managerMenuPanel", managerMenuPanel); // 위에 제목 만드
 		
+		cardPage.add("sinmungoinfoPanel",sinmungoinfoPanel);
+		cardPage.add("complaintAnswerListPanel", complaintAnswerListPanel); 
+		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
+		cardPage.add("departmentChangeRequestPanel", departmentChangeRequestPanel);
+//		cardPage.add("departmentChangeRequestDetailPanel", departmentChangeRequestDetailPanel); 
+		cardPage.add("rrnApplicationPanel", rrnApplicationPanel); 
+		//cardPage.add("writeContent", writeContent);
+		cardPage.add("managerMenuPanel", managerMenuPanel); 
 
 		MainFrameState.history.clear();
 		MainFrameState.future.clear();
