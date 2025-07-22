@@ -6,11 +6,6 @@ import java.io.*;
 
 public class FileSaveExample {
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            saveToFile("이것은 저장될 예시 텍스트입니다.");
-        });
-    }
 
     public static void saveToFile(String data) {
         JFileChooser fileChooser = new JFileChooser();

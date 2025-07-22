@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static gui.mainframe.MainFrameState.civil;
+
 public class PDFWriter {
     public PDFWriter(int simple_doc_pk,String rrn,Civil_Connector con, String outputPath) {
         QueryRequest<Simple_doc> target = new QueryRequest<>(
@@ -135,7 +137,7 @@ public class PDFWriter {
                     true,
                     true
             )) {
-
+                System.out.println(data.getComplaint_category_code());
                 if(data.getComplaint_category_code().equals("AA001")) {
                     writeText(document, page, check, font, 166, 750); //등본
                     writeText(document,page,data.getDoc_count().toString(),font,122 ,563); // 등본 부수
@@ -143,10 +145,10 @@ public class PDFWriter {
                         writeText(document,page,check,font,172 ,692); //등본 전부
                     }else{
                         if(data.getaddress_history().equals("Y")) {
-                            if(data.getAddress_history_years() > 0){
+                            if(data.getAddress_history_years() != null){
                                 writeText(document, page, check, font, 390, 665); //주소 변동사항 최근_년포함
                                 writeText(document,page,data.getAddress_history_years().toString(),font,493 ,665); //_년 포함
-                            }else{
+                            }else if(data.getAddress_history_years() == null){
                                 writeText(document, page, check, font, 305, 665); //주소 변동사항 전체 포함
                             }
                         }
@@ -167,7 +169,7 @@ public class PDFWriter {
                             }
                         }
 
-                        if(data.getid_number().equals("Y")) {
+                        if(data.gethead_name().equals("Y")) {
                             writeText(document, page, check, font, 504, 557); //교부 대상자 외 세대주 세대원 외국인등
                         }
 
@@ -181,7 +183,7 @@ public class PDFWriter {
 
                         writeText(document,page,checkedOrEmpty(data.getRoommate(),check),font,504 ,493); // 동거인
                     }
-                }else {
+                } else{
                     writeText(document, page, check, font, 347, 750); //초본
                     writeText(document,page,data.getDoc_count().toString(),font,122 ,372 ); // 초본 부수
                     if(data.getAll_Included().equals("Y")){
@@ -261,4 +263,5 @@ public class PDFWriter {
     private String checkedOrEmpty(String value, String checkMark) {
         return "Y".equalsIgnoreCase(value) ? checkMark : "";
     }
+
 }
