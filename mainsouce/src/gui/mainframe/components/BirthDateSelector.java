@@ -157,4 +157,20 @@ public class BirthDateSelector {
             dayComboBox.setSelectedItem(day + "일");
         }
     }
+    
+    public void reset() {
+        yearComboBox.setSelectedIndex(0);
+        monthComboBox.setSelectedIndex(0);
+        
+        // null로 초기화
+        dayComboBox.removeAllItems();
+        dayComboBox.addItem(null);
+        for (int d = 1; d <= 31; d++) {
+            dayComboBox.addItem(d + "일");
+        }
+
+        year = null;
+        month = null;
+        day = null;
+    }
 }

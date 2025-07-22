@@ -153,19 +153,5 @@ public class WriteContent extends JPanel {
         centerPanel.add(buttonPanel);
 
         add(centerPanel, BorderLayout.CENTER);
-
-        // ▶ 전송 버튼 패널 (오른쪽 아래)
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        bottomPanel.setBackground(new Color(217, 217, 217));
-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 60));
-
-        JButton submitButton = new JButton("전송");
-        submitButton.setPreferredSize(new Dimension(100, 30));
-        submitButton.setBackground(new Color(45, 140, 240));
-        submitButton.setForeground(Color.WHITE);
-        submitButton.setFocusPainted(false);
-
-        bottomPanel.add(submitButton);
-        add(bottomPanel, BorderLayout.SOUTH);
     }
 }
