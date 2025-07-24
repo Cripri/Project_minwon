@@ -145,9 +145,9 @@ public class MyPage extends JPanel{
         for (int i = 0; i < totalPages; i++) {
             int pageIndex = i;
             RoundedButton pageButton = new RoundedButton(String.valueOf(i + 1));
-            if (i == requestCurrentPage) {
-                pageButton.setEnabled(false); // 현재 페이지는 비활성화
-            }
+//            if (i == requestCurrentPage) {
+//                pageButton.setEnabled(false); // 현재 페이지는 비활성화
+//            }
             pageButton.addActionListener(e -> {
                 requestCurrentPage = pageIndex;
                 updateRequestTable();
@@ -171,7 +171,7 @@ public class MyPage extends JPanel{
         int[] columnWidths = {80, 920, 200, 150, 150};
         
         QueryRequest<Sinmungo> request = new QueryRequest<>(
-        		"SELECT * FROM sinmungo WHERE member_code like ?",
+        		"SELECT * FROM sinmungo WHERE member_code like ? order by sinmungo_code desc",
         		MainFrameState.member.getMember_code(),
         		Sinmungo.class,
         		MainFrameState.civil
@@ -323,9 +323,9 @@ public class MyPage extends JPanel{
         for (int i = 0; i < totalPages; i++) {
             final int pageIndex = i;
             RoundedButton pageButton = new RoundedButton(String.valueOf(i + 1));
-            if (i == issueCurrentPage) {
-                pageButton.setEnabled(false); // 현재 페이지는 비활성화
-            }
+//            if (i == issueCurrentPage) {
+//                pageButton.setEnabled(false); // 현재 페이지는 비활성화
+//            }
             pageButton.addActionListener(e -> {
                 issueCurrentPage = pageIndex;
                 updateIssueTable();

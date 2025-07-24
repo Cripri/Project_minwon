@@ -30,6 +30,9 @@ public class ComplaintClassifier {
     			ArrayList<String> list = keywordList.get(corp);
     			while ((line = bin.readLine()) != null) {
     				line = line.trim();
+    				if (line.startsWith("\uFEFF")) {
+    				    line = line.substring(1);
+    				}
                     if (!line.isEmpty()) {
                         list.add(line);
                     }
@@ -44,12 +47,14 @@ public class ComplaintClassifier {
     public static String classify(String text) {
     	String fallback = null;
 
+    	text = text.trim(); 
     	for (Entry<String, ArrayList<String>> entry : keywordList.entrySet()) {
             String company = entry.getKey();
             ArrayList<String> keywords = entry.getValue();
 
             int score = 0;
             for (String keyword : keywords) {
+            	
                 if (text.contains(keyword)) {
                     score++;
                 }

@@ -74,6 +74,7 @@ public class PaginationPanel extends JPanel {
 		add(prevBtn);
 		add(pageLabel);
 
+		nextBtn.setHorizontalTextPosition(SwingConstants.LEFT);
 		add(nextBtn);
 		revalidate();
 		repaint();
