@@ -7,6 +7,8 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.io.File;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -21,6 +23,7 @@ import function.drawingsign.DrawingSign;
 import function.pdfwriter.PDFViewerFromPath;
 import function.pdfwriter.PDFWriter;
 import gui.mainframe.MainFrameState;
+import gui.mainframe.MyPage;
 import gui.mainframe.components.addressComboBoxPanel;
 
 import static gui.mainframe.MainFrameState.civil;
@@ -349,7 +352,62 @@ public class RrnApplicationPanel extends JPanel {
 
             new PDFWriter(pk, rrn, MainFrameState.civil);
 
+
+
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("파일 저장 위치 선택");
+
+            // 타임스탬프 생성
+//                        String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
+            String timestamp = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+            // 기본 파일 이름 설정
+            String defaultFileName = "발급_서류_" + timestamp + ".pdf";
+            fileChooser.setSelectedFile(new File(defaultFileName));
+
+            int result = fileChooser.showSaveDialog(null);
+
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File file = fileChooser.getSelectedFile();
+
+                // .pdf 확장자 자동 추가
+                if (!file.getName().toLowerCase().endsWith(".pdf")) {
+                    file = new File(file.getAbsolutePath() + ".pdf");
+                }
+
+                // 덮어쓰기 확인
+                if (file.exists()) {
+                    int overwrite = JOptionPane.showConfirmDialog(
+                            null,
+                            "이미 같은 이름의 파일이 존재합니다.\n덮어쓰시겠습니까?",
+                            "파일 덮어쓰기 확인",
+                            JOptionPane.YES_NO_OPTION,
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                    if (overwrite != JOptionPane.YES_OPTION) {
+                        return;
+                    }
+                }
+
+                try {
+                    new PDFWriter(
+                            pk,
+                            rrn,
+                            MainFrameState.civil,
+                            file.getAbsolutePath()  // 추가된 저장 경로
+                    );
+                    JOptionPane.showMessageDialog(null, "파일이 성공적으로 저장되었습니다.");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "파일 저장 중 오류가 발생했습니다.");
+                }
+            }
+
             new PDFViewerFromPath("resources/pdf/temp.pdf");
+
+            MyPage myPage = new MyPage();
+            MainFrameState.card.add("myPage", myPage);
+            MainFrameState.card.show("myPage");
         });
 
         allIssue.addActionListener(e -> detailPanel.setVisible(false));
